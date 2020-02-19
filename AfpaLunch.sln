@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AfpaLunch", "AfpaLunch.csproj", "{DFE7988B-E36D-47C9-B995-3BCD0D49335A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFE7988B-E36D-47C9-B995-3BCD0D49335A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE7988B-E36D-47C9-B995-3BCD0D49335A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE7988B-E36D-47C9-B995-3BCD0D49335A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE7988B-E36D-47C9-B995-3BCD0D49335A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1EF5DF1-16CA-4D27-B5C1-CA1BA1E246F8}
+	EndGlobalSection
+EndGlobal

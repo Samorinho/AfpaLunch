@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mon application ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
+        <a class="navbar-brand" href="/Home/">
+            <img src="~/Images/" height="30" alt="logo">
+            
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-3" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-list-3">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    @Html.ActionLink("Accueil", "Home", null, new { @class = "nav-link mr-2" })
+                </li>
+                
+                <li class="nav-item">
+                    @Html.ActionLink("Restaurants", "Home", null, new { @class = "nav-link" })
+                </li>
+
+            </ul>
+            <div class="ml-auto">
+                <a class="nav-item" href="@Url.Action("","")"><span><i class="fas fa-shopping-cart"></i></span></a>
+                @Html.ActionLink("Compte", "Home", null, new { @class = "btn btn-outline-danger" })
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <span class="text-muted">&copy; @DateTime.Now.Year - AfpaLunch</span>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
