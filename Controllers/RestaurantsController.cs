@@ -68,7 +68,8 @@ namespace AfpaLunch.Controllers
         {
             try
             {
-                List<Produit> produits = null;
+                List<Produit> produits;
+                produits = new List<Produit>();
                 //CommandeProduit panier = new CommandeProduit();
                 Produit produit = db.Produits.Find(idproduit);
                 produits.Add(produit);
