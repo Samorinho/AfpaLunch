@@ -27,7 +27,6 @@ namespace AfpaLunch
     
         public virtual DbSet<Categorie> Categories { get; set; }
         public virtual DbSet<Commande> Commandes { get; set; }
-        public virtual DbSet<CommandeMenu> CommandeMenus { get; set; }
         public virtual DbSet<CommandeProduit> CommandeProduits { get; set; }
         public virtual DbSet<EtatCommande> EtatCommandes { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }

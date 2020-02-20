@@ -1,0 +1,50 @@
+﻿@model AfpaLunch.Restaurant
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+@Html.Hidden("IdRestaurant")
+<img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" />
+<div>
+    <p class="font-weight-bold h3">@Html.DisplayFor(model => Model.Nom)</p>
+    <p class="font-weight-light">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
+    <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
+    <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+    <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
+</div>
+
+@{
+    foreach (var item in Model.Produits)
+    {
+        <div class='row d-flex p-3 border-0 shadow-lg p-3 mb-2 bg-transparent rounded'>
+            <div class='col-2'>
+                <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="max-width: 50px" />
+            </div>
+            <div class='col-8'>
+                <div class='d-flex flex-column'>
+                    <div class='row px-5 text-primary h3'>
+                        @item.Nom
+                    </div>
+                    <div class='row px-5'>@item.Description</div>
+                </div>
+
+            </div>
+            <div class='col-2'>
+                <div class="row">
+                    <a href="@Url.Action("Payer","Restaurants",new { IdProduit = item.IdProduit })"><i class="fa fa-money fa-2x"></i></a>
+                </div>
+                <div class="row">
+                    <a href="@Url.Action("AddPanier","Restaurants" ,new { IdProduit = item.IdProduit, IdRestaurant = Model.IdRestaurant })"><i class="fa fa-cart-arrow-down fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdRestaurant })
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,58 @@
+﻿@model AfpaLunch.Commande
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Commande</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Prix)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Prix)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EtatCommande.Nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EtatCommande.Nom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Restaurant.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Restaurant.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Utilisateur.Nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Utilisateur.Nom)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdCommande }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
