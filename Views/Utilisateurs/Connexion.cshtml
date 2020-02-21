@@ -1,0 +1,32 @@
+﻿@model  AfpaLunch.Utilisateur
+
+@{
+    ViewBag.Title = "Connexion";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="text-center">
+        <div class="form-signin">
+            <img class="mb-4" src="~/Images/logo.png" alt="logo" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
+
+            <div class="d-flex justify-content-center">
+                @Html.EditorFor(model => model.Matricule, new { htmlAttributes = new { placeholder = "Matricule", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Matricule, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-flex justify-content-center">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "******" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-flex justify-content-center mb-4">
+                <input type="submit" class="btn btn-lg btn-primary btn-block" />
+            </div>
+        </div>
+    </div>
+
+}

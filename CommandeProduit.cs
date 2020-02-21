@@ -14,6 +14,13 @@ namespace AfpaLunch
     
     public partial class CommandeProduit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CommandeProduit()
+        {
+            this.Menus = new HashSet<Menu>();
+        }
+    
+        public int IdCommandeProduit { get; set; }
         public int IdCommande { get; set; }
         public int IdProduit { get; set; }
         public decimal Prix { get; set; }
@@ -21,5 +28,7 @@ namespace AfpaLunch
     
         public virtual Commande Commande { get; set; }
         public virtual Produit Produit { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

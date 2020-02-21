@@ -17,8 +17,8 @@ namespace AfpaLunch
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Menu()
         {
-            this.CommandeMenus = new HashSet<CommandeMenu>();
             this.Categories = new HashSet<Categorie>();
+            this.CommandeProduits = new HashSet<CommandeProduit>();
         }
     
         public int IdMenu { get; set; }
@@ -27,8 +27,8 @@ namespace AfpaLunch
         public decimal Prix { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CommandeMenu> CommandeMenus { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Categorie> Categories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CommandeProduit> CommandeProduits { get; set; }
     }
 }

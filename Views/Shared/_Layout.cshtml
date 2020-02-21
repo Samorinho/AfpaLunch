@@ -1,7 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    List<Produit> produits = (List<Produit>)Session["Panier"];
+}
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mon application ASP.NET</title>
@@ -11,8 +15,8 @@
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
         <a class="navbar-brand" href="/Home/">
-            <img src="~/Images/" height="30" alt="logo">
-            
+            <img src="~/Images/logo.png" height="30" alt="logo">
+
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-3" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -22,18 +26,89 @@
                 <li class="nav-item active">
                     @Html.ActionLink("Accueil", "Home", null, new { @class = "nav-link mr-2" })
                 </li>
-                
+
                 <li class="nav-item">
                     @Html.ActionLink("Restaurants", "Home", null, new { @class = "nav-link" })
                 </li>
 
             </ul>
-            <div class="ml-auto">
-                <a class="nav-item" href="@Url.Action("","")"><span><i class="fas fa-shopping-cart"></i></span></a>
-                @Html.ActionLink("Compte", "Home", null, new { @class = "btn btn-outline-danger" })
-            </div>
+            @{ if (Session["Utilisateur"] != null)
+                {
+                    <div class="ml-auto" id="on">
+                        <a class="nav-item btn btn-primary" href="@Url.Action("", "")"><span>Panier&nbsp;</span><span class="badge badge-light">9</span></a>
+                        @Html.ActionLink("Mon Compte", "Home", null, new { @class = "btn btn-outline-danger", @id = "moncompte" })
+                        <button class="btn btn-success" id="connected">Connecté(e)</button>
+                        @Html.ActionLink("Déconnexion", "Deconnexion", "Home", null, new { @class = "btn btn-outline-danger", @id = "deconnexion" })
+                    </div>
+                }
+                else
+                {
+                    <div class="ml-auto" id="off">
+                        <a class="nav-item btn btn-primary" href="@Url.Action("", "")" data-toggle="modal" data-target="#ModalPanier">
+                            <span>Panier&nbsp;</span>
+                            @{ if (produits != null)
+                                {
+                                    <span class="badge badge-light">@produits.Count</span>
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        </a>
+                        @Html.ActionLink("Connexion / Inscription", "Connexion", "Utilisateurs", null, new { @class = "btn btn-outline-danger", @id = "connexion" })
+                    </div>
+                }
+            }
         </div>
     </nav>
+
+    <div class="modal fade" id="ModalPanier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Panier</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                        @{ if (Session["Panier"] != null)
+                            {
+                                List<Produit> panier = (List<Produit>)Session["Panier"];
+                                foreach (Produit item in panier)
+                                {
+                                    <div class='col-4'>
+                                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="max-width: 100px" />
+                                    </div>
+                                    <div class='col-4'>
+                                        <div class='d-flex flex-column'>
+                                            <div class='row px-5 text-primary h3'>
+                                                @item.Nom
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                    <div class="col-1"><a href="@Url.Action()"><i class="fa fa-trash fa-2x"></i></a></div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="alert alert-info">Votre panier est vide !</p>
+                            }
+
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                    <input type="submit" value="Commander" class="btn btn-outline-success" />
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container body-content">
         @RenderBody()
@@ -48,5 +123,13 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    @section Scripts{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#on').hide()
+            });
+        </script>
+    }
 </body>
 </html>

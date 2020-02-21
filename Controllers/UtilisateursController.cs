@@ -20,6 +20,40 @@ namespace AfpaLunch.Views
             return View(db.Utilisateurs.ToList());
         }
 
+        public ActionResult Connexion()
+        {
+            //Utilisateur utilisateur = db.Utilisateurs.Find();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Connexion(FormCollection values)
+        {
+            string matricule = Convert.ToString(values["Matricule"]);
+            string motdepasse = Convert.ToString(values["Password"]);
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur = db.Utilisateurs.Where(u => u.Matricule == matricule && u.Password == motdepasse).FirstOrDefault();
+
+            if (utilisateur != null)
+            {
+                Session["Utilisateur"] = utilisateur;
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Connexion");
+          
+
+            //if (Session["Panier"] != null)
+            //{
+            //    return RedirectToAction("Paiement");
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index");
+            //}
+        }
         // GET: Utilisateurs/Details/5
         public ActionResult Details(int? id)
         {
