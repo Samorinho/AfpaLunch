@@ -13,7 +13,7 @@ namespace AfpaLunch.Controllers
     public class RestaurantsController : Controller
     {
         private AfpEATEntities db = new AfpEATEntities();
-
+        List<Produit> produits;
         // GET: Restaurants
         public ActionResult Index()
         {
@@ -66,18 +66,33 @@ namespace AfpaLunch.Controllers
 
         public ActionResult AddPanier(int idrestaurant, int idproduit)
         {
-            try
+            if (Session["Panier"] == null)
             {
-                List<Produit> produits;
-                produits = new List<Produit>();
-                //CommandeProduit panier = new CommandeProduit();
-                Produit produit = db.Produits.Find(idproduit);
-                produits.Add(produit);
-                Session["Panier"] = produits;             
+                try
+                {
+                    produits = new List<Produit>();
+                    Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
+                    produits.Add(produit);
+                    Session["Panier"] = produits;
+                }
+                catch (Exception ex)
+                {
+                    string err = ex.Message;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                string err = ex.Message;
+                try
+                {
+                    Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
+                    produits = (List<Produit>)Session["Panier"];
+                    produits.Add(produit);
+                    Session["Panier"] = produits;
+                }
+                catch (Exception ex)
+                {
+                    string err = ex.Message;
+                }
             }
             return RedirectToAction("Details/" + idrestaurant);
         }

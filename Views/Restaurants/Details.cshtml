@@ -6,10 +6,10 @@
 
 <h2>Details</h2>
 @Html.Hidden("IdRestaurant")
-<img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" />
+<img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" @*style="margin:-40.875% 0; display:block; overflow:hidden;"*@ />
 <div>
-    <p class="font-weight-bold h3">@Html.DisplayFor(model => Model.Nom)</p>
-    <p class="font-weight-light">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
+    <p class="font-weight-bold h3 mt-2 mb-0">@Html.DisplayFor(model => Model.Nom)</p>
+    <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
     <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
     <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
     <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
@@ -18,11 +18,11 @@
 @{
     foreach (var item in Model.Produits)
     {
-        <div class='row d-flex p-3 border-0 shadow-lg p-3 mb-2 bg-transparent rounded'>
+        <div class='row d-flex p-3 border-0 p-3 mb-2 rounded'>
             <div class='col-2'>
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="max-width: 50px" />
+                <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="max-width: 100px" />
             </div>
-            <div class='col-8'>
+            <div class='col-4'>
                 <div class='d-flex flex-column'>
                     <div class='row px-5 text-primary h3'>
                         @item.Nom
@@ -33,11 +33,13 @@
             </div>
             <div class='col-2'>
                 <div class="row">
-                    <a href="@Url.Action("Payer","Restaurants",new { IdProduit = item.IdProduit })"><i class="fa fa-money fa-2x"></i></a>
+                    <a href="@Url.Action("Payer","Restaurants", new { IdProduit = item.IdProduit })" class="btn btn-outline-info"><i class="fa fa-money fa-2x"></i></a>
+                    &nbsp;
+                    <a href="@Url.Action("AddPanier","Restaurants" ,new { IdProduit = item.IdProduit, IdRestaurant = Model.IdRestaurant })" class="btn btn-outline-success"><i class="fa fa-cart-plus fa-2x"></i></a>
                 </div>
-                <div class="row">
-                    <a href="@Url.Action("AddPanier","Restaurants" ,new { IdProduit = item.IdProduit, IdRestaurant = Model.IdRestaurant })"><i class="fa fa-cart-arrow-down fa-2x"></i></a>
-                </div>
+            </div>
+            <div class="col-2" id="added" style="display:none">
+                <div class="alert-link">Produit ajouté au panier !</div>
             </div>
         </div>
     }
@@ -48,3 +50,13 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdRestaurant })
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (!!$.cookie('Panier')) {
+                $("#added").show()
+            }
+        });
+    </script>
+}

@@ -18,7 +18,7 @@
                 <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
-                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen (@Html.DisplayFor(modelItem => item.Budget)€)</p>
+                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
                     <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
                     <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-primary">Voir</a>

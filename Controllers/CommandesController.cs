@@ -52,6 +52,30 @@ namespace AfpaLunch.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdCommande,IdUtilisateur,IdRestaurant,IdEtatCommande,Date,Prix")] Commande commande)
         {
+            if (Session["Utilisateur"] != null)
+            {
+                if (Session["Panier"] != null)
+                {
+                    try
+                    {
+                        Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
+                        Produit produit = (Produit)Session["Panier"];
+                        CommandeProduit commandeProduit = (CommandeProduit)Session["Commande"];
+                        int IdUtilisateur = utilisateur.IdUtilisateur;
+                        int IdRestaurant = produit.IdRestaurant;
+                        DateTime Date = DateTime.Now;
+                        decimal Prix = commandeProduit.Prix * commandeProduit.Quantite;
+                    }
+                    catch (Exception ex)
+                    {
+                        string err = ex.Message;
+                    }
+                }
+            }
+            else
+            {
+                return RedirectToAction("Connexion");
+            }
             if (ModelState.IsValid)
             {
                 db.Commandes.Add(commande);
