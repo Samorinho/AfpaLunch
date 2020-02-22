@@ -182,9 +182,6 @@
     <Compile Include="Restaurant.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="TypeCuisine.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -233,6 +230,14 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="owlcarousel\owl.carousel.css" />
+    <Content Include="owlcarousel\owl.carousel.js" />
+    <Content Include="owlcarousel\owl.carousel.min.css" />
+    <Content Include="owlcarousel\owl.carousel.min.js" />
+    <Content Include="owlcarousel\owl.theme.default.css" />
+    <Content Include="owlcarousel\owl.theme.default.min.css" />
+    <Content Include="owlcarousel\owl.theme.green.css" />
+    <Content Include="owlcarousel\owl.theme.green.min.css" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
