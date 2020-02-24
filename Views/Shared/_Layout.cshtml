@@ -9,6 +9,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mon application ASP.NET</title>
+    <link rel="stylesheet" href="owlcarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="owlcarousel/owl.theme.default.min.css">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -28,7 +30,7 @@
                 </li>
 
                 <li class="nav-item">
-                    @Html.ActionLink("Restaurants", "Home", null, new { @class = "nav-link" })
+                    @Html.ActionLink("Restaurants", "Index", "Restaurants", null, new { @class = "nav-link" })
                 </li>
 
             </ul>
@@ -80,17 +82,21 @@
                                 List<Produit> panier = (List<Produit>)Session["Panier"];
                                 foreach (Produit item in panier)
                                 {
-                                    <div class='col-4'>
-                                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="max-width: 100px" />
+                                    <div class='col-2'>
+                                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
                                     </div>
-                                    <div class='col-4'>
+                                    <div class='col-5'>
                                         <div class='d-flex flex-column'>
-                                            <div class='row px-5 text-primary h3'>
+                                            <div class='row text-wrap h3'>
                                                 @item.Nom
+                                            </div>
+                                            <div class="row text-wrap">
+                                                @item.Description
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                    <div class="col-2"><a href="@Url.Action()"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action()"><i class="fa fa-minus-circle fa-2x"></i></a></div>
                                     <div class="col-1"><a href="@Url.Action()"><i class="fa fa-trash fa-2x"></i></a></div>
                                 }
                             }
