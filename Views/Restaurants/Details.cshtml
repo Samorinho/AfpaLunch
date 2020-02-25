@@ -4,59 +4,71 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+    <h2 class="font-italic">Vous êtes chez <b>@Html.DisplayFor(model => Model.Nom)</b></h2>
 @Html.Hidden("IdRestaurant")
-<img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" @*style="margin:-40.875% 0; display:block; overflow:hidden;"*@ />
-<div>
-    <p class="font-weight-bold h3 mt-2 mb-0">@Html.DisplayFor(model => Model.Nom)</p>
-    <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
-    <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
-    <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-    <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
-</div>
+<div class="p-2 shadow shadow-lg rounded">
+    <div style="width:100%; overflow:hidden; margin:0"><img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" style="margin:-20.875% 0;" /></div>
 
-@{
-    foreach (var item in Model.Produits)
-    {
-        <div class='row d-flex p-3 border-0 p-3 mb-2 rounded'>
-            <div class='col-2'>
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
-            </div>
-            <div class='col-4'>
-                <div class='d-flex flex-column'>
-                    <div class='row px-5 h4'>
-                        @item.Nom
+    <div class="py-3">
+        <p class="font-weight-bold h3 mt-2 mb-0">@Html.DisplayFor(model => Model.Nom)</p>
+        <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
+        <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
+        <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+        <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
+    </div>
+
+    @{
+        foreach (var item in Model.Produits)
+        {
+            <div class='row d-flex p-3'>
+                <div class='col-2'>
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
+                </div>
+                <div class='col-4'>
+                    <div class='d-flex flex-column'>
+                        <div class='row px-5 h4'>
+                            @item.Nom
+                        </div>
+                        <div class='row px-5'>@item.Description</div>
                     </div>
-                    <div class='row px-5'>@item.Description</div>
                 </div>
-
-            </div>
-            <div class='col-2'>
-                <div class="row">
-                    <a href="@Url.Action("Payer","Restaurants", new { IdProduit = item.IdProduit })" class="btn btn-outline-info"><i class="fa fa-money fa-2x"></i></a>
-                    &nbsp;
-                    <a href="@Url.Action("AddPanier","Restaurants" ,new { IdProduit = item.IdProduit, IdRestaurant = Model.IdRestaurant })" class="btn btn-outline-success"><i class="fa fa-cart-plus fa-2x"></i></a>
+                <div class="col-1">
+                    <p class="font-weight-light">@item.Prix€</p>
+                </div>
+                <div class='col-2 ml-auto'>
+                    <div class="row">
+                        <a href="" class="btn btn-info addproduit">Ajouter au panier</a>
+                    </div>
+                </div>
+                <div class="col-2" id="added" style="display:none">
+                    <div class="alert-link">Produit ajouté au panier !</div>
                 </div>
             </div>
-            <div class="col-2" id="added" style="display:none">
-                <div class="alert-link">Produit ajouté au panier !</div>
-            </div>
-        </div>
+            
+        }
     }
-}
-
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdRestaurant })
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
 
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            if (!!$.cookie('Panier')) {
-                $("#added").show()
-            }
+            $('.addproduit').click(function () {                
+                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddProduit", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#added").css("display","block");
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
         });
     </script>
 }
+

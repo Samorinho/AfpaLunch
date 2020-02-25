@@ -28,31 +28,26 @@ namespace AfpaLunch.Views
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Connexion(FormCollection values)
+        public ActionResult Connexion([Bind(Include ="Matricule, Password")] Utilisateur utilisateur)
         {
-            string matricule = Convert.ToString(values["Matricule"]);
-            string motdepasse = Convert.ToString(values["Password"]);
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur = db.Utilisateurs.Where(u => u.Matricule == matricule && u.Password == motdepasse).FirstOrDefault();
-
-            if (utilisateur != null)
+            if (ModelState.IsValid)
             {
-                Session["Utilisateur"] = utilisateur;
+                Utilisateur user = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
+                if (user != null)
+                {
 
-                return RedirectToAction("Index");
+                    user.IdSession = Session.SessionID;
+                    db.SaveChanges();
+
+                    Session["Utilisateur"] = user;
+
+                    return RedirectToAction("Index", "Restaurants");
+                }
             }
 
-            return RedirectToAction("Connexion");
-          
+           
 
-            //if (Session["Panier"] != null)
-            //{
-            //    return RedirectToAction("Paiement");
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index");
-            //}
+            return View();       
         }
         // GET: Utilisateurs/Details/5
         public ActionResult Details(int? id)
@@ -91,7 +86,17 @@ namespace AfpaLunch.Views
 
             return View(utilisateur);
         }
+        public ActionResult ValidationCommande(int? id)
+        {
+            Utilisateur utilisateur = db.Utilisateurs.Find(id);
+            Session["Utilisateur"] = utilisateur;
+            return RedirectToAction("Index");
+        }
 
+        public ActionResult RecapCommande()
+        {
+            return View();
+        }
         // GET: Utilisateurs/Edit/5
         public ActionResult Edit(int? id)
         {

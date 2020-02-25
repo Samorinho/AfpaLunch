@@ -9,8 +9,7 @@
 <h2>Nos Restaurants</h2>
 
 @using (Html.BeginForm())
-{
-   
+{  
     <div class="input-group mb-3">
         @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich"})
         <div class="input-group-append">
@@ -25,7 +24,6 @@
         try
         {
             <div class=" card mr-4 mb-4" style="width: 18rem;">
-
                 <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
@@ -43,9 +41,9 @@
     }
 </div>
 
-<div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
+@*<div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
 
-    <!--Controls-->
+    Controls
     <div class="controls-top">
         <a class="btn-floating" href="#carousel-example-multi" data-slide="prev">
             <i class="fa fa-chevron-left"></i>
@@ -54,8 +52,8 @@
             <i class="fa fa-chevron-right"></i>
         </a>
     </div>
-    <!--/.Controls-->
-    <!-- Indicators -->
+    /.Controls
+     Indicators 
     <ol class="carousel-indicators">
         <li data-target="#carousel-example-multi" data-slide-to="0" class="active"></li>
         <li data-target="#carousel-example-multi" data-slide-to="1"></li>
@@ -64,7 +62,7 @@
         <li data-target="#carousel-example-multi" data-slide-to="4"></li>
         <li data-target="#carousel-example-multi" data-slide-to="5"></li>
     </ol>
-    <!--/.Indicators-->
+    /.Indicators
 
     <div class="carousel-inner v-2" role="listbox">
 
@@ -84,90 +82,10 @@
                 </div>
             </div>
         </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (34).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (38).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (29).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (30).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (27).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
-</div>
+</div>*@
 
 @section Scripts {
     <script src="owlcarousel/owl.carousel.min.js"></script>

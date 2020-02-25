@@ -4,16 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5f19a96a897443d6a95abe517dab0add" Name="Diagram1">
+      <Diagram DiagramId="7f946d24933447fdbcab675c7a0324db" Name="Diagram1">
         <EntityTypeShape EntityType="AfpEATModel.Categorie" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Commande" Width="1.5" PointX="11.25" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.CommandeProduit" Width="1.5" PointX="8.25" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AfpEATModel.EtatCommande" Width="1.5" PointX="9" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AfpEATModel.EtatCommande" Width="1.5" PointX="9" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Menu" Width="1.5" PointX="13.5" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Operation" Width="1.5" PointX="11.25" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Photo" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Produit" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Restaurant" Width="1.5" PointX="6" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AfpEATModel.SessionUtilisateur" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AfpEATModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.TypeCuisine" Width="1.5" PointX="3.75" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.TypeVersement" Width="1.5" PointX="9" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AfpEATModel.Utilisateur" Width="1.5" PointX="9" PointY="8.375" IsExpanded="true" />

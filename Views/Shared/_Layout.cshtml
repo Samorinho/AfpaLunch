@@ -1,6 +1,8 @@
 ﻿
 @{
-    List<Produit> produits = (List<Produit>)Session["Panier"];
+
+    List<AfpaLunch.Models.Basket> baskets = (List<AfpaLunch.Models.Basket>)Session["Panier"];
+    List<AfpaLunch.Models.ProduitPanier> panier = (List<AfpaLunch.Models.ProduitPanier>)HttpContext.Current.Application[Session.SessionID];
 }
 <!DOCTYPE html>
 <html>
@@ -8,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mon application ASP.NET</title>
+    <title>@ViewBag.Title - AfpaLunch</title>
     <link rel="stylesheet" href="owlcarousel/owl.carousel.min.css">
     <link rel="stylesheet" href="owlcarousel/owl.theme.default.min.css">
     @Styles.Render("~/Content/css")
@@ -16,9 +18,8 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
-        <a class="navbar-brand" href="/Home/">
+        <a class="navbar-brand" href="/Restaurants/">
             <img src="~/Images/logo.png" height="30" alt="logo">
-
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-3" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,18 +27,30 @@
         <div class="collapse navbar-collapse" id="navbar-list-3">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    @Html.ActionLink("Accueil", "Home", null, new { @class = "nav-link mr-2" })
+                    @Html.ActionLink("Accueil", "Index", "Restaurants", null, new { @class = "nav-link mr-2" })
                 </li>
-
                 <li class="nav-item">
                     @Html.ActionLink("Restaurants", "Index", "Restaurants", null, new { @class = "nav-link" })
                 </li>
-
             </ul>
+            <div class="ml-auto mr-2">
+                <a class="nav-item btn btn-primary " href="@Url.Action("", "")" data-toggle="modal" data-target="#ModalPanier">
+                    <span>Panier&nbsp;</span>
+                    @{ if (panier != null)
+                        {
+                            <span class="badge badge-light">@panier.Count</span>
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                </a>
+            </div>
+
             @{ if (Session["Utilisateur"] != null)
                 {
-                    <div class="ml-auto" id="on">
-                        <a class="nav-item btn btn-primary" href="@Url.Action("", "")"><span>Panier&nbsp;</span><span class="badge badge-light">9</span></a>
+                    <div class="" id="on">
                         @Html.ActionLink("Mon Compte", "Home", null, new { @class = "btn btn-outline-danger", @id = "moncompte" })
                         <button class="btn btn-success" id="connected">Connecté(e)</button>
                         @Html.ActionLink("Déconnexion", "Deconnexion", "Home", null, new { @class = "btn btn-outline-danger", @id = "deconnexion" })
@@ -45,20 +58,8 @@
                 }
                 else
                 {
-                    <div class="ml-auto" id="off">
-                        <a class="nav-item btn btn-primary" href="@Url.Action("", "")" data-toggle="modal" data-target="#ModalPanier">
-                            <span>Panier&nbsp;</span>
-                            @{ if (produits != null)
-                                {
-                                    <span class="badge badge-light">@produits.Count</span>
-                                }
-                                else
-                                {
-
-                                }
-                            }
-                        </a>
-                        @Html.ActionLink("Connexion / Inscription", "Connexion", "Utilisateurs", null, new { @class = "btn btn-outline-danger", @id = "connexion" })
+                    <div class="" id="off">
+                        @Html.ActionLink("Connexion", "Connexion", "Utilisateurs", null, new { @class = "btn btn-outline-danger", @id = "connexion" })
                     </div>
                 }
             }
@@ -66,6 +67,8 @@
     </nav>
 
     <div class="modal fade" id="ModalPanier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        @*@using (@Html.BeginForm("SaveCommande", "Sw"))
+            {*@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -77,43 +80,78 @@
                 <div class="modal-body">
                     <div class="row">
                         @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-                        @{ if (Session["Panier"] != null)
+                        @{ if (HttpContext.Current.Application[Session.SessionID] != null)
                             {
-                                List<Produit> panier = (List<Produit>)Session["Panier"];
-                                foreach (Produit item in panier)
+                                foreach (AfpaLunch.Models.ProduitPanier item in panier)
                                 {
-                                    <div class='col-2'>
-                                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
-                                    </div>
-                                    <div class='col-5'>
-                                        <div class='d-flex flex-column'>
-                                            <div class='row text-wrap h3'>
-                                                @item.Nom
+                                    if (item.Quantite > 1)
+                                    {
+                                        try
+                                        {
+                                            <div class='col-2'>
+                                                <img src="~/@item.Photo" class="" style="max-width: 100px" />
                                             </div>
-                                            <div class="row text-wrap">
-                                                @item.Description
+                                            <div class='col-5'>
+                                                <div class='d-flex flex-column'>
+                                                    <div class='row text-wrap h3'>
+                                                        @item.Nom
+                                                    </div>
+                                                    <div class="row text-wrap">
+                                                        @item.Description
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
-                                    <div class="col-2"><a href="@Url.Action()"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action()"><i class="fa fa-minus-circle fa-2x"></i></a></div>
-                                    <div class="col-1"><a href="@Url.Action()"><i class="fa fa-trash fa-2x"></i></a></div>
+                                            <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                            <div class="col-2"><a href="@Url.Action()"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action()"><i class="fa fa-minus-circle fa-2x"></i></a></div>
+                                            <div class="col-1"><a href="@Url.Action()"><i class="fa fa-trash fa-2x"></i></a></div>
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            string er = ex.Message;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            <div class='col-2'>
+                                                <img src="~/@item.Photo" class="" style="max-width: 100px" />
+                                            </div>
+                                            <div class='col-5'>
+                                                <div class='d-flex flex-column'>
+                                                    <div class='row text-wrap h3'>
+                                                        @item.Nom
+                                                    </div>
+                                                    <div class="row text-wrap">
+                                                        @item.Description
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                            <div class="col-2"><a href="@Url.Action("AddQuantite","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action("RemoveQuantite","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-minus-circle fa-2x"></i></a></div>
+                                            <div class="col-1"><a href="@Url.Action("RemoveProduit","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-trash fa-2x"></i></a></div>
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            string er = ex.Message;
+                                        }
+                                    }
                                 }
                             }
                             else
                             {
                                 <p class="alert alert-info">Votre panier est vide !</p>
                             }
-
                         }
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
-                    <input type="submit" value="Commander" class="btn btn-outline-success" />
+                    <button type="button" id="commander" class="btn btn-outline-success">Commander</button>
                 </div>
             </div>
         </div>
+        @*}*@
     </div>
 
     <div class="container body-content">
@@ -130,12 +168,47 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    @section Scripts{
+
         <script type="text/javascript">
             $(document).ready(function () {
-                $('#on').hide()
+
+                $("#modalPanier").click(function () {
+                    var data = { 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("GetProduits", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+                });
+
+                $("#commander").click(function () {
+                    SaveCommandeSw();
+                })
             });
+
+           function SaveCommandeSw() {
+                    var data = { 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("SaveCommande", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            document.location.href = '/restaurants/index';
+                        },
+                        error: function () {
+                        alert("Erreur");
+                        }
+                    })
+                }
         </script>
-    }
 </body>
 </html>

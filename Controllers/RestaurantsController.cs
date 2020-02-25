@@ -7,13 +7,14 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AfpaLunch;
+using AfpaLunch.Models;
 
 namespace AfpaLunch.Controllers
 {
     public class RestaurantsController : Controller
     {
         private AfpEATEntities db = new AfpEATEntities();
-        List<Produit> produits;
+
         // GET: Restaurants
         public ActionResult Index(string searchString)
         {
@@ -74,33 +75,41 @@ namespace AfpaLunch.Controllers
             {
                 try
                 {
-                    produits = new List<Produit>();
+                    List<Basket> baskets = new List<Basket>();
+
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
-                    produits.Add(produit);
-                    Session["Panier"] = produits;
+
+                    Basket basket  = new Basket();
+                    basket.monproduit = produit;
+                    basket.Quantite++;
+                    baskets.Add(basket);
+                    Session["Panier"] = baskets;
                 }
                 catch (Exception ex)
                 {
-                    string err = ex.Message;
+                    string er = ex.Message;
                 }
             }
             else
             {
                 try
                 {
+                    List<Basket> baskets = (List<Basket>)Session["Panier"];
+
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
-                    produits = (List<Produit>)Session["Panier"];
-                    produits.Add(produit);
-                    Session["Panier"] = produits;
+                    Basket basket = new Basket();
+                    basket.monproduit = produit;
+                    basket.Quantite++;
+                    baskets.Add(basket);
+                    Session["Panier"] = baskets;
                 }
                 catch (Exception ex)
                 {
-                    string err = ex.Message;
+                    string er = ex.Message;
                 }
             }
             return RedirectToAction("Details/" + idrestaurant);
         }
-
 
         // GET: Restaurants/Edit/5
         public ActionResult Edit(int? id)

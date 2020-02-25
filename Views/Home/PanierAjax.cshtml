@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "PanierAjax";
+}
+
+<h2>PanierAjax</h2>
+
+<div id="panierajax">
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+                var data = { 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("GetProduits", "Sw")', 
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        var html = "<table class='table'>";
+                        for (i = 0; i < data.length; i++) {
+                            html += "<tr><td>" + data[i].Photo + "</td>";
+                            html += "<td>" + data[i].Nom + "</td>";
+                            html += "<td>" + data[i].Description + "</td>";
+                            html += "<td>" + data[i].Prix + "</td>";
+                            html += "<td>" + data[i].Quantite + "</td></tr>";
+                        }
+                        html += "</table>";
+                        $("#panierajax").html(html);
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+        });
+    </script>
+}

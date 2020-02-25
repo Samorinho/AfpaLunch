@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AfpaLunch;
+using AfpaLunch.Models;
 
 namespace AfpaLunch.Controllers
 {
@@ -59,12 +60,10 @@ namespace AfpaLunch.Controllers
                     try
                     {
                         Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
-                        Produit produit = (Produit)Session["Panier"];
-                        CommandeProduit commandeProduit = (CommandeProduit)Session["Commande"];
+                        List<Basket> baskets = (List<Basket>)Session["Panier"];
                         int IdUtilisateur = utilisateur.IdUtilisateur;
-                        int IdRestaurant = produit.IdRestaurant;
                         DateTime Date = DateTime.Now;
-                        decimal Prix = commandeProduit.Prix * commandeProduit.Quantite;
+                        decimal Prix = 1;
                     }
                     catch (Exception ex)
                     {

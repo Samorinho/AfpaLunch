@@ -28,6 +28,7 @@ namespace AfpaLunch
         public string Password { get; set; }
         public bool Statut { get; set; }
         public decimal Solde { get; set; }
+        public string IdSession { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Commande> Commandes { get; set; }
