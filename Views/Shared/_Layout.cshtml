@@ -84,57 +84,28 @@
                             {
                                 foreach (AfpaLunch.Models.ProduitPanier item in panier)
                                 {
-                                    if (item.Quantite > 1)
+                                    try
                                     {
-                                        try
-                                        {
-                                            <div class='col-2'>
-                                                <img src="~/@item.Photo" class="" style="max-width: 100px" />
-                                            </div>
-                                            <div class='col-5'>
-                                                <div class='d-flex flex-column'>
-                                                    <div class='row text-wrap h3'>
-                                                        @item.Nom
-                                                    </div>
-                                                    <div class="row text-wrap">
-                                                        @item.Description
-                                                    </div>
+                                        <div class='col-2'>
+                                            <img src="~/@item.Photo" class="" style="max-width: 100px" />
+                                        </div>
+                                        <div class='col-5'>
+                                            <div class='d-flex flex-column'>
+                                                <div class='row text-wrap h3'>
+                                                    @item.Nom
+                                                </div>
+                                                <div class="row text-wrap">
+                                                    @item.Description
                                                 </div>
                                             </div>
-                                            <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
-                                            <div class="col-2"><a href="@Url.Action()"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action()"><i class="fa fa-minus-circle fa-2x"></i></a></div>
-                                            <div class="col-1"><a href="@Url.Action()"><i class="fa fa-trash fa-2x"></i></a></div>
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            string er = ex.Message;
-                                        }
+                                        </div>
+                                        <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                        <div class="col-2"><a href="" class="plusproduit" data-produit="@item.IdProduit"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="" class="moinsproduit" data-produit="@item.IdProduit"><i class="fa fa-minus-circle fa-2x"></i></a></div>
+                                        <div class="col-1"><a href="" class="removeproduit" data-produit="@item.IdProduit"><i class="fa fa-trash fa-2x"></i></a></div>
                                     }
-                                    else
+                                    catch (Exception ex)
                                     {
-                                        try
-                                        {
-                                            <div class='col-2'>
-                                                <img src="~/@item.Photo" class="" style="max-width: 100px" />
-                                            </div>
-                                            <div class='col-5'>
-                                                <div class='d-flex flex-column'>
-                                                    <div class='row text-wrap h3'>
-                                                        @item.Nom
-                                                    </div>
-                                                    <div class="row text-wrap">
-                                                        @item.Description
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
-                                            <div class="col-2"><a href="@Url.Action("AddQuantite","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="@Url.Action("RemoveQuantite","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-minus-circle fa-2x"></i></a></div>
-                                            <div class="col-1"><a href="@Url.Action("RemoveProduit","Sw", new { idproduit = item.IdProduit, idsession = Session.SessionID })"><i class="fa fa-trash fa-2x"></i></a></div>
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            string er = ex.Message;
-                                        }
+                                        string er = ex.Message;
                                     }
                                 }
                             }
@@ -169,7 +140,7 @@
     @RenderSection("scripts", required: false)
 
 
-        <script type="text/javascript">
+    <script type="text/javascript">
             $(document).ready(function () {
 
                 $("#modalPanier").click(function () {
@@ -208,7 +179,58 @@
                         alert("Erreur");
                         }
                     })
-                }
-        </script>
+            };
+
+            $('.plusproduit').click(function () {
+                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddQuantite", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
+
+            $('.moinsproduit').click(function () {
+                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("RemoveQuantite", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
+
+            $('.removeproduit').click(function () {
+                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("RemoveProduit", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
+    </script>
 </body>
 </html>

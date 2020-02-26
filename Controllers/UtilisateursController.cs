@@ -35,7 +35,6 @@ namespace AfpaLunch.Views
                 Utilisateur user = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
                 if (user != null)
                 {
-
                     user.IdSession = Session.SessionID;
                     db.SaveChanges();
 
@@ -44,9 +43,7 @@ namespace AfpaLunch.Views
                     return RedirectToAction("Index", "Restaurants");
                 }
             }
-
-           
-
+         
             return View();       
         }
         // GET: Utilisateurs/Details/5

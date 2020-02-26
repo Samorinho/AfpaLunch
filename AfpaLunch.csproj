@@ -170,6 +170,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Basket.cs" />
+    <Compile Include="Models\MenuPanier.cs" />
     <Compile Include="Models\ProduitPanier.cs" />
     <Compile Include="Operation.cs">
       <DependentUpon>Model1.tt</DependentUpon>

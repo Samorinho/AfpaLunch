@@ -16,6 +16,35 @@ namespace AfpaLunch.Controllers
             return View();
         }
 
+        public JsonResult AddMenu(int IdMenu, string idsession)
+        {
+            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
+            List<MenuPanier> menuPaniers = null;
+            if (sessionUtilisateur != null)
+            {
+                if (HttpContext.Application[idsession] != null)
+                {
+                    menuPaniers = (List<MenuPanier>)HttpContext.Application[idsession];
+                }
+                else
+                {
+                    menuPaniers = new List<MenuPanier>();
+                }
+
+                Menu menu = db.Menus.Find(IdMenu);
+
+                MenuPanier menuPanier = new MenuPanier();
+                menuPanier.IdMenu = menu.IdMenu;
+                menuPanier.produits = db.Produits.Where(p => p.IdCategorie == p.Categorie.Menus.FirstOrDefault().Categories.FirstOrDefault().IdCategorie).ToList();
+                menuPanier.Prix = menu.Prix;
+                menuPanier.Quantite = 1;
+                menuPaniers.Add(menuPanier);
+
+                HttpContext.Application[idsession] = menuPaniers;
+            }
+            return Json(menuPaniers.Count, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult AddProduit(int IdProduit, string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
