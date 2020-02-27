@@ -1,6 +1,5 @@
 ﻿
 @{
-
     List<AfpaLunch.Models.Basket> baskets = (List<AfpaLunch.Models.Basket>)Session["Panier"];
     List<AfpaLunch.Models.ProduitPanier> panier = (List<AfpaLunch.Models.ProduitPanier>)HttpContext.Current.Application[Session.SessionID];
 }
@@ -11,8 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - AfpaLunch</title>
-    <link rel="stylesheet" href="owlcarousel/owl.carousel.min.css">
-    <link rel="stylesheet" href="owlcarousel/owl.theme.default.min.css">
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -34,11 +32,11 @@
                 </li>
             </ul>
             <div class="ml-auto mr-2">
-                <a class="nav-item btn btn-primary " href="@Url.Action("", "")" data-toggle="modal" data-target="#ModalPanier">
-                    <span>Panier&nbsp;</span>
+                <a class="nav-item btn btn-primary" href="" data-toggle="modal" data-target="#ModalPanier">
+                    <span>Panier</span>
                     @{ if (panier != null)
                         {
-                            <span class="badge badge-light">@panier.Count</span>
+                            <span id="chiffrepanier" class="badge badge-light">@panier.Count</span>
                         }
                         else
                         {
@@ -67,62 +65,63 @@
     </nav>
 
     <div class="modal fade" id="ModalPanier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        @*@using (@Html.BeginForm("SaveCommande", "Sw"))
-            {*@
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Panier</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-                        @{ if (HttpContext.Current.Application[Session.SessionID] != null)
-                            {
-                                foreach (AfpaLunch.Models.ProduitPanier item in panier)
+        @using (@Html.BeginForm("SaveCommande", "Sw"))
+        {
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Panier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                            @{ if (HttpContext.Current.Application[Session.SessionID] != null)
                                 {
-                                    try
-                                    {
-                                        <div class='col-2'>
-                                            <img src="~/@item.Photo" class="" style="max-width: 100px" />
-                                        </div>
-                                        <div class='col-5'>
-                                            <div class='d-flex flex-column'>
-                                                <div class='row text-wrap h3'>
-                                                    @item.Nom
-                                                </div>
-                                                <div class="row text-wrap">
-                                                    @item.Description
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
-                                        <div class="col-2"><a href="" class="plusproduit" data-produit="@item.IdProduit"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="" class="moinsproduit" data-produit="@item.IdProduit"><i class="fa fa-minus-circle fa-2x"></i></a></div>
-                                        <div class="col-1"><a href="" class="removeproduit" data-produit="@item.IdProduit"><i class="fa fa-trash fa-2x"></i></a></div>
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        string er = ex.Message;
-                                    }
+                                    <div class="row">
+                                        @{ foreach (AfpaLunch.Models.ProduitPanier item in panier)
+                                            {
+                                                try
+                                                {
+                                                    <div class='col-2'>
+                                                        <img src="~/@item.Photo" class="" style="max-width: 100px" />
+                                                    </div>
+                                                    <div class='col-5'>
+                                                        <div class='d-flex flex-column'>
+                                                            <div class='row text-wrap h3'>
+                                                                @item.Nom
+                                                            </div>
+                                                            <div class="row text-wrap">
+                                                                @item.Description
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
+                                                    <div class="col-2"><a href="" class="plusproduit" data-produit="@item.IdProduit"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="" class="moinsproduit" data-produit="@item.IdProduit"><i class="fa fa-minus-circle fa-2x"></i></a></div>
+                                                    <div class="col-1"><a href="" class="removeproduit" data-produit="@item.IdProduit"><i class="fa fa-trash fa-2x"></i></a></div>
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    string er = ex.Message;
+                                                }
+                                            }
+                                        }
+                                    </div>
                                 }
-                            }
-                            else
-                            {
-                                <p class="alert alert-info">Votre panier est vide !</p>
-                            }
-                        }
+                                else
+                                {
+                                    <p class="alert alert-info">Votre panier est vide !</p>
+                                }
+                            }                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
+                        <input type="button" id="commander" class="btn btn-outline-success" value="Commander" />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
-                    <button type="button" id="commander" class="btn btn-outline-success">Commander</button>
-                </div>
             </div>
-        </div>
-        @*}*@
+        }
     </div>
 
     <div class="container body-content">
@@ -137,6 +136,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/glide")
+    @Scripts.Render("~/bundles/owl.carousel")
     @RenderSection("scripts", required: false)
 
 
@@ -158,11 +159,11 @@
                         }
                     })
                 });
-
-                $("#commander").click(function () {
-                    SaveCommandeSw();
-                })
             });
+
+        $("#commander").click(function () {
+            SaveCommandeSw();
+        });
 
            function SaveCommandeSw() {
                     var data = { 'idsession': '@Session.SessionID' };
@@ -173,6 +174,7 @@
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'json',
                         success: function (data) {
+                            alert("Commande validée !");
                             document.location.href = '/restaurants/index';
                         },
                         error: function () {

@@ -35,9 +35,9 @@ namespace AfpaLunch.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.Bouffe = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 2 || p.IdCategorie == 7 || p.IdCategorie == 8 || p.IdCategorie == 9).ToList(), "IdCategorie", "Nom");
-            ViewBag.Boisson = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 6).ToList(), "IdCategorie", "Nom");
-            ViewBag.Dessert = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 4).ToList(), "IdCategorie","Nom");
+            ViewBag.Bouffe = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 2 || p.IdCategorie == 7 || p.IdCategorie == 8 || p.IdCategorie == 9).ToList(), "IdProduit", "Nom");
+            ViewBag.Boisson = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 6).ToList(), "IdProduit", "Nom");
+            ViewBag.Dessert = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 4).ToList(), "IdProduit", "Nom");
 
             Restaurant restaurant = db.Restaurants.Find(id);           
 

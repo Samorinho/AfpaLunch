@@ -9,9 +9,9 @@
 <h2>Nos Restaurants</h2>
 
 @using (Html.BeginForm())
-{  
+{
     <div class="input-group mb-3">
-        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich"})
+        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich" })
         <div class="input-group-append">
             <input class="btn btn-primary" type="submit" value="Rechercher" />
         </div>
@@ -41,74 +41,48 @@
     }
 </div>
 
-@*<div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
+<hr />
 
-    Controls
-    <div class="controls-top">
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="prev">
-            <i class="fa fa-chevron-left"></i>
-        </a>
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="next">
-            <i class="fa fa-chevron-right"></i>
-        </a>
-    </div>
-    /.Controls
-     Indicators 
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-example-multi" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="1"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="2"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="3"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="4"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="5"></li>
-    </ol>
-    /.Indicators
+<div class="container">
+    <div class="row">
 
-    <div class="carousel-inner v-2" role="listbox">
 
-        <div class="carousel-item active">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (36).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
+        <div class="glide">
+            <div class="glide__track" data-glide-el="track">
+                <ul class="glide__slides">
+                    @foreach (var item in Model)
+                    {
+                        <li class="glide__slide"><img src="~/@item.Photos.FirstOrDefault().Nom" alt="Photo Restaurant"></li>
+                    }
+                </ul>
             </div>
         </div>
+        <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+        </div>
+
+
+
 
     </div>
+</div>
 
-</div>*@
+
+
+
 
 @section Scripts {
-    <script src="owlcarousel/owl.carousel.min.js"></script>
 
-    <script type="text/javascript">
-        $('.carousel.carousel-multi-item.v-2 .carousel-item').each(function () {
-            var next = $(this).next();
-            if (!next.length) {
-                next = $(this).siblings(':first');
-            }
-            next.children(':first-child').clone().appendTo($(this));
+    <script src="https://cdn.jsdelivr.net/npm/&#64glidejs/glide">
 
-            for (var i = 0; i < 4; i++) {
-                next = next.next();
-                if (!next.length) {
-                    next = $(this).siblings(':first');
-                }
-                next.children(':first-child').clone().appendTo($(this));
-            }
-        });
+    </script>
 
-        $(document).ready(function () {
-            $(".owl-carousel").owlCarousel();
-        });
+    <script>
+        const config = {
+            type: 'carousel',
+            perView: 2
+        }
+        new Glide(".glide", config).mount({ Controls, Breakpoints });
     </script>
 }

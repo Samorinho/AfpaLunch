@@ -20,6 +20,7 @@ namespace AfpaLunch.Controllers
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
             List<MenuPanier> menuPaniers = null;
+            List<ProduitPanier> produitPaniers = null;
             if (sessionUtilisateur != null)
             {
                 if (HttpContext.Application[idsession] != null)
@@ -39,6 +40,19 @@ namespace AfpaLunch.Controllers
                 menuPanier.Prix = menu.Prix;
                 menuPanier.Quantite = 1;
                 menuPaniers.Add(menuPanier);
+                foreach (ProduitPanier item in produitPaniers)
+                {                   
+                    Produit produit = new Produit();
+                    ProduitPanier produitPanier = new ProduitPanier();
+                    //produitPanier.IdProduit = Convert.ToInt32(values["Bouffe"]);
+                    produitPanier.Nom = produit.Nom;
+                    produitPanier.Description = produit.Description;
+                    produitPanier.Quantite = 1;
+                    produitPanier.Prix = produit.Prix;
+                    produitPanier.Photo = produit.Photos.First().Nom;
+                    produitPanier.IdRestaurant = produit.IdRestaurant;
+                    produitPaniers.Add(produitPanier);
+                }
 
                 HttpContext.Application[idsession] = menuPaniers;
             }
@@ -60,24 +74,43 @@ namespace AfpaLunch.Controllers
                     produitPaniers = new List<ProduitPanier>();
                 }
 
-                Produit produit = db.Produits.Find(IdProduit);
-                ProduitPanier produitPanier = new ProduitPanier();
-                produitPanier.IdProduit = IdProduit;
-                produitPanier.Nom = produit.Nom;
-                produitPanier.Description = produit.Description;
-                produitPanier.Quantite = 1;
-                produitPanier.Prix = produit.Prix;
-                produitPanier.Photo = produit.Photos.First().Nom;
-                produitPanier.IdRestaurant = produit.IdRestaurant;
-
-                foreach (ProduitPanier item in produitPaniers)
+                if (produitPaniers.Count > 0)
                 {
-                    if (item.IdProduit != null)
+                    foreach (ProduitPanier item in produitPaniers)
                     {
-                        item.Quantite++;
+                        if (item.IdProduit == IdProduit)
+                        {
+                            item.Quantite++;
+                        }
+                        else
+                        {
+                            Produit produit = db.Produits.Find(IdProduit);
+                            ProduitPanier produitPanier = new ProduitPanier();
+                            produitPanier.IdProduit = IdProduit;
+                            produitPanier.Nom = produit.Nom;
+                            produitPanier.Description = produit.Description;
+                            produitPanier.Quantite = 1;
+                            produitPanier.Prix = produit.Prix;
+                            produitPanier.Photo = produit.Photos.First().Nom;
+                            produitPanier.IdRestaurant = produit.IdRestaurant;
+                            produitPaniers.Add(produitPanier);
+                        }
                     }
                 }
-                produitPaniers.Add(produitPanier);
+
+                else
+                {
+                    Produit produit = db.Produits.Find(IdProduit);
+                    ProduitPanier produitPanier = new ProduitPanier();
+                    produitPanier.IdProduit = IdProduit;
+                    produitPanier.Nom = produit.Nom;
+                    produitPanier.Description = produit.Description;
+                    produitPanier.Quantite = 1;
+                    produitPanier.Prix = produit.Prix;
+                    produitPanier.Photo = produit.Photos.First().Nom;
+                    produitPanier.IdRestaurant = produit.IdRestaurant;
+                    produitPaniers.Add(produitPanier);
+                }
 
                 HttpContext.Application[idsession] = produitPaniers;
             }
@@ -90,10 +123,13 @@ namespace AfpaLunch.Controllers
 
             List<ProduitPanier> produitPaniers = (List<ProduitPanier>)HttpContext.Application[idsession];
 
-            Produit produit = db.Produits.Find(IdProduit);
-            ProduitPanier produitPanier = new ProduitPanier();
-
-            produitPaniers.Remove(produitPanier);
+            foreach (ProduitPanier item in produitPaniers)
+            {
+                if (item.IdProduit == IdProduit)
+                {
+                    produitPaniers.Remove(item);
+                }
+            }
 
             HttpContext.Application[idsession] = produitPaniers;
 
@@ -106,9 +142,13 @@ namespace AfpaLunch.Controllers
 
             List<ProduitPanier> produitPaniers = (List<ProduitPanier>)HttpContext.Application[idsession];
 
-            Produit produit = db.Produits.Find(IdProduit);
-            ProduitPanier produitPanier = new ProduitPanier();
-            produitPanier.Quantite++;
+            foreach (ProduitPanier item in produitPaniers)
+            {
+                if (item.IdProduit == IdProduit)
+                {
+                    item.Quantite++;
+                }
+            }
 
             HttpContext.Application[idsession] = produitPaniers;
 
@@ -121,9 +161,13 @@ namespace AfpaLunch.Controllers
 
             List<ProduitPanier> produitPaniers = (List<ProduitPanier>)HttpContext.Application[idsession];
 
-            Produit produit = db.Produits.Find(IdProduit);
-            ProduitPanier produitPanier = new ProduitPanier();
-            produitPanier.Quantite--;
+            foreach (ProduitPanier item in produitPaniers)
+            {
+                if (item.IdProduit == IdProduit)
+                {
+                    item.Quantite--;
+                }
+            }
 
             HttpContext.Application[idsession] = produitPaniers;
 
@@ -151,7 +195,6 @@ namespace AfpaLunch.Controllers
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
             List<ProduitPanier> panier = null;
             int idrestaurant = 0;
-            string message = "";
 
             if (sessionUtilisateur != null)
             {
@@ -195,6 +238,20 @@ namespace AfpaLunch.Controllers
                             commandeProduit.Quantite = produitPanier.Quantite;
 
                             commande.CommandeProduits.Add(commandeProduit);
+
+                            try
+                            {
+                                Produit produit = db.Produits.Find(commandeProduit.IdProduit);
+
+                                if (produit.IdProduit == commandeProduit.IdProduit)
+                                {
+                                    produit.Quantite -= commandeProduit.Quantite;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                string er = ex.Message;
+                            }
                         }
 
                         db.Commandes.Add(commande);
