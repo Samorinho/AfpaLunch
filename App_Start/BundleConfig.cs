@@ -22,10 +22,20 @@ namespace AfpaLunch
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/owl.carousel").Include(
+                      "~/Scripts/owl.carousel.js",
+                      "~/Scripts/owl.carousel.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
                       "~/Content/font-awesome.min.css",
+                      "~/owlcarousel/owl.carousel.min.css",
+                      "~/owlcarousel/owl.carousel.css",
+                      "~/owlcarousel/owl.theme.default.css",
+                      "~/owlcarousel/owl.theme.default.min.css",
+                      "~/owlcarousel/owl.theme.green.css",
+                      "~/owlcarousel/owl.theme.green.min.css",
                       "~/Content/site.css"));
         }
     }

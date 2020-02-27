@@ -10,29 +10,44 @@
 
 @using (Html.BeginForm())
 {
-   
-    <div class="input-group mb-3">
-        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich"})
+
+    <div class="input-group col-10 mb-3">
+        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", @id = "recherche", placeholder = "Pizzeria ou Sandwich" })
         <div class="input-group-append">
             <input class="btn btn-primary" type="submit" value="Rechercher" />
         </div>
     </div>
+
 }
 
-<div class="row">
+<div class="owl-carousel owl-theme">
     @foreach (var item in Model)
     {
         try
         {
-            <div class=" card mr-4 mb-4" style="width: 18rem;">
+            <div class="">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="max-height: 190px">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                        <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                        <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+                    </div>
+                </div>
+            </div>
 
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
-                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
-                    <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+            <div class="">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="max-height: 190px">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                        <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                        <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+                    </div>
                 </div>
             </div>
         }
@@ -43,154 +58,95 @@
     }
 </div>
 
-<div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
-
-    <!--Controls-->
-    <div class="controls-top">
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="prev">
-            <i class="fa fa-chevron-left"></i>
-        </a>
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="next">
-            <i class="fa fa-chevron-right"></i>
-        </a>
-    </div>
-    <!--/.Controls-->
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-example-multi" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="1"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="2"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="3"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="4"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="5"></li>
-    </ol>
-    <!--/.Indicators-->
-
-    <div class="carousel-inner v-2" role="listbox">
-
-        <div class="carousel-item active">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (36).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (34).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (38).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (29).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (30).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (27).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
 
 @section Scripts {
-    <script src="owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/Scripts/owl.carousel.min.js"></script>
+
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.20/af-2.3.4/datatables.min.js">
+        $(document).ready(function () {
+            $('').DataTable();
+        });
+    </script>
 
     <script type="text/javascript">
-        $('.carousel.carousel-multi-item.v-2 .carousel-item').each(function () {
-            var next = $(this).next();
-            if (!next.length) {
-                next = $(this).siblings(':first');
-            }
-            next.children(':first-child').clone().appendTo($(this));
-
-            for (var i = 0; i < 4; i++) {
-                next = next.next();
-                if (!next.length) {
-                    next = $(this).siblings(':first');
-                }
-                next.children(':first-child').clone().appendTo($(this));
-            }
-        });
-
         $(document).ready(function () {
-            $(".owl-carousel").owlCarousel();
+            $(".owl-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left'></i>", "<i class='fa fa-chevron-circle-right'></i>"]
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            @*$("#recherche").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("Recherche","Restaurants")",
+                        type: "POST",
+                        dataType: "json",
+                        data: "{'searchString':'" + request.term+ "'}",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: items,
+                                    value: items
+                                }
+                            }))
+                        },
+                         error: function (response) {
+                            alert(response.responseText);
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });*@
+
+               $("#recherche").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("Recherche","Restaurants")",
+                        data: "{'prefixText':'" + $("#recherche").val() + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataFilter: function (data) { return data; },
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item,
+                                    value: item
+                                }
+                            }))
+                        }
+                    });
+                },
+                minLength: 1
+              });
         });
     </script>
 }
