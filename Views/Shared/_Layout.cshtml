@@ -41,15 +41,10 @@
             <div class="ml-auto mr-2">
                 <a class="nav-item btn btn-primary" href="" data-toggle="modal" data-target="#ModalPanier">
                     <span>Panier</span>
-                    @{ if (panier != null)
-                        {
-                            <span id="chiffrepanier" class="badge badge-light">@panier.Count</span>
-                        }
-                        else
-                        {
-
-                        }
-                    }
+                    
+                            <span id="chiffrepanier" class="badge badge-light"></span>
+                        
+                   
                 </a>
             </div>
 
@@ -199,7 +194,7 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-                        $("#chiffrepanier").val()
+                        
                     },
                     error: function () {
                         alert("Erreur");

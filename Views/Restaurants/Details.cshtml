@@ -88,7 +88,7 @@
                                         <p class="card-text">@Html.DisplayFor(modelItem => item.Description)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
                                     </div>
                                     <div class="p-2 ml-auto">
-                                        <a href="" class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></a>
+                                        <button class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></button>
                                     </div>
                                 </div>
 
@@ -244,6 +244,7 @@
             });
 
             $('.leproduit').click(function () {
+                event.stopPropagation();
                 var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
                 $.ajax({
                     url: '@Url.Action("AddProduit", "Sw")',
@@ -252,7 +253,9 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-                        $(".added").css("display", "block");
+
+                        $("#chiffrepanier").html(data);
+                        return false;
 
                     },
                     error: function () {

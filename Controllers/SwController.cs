@@ -63,6 +63,7 @@ namespace AfpaLunch.Controllers
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
             List<ProduitPanier> produitPaniers = null;
+            int quantite = 0;
             if (sessionUtilisateur != null)
             {
                 if (HttpContext.Application[idsession] != null)
@@ -81,6 +82,7 @@ namespace AfpaLunch.Controllers
                         if (item.IdProduit == IdProduit)
                         {
                             item.Quantite++;
+                            quantite += item.Quantite;
                         }
                         else
                         {
@@ -94,7 +96,11 @@ namespace AfpaLunch.Controllers
                             produitPanier.Photo = produit.Photos.First().Nom;
                             produitPanier.IdRestaurant = produit.IdRestaurant;
                             produitPaniers.Add(produitPanier);
+
+                            quantite++;
                         }
+
+
                     }
                 }
 
@@ -110,11 +116,13 @@ namespace AfpaLunch.Controllers
                     produitPanier.Photo = produit.Photos.First().Nom;
                     produitPanier.IdRestaurant = produit.IdRestaurant;
                     produitPaniers.Add(produitPanier);
+
+                    quantite++;
                 }
 
                 HttpContext.Application[idsession] = produitPaniers;
             }
-            return Json(produitPaniers.Count, JsonRequestBehavior.AllowGet);
+            return Json(quantite, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult RemoveProduit(int IdProduit, string idsession)
