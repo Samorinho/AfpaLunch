@@ -12,8 +12,15 @@
     <title>@ViewBag.Title - AfpaLunch</title>
 
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/owl.carousel.min.css")
+    @Styles.Render("~/Content/owl.theme.default.min.css")
+    @Styles.Render("~/Content/glide.core.css")
+    @Styles.Render("~/Content/glide.core.min.css")
+    @Styles.Render("~/Content/glide.theme.css")
+    @Styles.Render("~/Content/glide.theme.min.css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
+
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
         <a class="navbar-brand" href="/Restaurants/">
@@ -192,7 +199,7 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-
+                        $("#chiffrepanier").val()
                     },
                     error: function () {
                         alert("Erreur");

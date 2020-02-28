@@ -6,31 +6,56 @@
     List<Restaurant> typerestaurant = (List<Restaurant>)ViewBag.TypeRestaurant;
 }
 
-<h2>Nos Restaurants</h2>
+<h1>Nos Restaurants</h1>
 
 @using (Html.BeginForm())
 {
-    <div class="input-group mb-3">
-        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich" })
+    <div class="input-group col-10 my-3">
+        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", @id = "recherche", placeholder = "Pizzeria ou Sandwich" })
         <div class="input-group-append">
             <input class="btn btn-primary" type="submit" value="Rechercher" />
         </div>
     </div>
 }
 
-<div class="row">
+@*<div class="row">
+        @foreach (var item in Model)
+        {
+            try
+            {
+                <div class=" card mr-4 mb-4" style="width: 18rem;">
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                        <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                        <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+                    </div>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+        }
+    </div>*@
+
+<div class="owl-carousel owl-theme mt-4">
     @foreach (var item in Model)
     {
         try
         {
-            <div class=" card mr-4 mb-4" style="width: 18rem;">
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
-                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
-                    <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+            <div class="">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                        <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                        <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+                    </div>
                 </div>
             </div>
         }
@@ -41,48 +66,106 @@
     }
 </div>
 
+@*<div class="container">
+    <div class="glide">
+        <div class="glide__track" data-glide-el="track">
+            <ul class="glide__slides">
+                @foreach (var item in Model)
+                {
+                    try
+                    {
+                        <li class="glide__slide">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="max-height: 190px; max-width: 285px">
+                        </li>
+                    }
+                    catch (Exception ex)
+                    {
+                        string error = ex.Message;
+                    }
+                }
+            </ul>
+        </div>
+
+        <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<i class='fa fa-chevron-circle-left fa-2x'></i>">prev</button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir="<i class='fa fa-chevron-circle-right fa-2x'></i>">next</button>
+        </div>
+    </div>
+</div>*@
+
 <hr />
 
-<div class="container">
-    <div class="row">
-
-
-        <div class="glide">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    @foreach (var item in Model)
-                    {
-                        <li class="glide__slide"><img src="~/@item.Photos.FirstOrDefault().Nom" alt="Photo Restaurant"></li>
-                    }
-                </ul>
-            </div>
-        </div>
-        <div class="glide__arrows" data-glide-el="controls">
-            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-        </div>
-
-
-
-
-    </div>
-</div>
-
-
-
-
-
 @section Scripts {
+    <script src="~/Scripts/owl.carousel.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/&#64glidejs/glide">
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.20/af-2.3.4/datatables.min.js">
+        $(document).ready(function () {
+            $('').DataTable();
+        });
     </script>
 
-    <script>
-        const config = {
-            type: 'carousel',
-            perView: 2
-        }
-        new Glide(".glide", config).mount({ Controls, Breakpoints });
+    <script src="https://unpkg.com/&#64;glidejs/glide"></script>
+
+    @*<script type="text/javascript">
+        new Glide('.glide').mount()
+    </script>*@
+
+    <script type="text/javascript">
+         $("#recherche").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("Recherche","Restaurants")",
+                        data: "{'prefixText':'" + $("#recherche").val() + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataFilter: function (data) { return data; },
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item,
+                                    value: item
+                                }
+                            }))
+                        },
+                        error: function () {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                minLength: 1
+              });
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left fa-2x'></i>", "<i class='fa fa-chevron-circle-right fa-2x'></i>"]
+            });
+        });
+    </script>
+
 }

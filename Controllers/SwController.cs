@@ -260,6 +260,11 @@ namespace AfpaLunch.Controllers
                         HttpContext.Application.Clear();
                     }
                 }
+                else
+                {
+                    string ex = "Vous devez vous connecter pour effectuer votre commande";
+                    return Json(ex, JsonRequestBehavior.AllowGet);
+                }
                 return Json(new { idutilisateur = utilisateur.IdUtilisateur }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

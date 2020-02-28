@@ -23,13 +23,12 @@ namespace AfpaLunch
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/owl.carousel").Include(
-                      "~/Scripts/owl.carousel.js"));
+                      "~/Scripts/owl.carousel.js",
+                      "~/Scripts/owl.carousel.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/glide").Include(
                       "~/Scripts/glide.js",
-                      "~/Scripts/glide.min.js",
-                      "~/Scripts/glide.modular.esm.js",
-                      "~/Scripts/glide.esm.js"));
+                      "~/Scripts/glide.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -44,6 +43,7 @@ namespace AfpaLunch
                       "~/Content/owl.theme.default.css",
                       "~/Content/owl.theme.default.min.css",
                       "~/Content/owl.theme.green.css",
+                      "~/Content/owl.theme.green.min.css",
                       "~/Content/site.css"));
         }
     }

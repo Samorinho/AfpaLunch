@@ -15,48 +15,145 @@
         <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
         <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
         <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-        <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
+        <p class="card-text my-0">@Html.DisplayFor(model => Model.Description)</p>
+        <p class="card-text my-0">@Html.DisplayFor(model => Model.Telephone)</p>
     </div>
 
     <div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Produits&nbsp;<i class="fa fa-birthday-cake"></i></p></div>
-    <hr />
 
     @{
         var ordre = from p in Model.Produits
                     orderby p.Categorie
                     select p;
 
-        foreach (var item in Model.Produits)
-        {
-            <div class='row d-flex p-3'>
-                <div class='col-2'>
-                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
-                </div>
-                <div class='col-4'>
-                    <div class='d-flex flex-column'>
-                        <div class='row px-5 h4'>
-                            @item.Nom
-                        </div>
-                        <div class='row px-5'>@item.Description</div>
-                    </div>
-                </div>
-                <div class="col-1">
-                    <p class="font-weight-light">@item.Prix€</p>
-                </div>
-                <div class='col-2 ml-auto'>
-                    <div class="row">
-                        <a href="" class="btn btn-info leproduit" data-produit="@item.IdProduit">Ajouter au panier</a>
-                    </div>
-                </div>
-                <div class="col-2 added" style="display:none">
-                    <div class="alert-link">Produit ajouté au panier !</div>
-                </div>
-            </div>
+        var entree = from p in Model.Produits
+                     where p.Categorie.IdCategorie == 2
+                     select p;
 
+        var plat = from p in Model.Produits
+                   where p.Categorie.IdCategorie == 3 || p.Categorie.IdCategorie == 5 || p.Categorie.IdCategorie == 7 || p.Categorie.IdCategorie == 8 || p.Categorie.IdCategorie == 9
+                   select p;
+
+        var dessert = from p in Model.Produits
+                      where p.Categorie.IdCategorie == 4
+                      select p;
+
+        var boisson = from p in Model.Produits
+                      where p.Categorie.IdCategorie == 6
+                      select p;
+
+
+        if (entree != null)
+        {
+            <p class="font-italic" style="font-size: 1.25em">Nos entrées</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in entree)
+                {
+                    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                        <div class="card rounded" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo produit" style="max-height: 185px; max-width: 286px">
+                            <div class="card-body" style="background-color:lightyellow">
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                    </div>
+                                    <div class="p-2 ml-auto">
+                                        <a href="" class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         }
 
+        if (plat != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos plats</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in plat)
+                {
+                    <div class="">
+                        <div class="card rounded m-0 p-0" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo produit" style="height: 185px; width: 286px">
+                            <div class="card-body" style="background-color:lightyellow">
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                    </div>
+                                    <div class="p-2 ml-auto">
+                                        <a href="" class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></a>
+                                    </div>
+                                </div>
 
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
 
+        if (dessert != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos desserts</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in dessert)
+                {
+                    <div class="">
+                        <div class="card rounded" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo produit" style="max-height: 185px; max-width: 286px">
+                            <div class="card-body" style="background-color:lightyellow">
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                    </div>
+                                    <div class="p-2 ml-auto">
+                                        <a href="" class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        if (boisson != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos boissons</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in boisson)
+                {
+                    <div class="">
+                        <div class="card rounded" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo produit" style="max-height: 185px; max-width: 286px">
+                            <div class="card-body" style="background-color:lightyellow">
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                    </div>
+                                    <div class="p-2 ml-auto">
+                                        <a href="" class="leproduit" data-produit="@item.IdProduit"><i class="fa fa-3x fa-plus-square" style="color:#17a2b8"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
 
         <div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Menus&nbsp;<i class="fa fa-spoon"></i><i class="fa fa-glass"></i></p></div>
         <hr />
@@ -162,6 +259,31 @@
                         alert("Erreur");
                     }
                 })
+            });
+
+            $(".owl-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#17a2b8'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#17a2b8'></i>"]
             });
         });
     </script>

@@ -231,22 +231,24 @@
     <Content Include="Content\owl.theme.green.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="GlideJS\glide.core.css" />
-    <Content Include="GlideJS\glide.core.min.css" />
-    <Content Include="GlideJS\glide.esm.js" />
-    <Content Include="GlideJS\glide.js" />
-    <Content Include="GlideJS\glide.min.js" />
-    <Content Include="GlideJS\glide.modular.esm.js" />
-    <Content Include="GlideJS\glide.theme.css" />
-    <Content Include="GlideJS\glide.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\coke.png" />
+    <Content Include="Images\eau.jpg" />
+    <Content Include="Images\flancoco.jpg" />
+    <Content Include="Images\icetea.jpg" />
     <Content Include="Images\jambonbeurre.jpg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\orangina.jpg" />
+    <Content Include="Images\pouletcrudites.jpg" />
     <Content Include="Images\resto1.jpg" />
     <Content Include="Images\resto3.jpeg" />
+    <Content Include="Images\restoitalien.jpg" />
+    <Content Include="Images\restokebab.jpg" />
+    <Content Include="Images\restopizzeria.jpg" />
     <Content Include="Images\tarteaucitron.jpg" />
+    <Content Include="Images\tarteauxpommes.jpg" />
+    <Content Include="Images\thonalacatalane.jpg" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -283,10 +285,8 @@
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
-    <Content Include="Scripts\glide.esm.js" />
     <Content Include="Scripts\glide.js" />
     <Content Include="Scripts\glide.min.js" />
-    <Content Include="Scripts\glide.modular.esm.js" />
     <Content Include="Scripts\index.js.flow" />
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\esm\popper.js.map" />

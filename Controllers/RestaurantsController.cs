@@ -27,6 +27,16 @@ namespace AfpaLunch.Controllers
             return View(restaurants.ToList());
         }
 
+        public JsonResult Recherche(string prefixText)
+        {
+            var restaurants = db.Restaurants.Include(r => r.TypeCuisine);
+            if (!String.IsNullOrEmpty(prefixText))
+            {
+                restaurants = db.Restaurants.Where(r => r.Nom.Contains(prefixText) || r.TypeCuisine.Nom.Contains(prefixText) || r.Produits.FirstOrDefault().Nom.Contains(prefixText));
+            }
+            return Json(restaurants, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Restaurants/Details/5
         public ActionResult Details(int? id)
         {
