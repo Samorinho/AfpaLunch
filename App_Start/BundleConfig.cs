@@ -44,6 +44,8 @@ namespace AfpaLunch
                       "~/Content/owl.theme.default.css",
                       "~/Content/owl.theme.default.min.css",
                       "~/Content/owl.theme.green.css",
+                      "~/Content/animate.css",
+                      "~/Content/magic.css",
                       "~/Content/site.css"));
         }
     }

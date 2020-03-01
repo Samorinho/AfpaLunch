@@ -14,11 +14,6 @@ namespace AfpaLunch.Controllers
             return View();
         }
 
-        public ActionResult Deconnexion()
-        {
-            Session.Clear();
-            return RedirectToAction("Index");
-        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

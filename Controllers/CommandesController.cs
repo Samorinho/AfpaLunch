@@ -63,7 +63,6 @@ namespace AfpaLunch.Controllers
                         List<Basket> baskets = (List<Basket>)Session["Panier"];
                         int IdUtilisateur = utilisateur.IdUtilisateur;
                         DateTime Date = DateTime.Now;
-                        decimal Prix = 1;
                     }
                     catch (Exception ex)
                     {

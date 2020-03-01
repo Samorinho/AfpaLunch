@@ -16,14 +16,15 @@ namespace AfpaLunch.Controllers
         private AfpEATEntities db = new AfpEATEntities();
 
         // GET: Restaurants
-        public ActionResult Index(string searchString)
+        public ActionResult Index(/*string searchString*/)
         {
             var restaurants = db.Restaurants.Include(r => r.TypeCuisine);
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                restaurants = db.Restaurants.Where(r => r.Nom.Contains(searchString) || r.TypeCuisine.Nom.Contains(searchString) || r.Produits.FirstOrDefault().Nom.Contains(searchString));
-            }
-            ViewBag.TypeCuisine = db.Restaurants.ToList();
+            //if (!String.IsNullOrEmpty(searchString))
+            //{
+            //    restaurants = db.Restaurants.Where(r => r.Nom.Contains(searchString) || r.TypeCuisine.Nom.Contains(searchString) || r.Produits.FirstOrDefault().Nom.Contains(searchString));
+            //}
+            ViewBag.TypeCuisine = db.TypeCuisines.OrderBy(t => t.Nom).ToList();
+            ViewBag.Restaurants = db.Restaurants.Include(r => r.TypeCuisine).ToList();
             return View(restaurants.ToList());
         }
 

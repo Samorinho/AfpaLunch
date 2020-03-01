@@ -172,6 +172,7 @@
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\MenuPanier.cs" />
     <Compile Include="Models\ProduitPanier.cs" />
+    <Compile Include="Models\Resto.cs" />
     <Compile Include="Operation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -203,6 +204,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -224,6 +226,7 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\magic.css" />
     <Content Include="Content\owl.carousel.css" />
     <Content Include="Content\owl.carousel.min.css" />
     <Content Include="Content\owl.theme.default.css" />
@@ -242,11 +245,22 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\coke.png" />
+    <Content Include="Images\cover.jpg" />
+    <Content Include="Images\eau.jpg" />
+    <Content Include="Images\flancoco.jpg" />
+    <Content Include="Images\icetea.jpg" />
     <Content Include="Images\jambonbeurre.jpg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\orangina.jpg" />
+    <Content Include="Images\pouletcrudites.jpg" />
     <Content Include="Images\resto1.jpg" />
     <Content Include="Images\resto3.jpeg" />
+    <Content Include="Images\restoitalien.jpg" />
+    <Content Include="Images\restokebab.jpg" />
+    <Content Include="Images\restopizzeria.jpg" />
     <Content Include="Images\tarteaucitron.jpg" />
+    <Content Include="Images\tarteauxpommes.jpg" />
+    <Content Include="Images\thonalacatalane.jpg" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -304,6 +318,7 @@
     <Content Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\magic.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

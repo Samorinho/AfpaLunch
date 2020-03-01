@@ -1,36 +1,140 @@
-﻿@model IEnumerable<AfpaLunch.Restaurant>
+﻿﻿@model  IEnumerable<AfpaLunch.Restaurant>
 
 @{
     ViewBag.Title = "Index";
     List<Restaurant> restaurants = (List<Restaurant>)ViewBag.Restaurants;
-    List<Restaurant> typerestaurant = (List<Restaurant>)ViewBag.TypeRestaurant;
+    List<AfpaLunch.TypeCuisine> typerestaurant = (List<AfpaLunch.TypeCuisine>)ViewBag.TypeCuisine;
 }
 
-<h2>Nos Restaurants</h2>
 
-@using (Html.BeginForm())
-{
-    <div class="input-group mb-3">
-        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich" })
-        <div class="input-group-append">
-            <input class="btn btn-primary" type="submit" value="Rechercher" />
+@*<div class="row mb-4 mx-2">
+        <div class="h4">Nos Restaurants</div>
+        <div class="input-group">
+            @Html.TextBox("search", null, htmlAttributes: new { @class = "form-control", @id = "rechercheTest", placeholder = "Pizzeria ou Sandwich" })
+            <div class="input-group-append">
+                <input class="btn" type="submit" value="Rechercher" style="background-color:#fdf18d" />
+            </div>
         </div>
-    </div>
-}
+    </div>*@
+<style type="text/css">
+    #frgrd {
+        position: relative;
+        z-index: 1;
+        height: 400px;
+    }
+
+    #frgrd p {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    #bckgrd {
+        background-image: url(../Images/cover.jpg);
+        /*overflow:hidden;*/
+        margin: 0;
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        opacity: .4;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<div id="frgrd">
+    <div id="bckgrd" class="" @*style=""*@>@*<img src="~/Images/cover.jpg" class="w-100" style="margin:-20.875% 0;" />*@</div>
+    <p class="h1 font-weight-bold" style="color:#fdf18d">Bienvenue chez AfpaLunch !</p>
+</div>
+
 
 <div class="row">
-    @foreach (var item in Model)
+    <div class="input-group my-4 col-12">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-search"></i></span>
+        </div>
+        <input type="text" class="form-control" id="rechercheTest" placeholder="ex: McDonald's">
+    </div>
+
+
+</div>
+
+
+<div class="row col-12 border border-bottom-0 border-grey rounded-top p-0 m-0" style="background-color:#F0F0F0">
+    <div id="typesnom" @*data-toggle="collapse" data-target="#types"*@ class="d-flex justify-content-center alert col-6 m-0 rounded-0" style="background-color:darkgrey">
+        Types de cuisine
+    </div>
+
+    <div id="restonom" @*data-toggle="collapse" data-target="#resto"*@ class="d-flex justify-content-center alert col-6 m-0 rounded-0" style="background-color: lightgray">
+        Restaurants
+    </div>
+</div>
+
+
+<div id="types" @*class="collapse"*@>
+    <div class="row">
+        <div class="oul-carousel owl-carousel owl-theme mt-4">
+            @foreach (var item in typerestaurant)
+            {
+                <div class="d-flex justify-content-center shadow-sm border-0 m-0 rounded choix" data-resto="@item.IdTypeCuisine" style=" width: 10rem; padding-top: 5rem; padding-bottom: 5rem; background-color: #fdf18d">
+                    <p class="font-weight-bold h5">@item.Nom</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="resto" @*class="collapse show"*@ style="display: none">
+    <div class="oulo-carousel owl-carousel owl-theme mt-4">
+        @foreach (var item in Model)
+        {
+            try
+            {
+                <div class="">
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                            <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                            <p class="card-text">
+                                <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="        color: gold
+"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                            </p>
+                            <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+        }
+    </div>
+</div>
+
+@{
+    int xxx = 3;
+    var a = restaurants.Where(r => r.IdTypeCuisine == xxx);
+}
+<div class="oulo-carousel owl-carousel owl-theme mt-4">
+    @foreach (var item in restaurants)
     {
         try
         {
-            <div class=" card mr-4 mb-4" style="width: 18rem;">
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
-                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
-                    <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+            <div class="">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Nom</h5>
+                        <p class="card-text font-italic my-0">@item.TypeCuisine.Nom ( Prix moyen @item.Budget€)</p>
+                        <p class="card-text">
+                            <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                        </p>
+                        <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                    </div>
                 </div>
             </div>
         }
@@ -41,48 +145,190 @@
     }
 </div>
 
+<p class="h5 font-weight-light">Nos meilleurs produits</p>
+<div class="oula-carousel owl-carousel owl-theme mt-4">
+    @{
+        Random rnd = new Random();
+        foreach (var item in restaurants)
+        {
+            try
+            {
+                <div class="">
+                    @rnd.Next()
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/@item.Produits.FirstOrDefault().Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Produits.FirstOrDefault().Nom</h5>
+                            <p class="card-text font-italic my-0">@item.Produits.FirstOrDefault().Categorie.Nom ( Prix @item.Produits.FirstOrDefault().Prix€)</p>
+                            <p class="card-text">
+                                <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                            </p>
+                            <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+        }
+    }
+</div>
 <hr />
 
-<div class="container">
-    <div class="row">
-
-
-        <div class="glide">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    @foreach (var item in Model)
-                    {
-                        <li class="glide__slide"><img src="~/@item.Photos.FirstOrDefault().Nom" alt="Photo Restaurant"></li>
-                    }
-                </ul>
-            </div>
-        </div>
-        <div class="glide__arrows" data-glide-el="controls">
-            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-        </div>
-
-
-
-
-    </div>
-</div>
-
-
-
-
-
 @section Scripts {
+    <script src="~/Scripts/owl.carousel.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/&#64glidejs/glide">
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.20/af-2.3.4/datatables.min.js">
+        $(document).ready(function () {
+            $('').DataTable();
+        });
     </script>
 
-    <script>
-        const config = {
-            type: 'carousel',
-            perView: 2
-        }
-        new Glide(".glide", config).mount({ Controls, Breakpoints });
+    <script src="https://unpkg.com/&#64;glidejs/glide"></script>
+
+    @*<script type="text/javascript">
+            new Glide('.glide').mount()
+        </script>*@
+
+    <script type="text/javascript">
+         $("#rechercheTest").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("Recherche","Sw")",
+                        data: { search: $("#rechercheTest").val() },
+                        dataType: "json",
+                        //type: "POST",
+                        //contentType: "application/json; charset=utf-8",
+                        //dataFilter: function (data) { return data; },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.Nom,
+                                    value: item.Nom
+                                };
+                            }));
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Erreur");
+                        }
+                    });
+                },
+                minLength: 1
+         });
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".oulo-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-2x fa-chevron-circle-left' style='color:#fdf18d'></i>", "<i class='fa fa-2x fa-chevron-circle-right' style='color:#fdf18d'></i>"]
+            });
+
+            $(".oula-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-2x fa-chevron-circle-left' style='color:#fdf18d'></i>", "<i class='fa fa-2x fa-chevron-circle-right' style='color:#fdf18d'></i>"]
+            });
+
+            $(".oul-carousel").owlCarousel({
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 2,
+                        margin: 10
+                    },
+                    768: {
+                        items: 3,
+                        margin: 30
+                    },
+                    992: {
+                        items: 5,
+                        margin: 1
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
+            });
+
+            $("#typesnom").click(function () {
+                $("#resto").css("display", "none"),
+                    $("#types").css("display", "block"),
+                    $("#typesnom").css("background-color", "darkgrey"),
+                    $("#restonom").css("background-color", "lightgray")
+            });
+
+            $("#restonom").click(function () {
+                $("#types").css("display", "none"),
+                    $("#resto").css("display", "block"),
+                    $("#restonom").css("background-color", "darkgrey"),
+                    $("#typesnom").css("background-color", "lightgray")
+            });
+
+            $(".choix").click(function () {
+                    var data = { 'IdTypeCuisine': $(this).data("resto"), 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("GetRestos", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#blabla').html(data)
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+            });
+        });
+    </script>
+
 }

@@ -10,12 +10,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - AfpaLunch</title>
+    <style>
+        #produitModal:hover, #typesnom:hover, #restonom:hover, .choix:hover {
+            cursor: pointer;
+        }
+
+        .owl-prev, .owl-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: block !important;
+            border: 0px solid black;
+        }
+
+            .owl-prev:hover, .owl-next:hover {
+                background-color: none
+            }
+
+        .owl-prev {
+            left: -50px;
+        }
+
+        .owl-next {
+            right: -5px;
+        }
+
+            .owl-prev i, .owl-next i { /*color: #ccc;*/
+            }
+
+    </style>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
+    <nav class="navbar  navbar-expand-sm fixed-top" style="background-color:#fdf18d">
         <a class="navbar-brand" href="/Restaurants/">
             <img src="~/Images/logo.png" height="30" alt="logo">
         </a>
@@ -25,39 +54,36 @@
         <div class="collapse navbar-collapse" id="navbar-list-3">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    @Html.ActionLink("Accueil", "Index", "Restaurants", null, new { @class = "nav-link mr-2" })
+                    <a href="@Url.Action("Index", "Home")" class="nav-link" style="color: black;">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    @Html.ActionLink("Restaurants", "Index", "Restaurants", null, new { @class = "nav-link" })
+                    <a href="@Url.Action("Index", "Restaurants")" class="nav-link" style="color: black; ">Restaurants</a>
                 </li>
             </ul>
-            <div class="ml-auto mr-2">
-                <a class="nav-item btn btn-primary" href="" data-toggle="modal" data-target="#ModalPanier">
-                    <span>Panier</span>
-                    @{ if (panier != null)
-                        {
-                            <span id="chiffrepanier" class="badge badge-light">@panier.Count</span>
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                </a>
+            <div class="ml-auto mr-2" id="produitModal">
+                <i class="" style="" data-toggle="modal" data-target="#ModalPanier">
+                    <span id="nompanier">Panier</span>
+                    <span id="chiffrepanier" class="badge badge-light"></span>
+                </i>
             </div>
 
             @{ if (Session["Utilisateur"] != null)
                 {
-                    <div class="" id="on">
-                        @Html.ActionLink("Mon Compte", "Home", null, new { @class = "btn btn-outline-danger", @id = "moncompte" })
-                        <button class="btn btn-success" id="connected">Connecté(e)</button>
-                        @Html.ActionLink("Déconnexion", "Deconnexion", "Home", null, new { @class = "btn btn-outline-danger", @id = "deconnexion" })
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-circle-o" style="color: black"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a href="@Url.Action("Moncompte", "Utilisateurs")" class="dropdown-item" style="color: black; ">Mon Compte</a>
+                            @*<button class="btn btn-success" id="connected">Connecté(e)</button>*@
+                            <a href="@Url.Action("Deconnexion", "Utilisateurs")" class="dropdown-item" style="color: red; ">Déconnexion</a>
+                        </div>
                     </div>
                 }
                 else
                 {
-                    <div class="" id="off">
-                        @Html.ActionLink("Connexion", "Connexion", "Utilisateurs", null, new { @class = "btn btn-outline-danger", @id = "connexion" })
+                    <div class="">
+                        <a href="@Url.Action("Connexion", "Utilisateurs")" class="nav-link" style="color: black; ">Connexion</a>
                     </div>
                 }
             }
@@ -76,18 +102,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-                            @{ if (HttpContext.Current.Application[Session.SessionID] != null)
-                                {
-                                    <div class="row">
-                                        @{ foreach (AfpaLunch.Models.ProduitPanier item in panier)
+                        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                        @{ if (panier != null)
+                            {
+                                <div class="row">
+                                    @{ foreach (AfpaLunch.Models.ProduitPanier item in panier)
+                                        {
+                                            try
                                             {
-                                                try
-                                                {
+                                                <div class="row m-1 listepanier">
                                                     <div class='col-2'>
-                                                        <img src="~/@item.Photo" class="" style="max-width: 100px" />
+                                                        <img src="~/@item.Photo" class="img-thumbnail" style="min-width: 90px; min-height:70px" />
                                                     </div>
-                                                    <div class='col-5'>
+                                                    <div class='col-4'>
                                                         <div class='d-flex flex-column'>
                                                             <div class='row text-wrap h3'>
                                                                 @item.Nom
@@ -98,22 +125,27 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-2">@item.Prix€ <span class="badge badge-light">@item.Quantite</span></div>
-                                                    <div class="col-2"><a href="" class="plusproduit" data-produit="@item.IdProduit"><i class="fa fa-plus-circle fa-2x"></i></a>&nbsp;<a href="" class="moinsproduit" data-produit="@item.IdProduit"><i class="fa fa-minus-circle fa-2x"></i></a></div>
-                                                    <div class="col-1"><a href="" class="removeproduit" data-produit="@item.IdProduit"><i class="fa fa-trash fa-2x"></i></a></div>
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    string er = ex.Message;
-                                                }
+                                                    <div class="col-2">
+                                                        <span class="p-2 rounded moinsproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <span class="p-2 rounded removeproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                string er = ex.Message;
                                             }
                                         }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <p class="alert alert-info">Votre panier est vide !</p>
-                                }
-                            }                       
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="alert alert-info">Votre panier est vide !</p>
+                            }
+                        }
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
@@ -143,8 +175,14 @@
 
     <script type="text/javascript">
             $(document).ready(function () {
+                $("#produitModal").click(function () {
+                    GetProduitsSw();
+                });
+                $("#modalPanier").load(function () {
+                    GetProduitsSw();
+                });
 
-                $("#modalPanier").click(function () {
+                function GetProduitsSw() {
                     var data = { 'idsession': '@Session.SessionID' };
                     $.ajax({
                         url: '@Url.Action("GetProduits", "Sw")',
@@ -158,81 +196,69 @@
                             alert("Erreur");
                         }
                     })
+                };
+
+                $("#commander").click(function () {
+                    SaveCommandeSw();
                 });
-            });
 
-        $("#commander").click(function () {
-            SaveCommandeSw();
-        });
+               function SaveCommandeSw() {
+                        var data = { 'idsession': '@Session.SessionID' };
+                        $.ajax({
+                            url: '@Url.Action("SaveCommande", "Sw")',
+                            type: 'POST',
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (data) {
+                                alert("Commande validée !");
+                                document.location.href = '/restaurants/index';
+                            },
+                            error: function () {
+                            alert("Erreur");
+                            }
+                        })
+                };
 
-           function SaveCommandeSw() {
-                    var data = { 'idsession': '@Session.SessionID' };
+                $('.plusproduit').click(function () {
+                    var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
                     $.ajax({
-                        url: '@Url.Action("SaveCommande", "Sw")',
+                        url: '@Url.Action("AddQuantite", "Sw")',
                         type: 'POST',
                         data: JSON.stringify(data),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'json',
                         success: function (data) {
-                            alert("Commande validée !");
-                            document.location.href = '/restaurants/index';
+
                         },
                         error: function () {
-                        alert("Erreur");
+                            alert("Erreur");
                         }
                     })
-            };
+                });
 
-            $('.plusproduit').click(function () {
-                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
-                $.ajax({
-                    url: '@Url.Action("AddQuantite", "Sw")',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (data) {
+                $('.moinsproduit').click(function () {
+                    var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("RemoveQuantite", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
 
-                    },
-                    error: function () {
-                        alert("Erreur");
-                    }
-                })
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+                });
             });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-            $('.moinsproduit').click(function () {
-                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
-                $.ajax({
-                    url: '@Url.Action("RemoveQuantite", "Sw")',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (data) {
-
-                    },
-                    error: function () {
-                        alert("Erreur");
-                    }
-                })
-            });
-
-            $('.removeproduit').click(function () {
-                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
-                $.ajax({
-                    url: '@Url.Action("RemoveProduit", "Sw")',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (data) {
-
-                    },
-                    error: function () {
-                        alert("Erreur");
-                    }
-                })
-            });
+        }
     </script>
 </body>
 </html>

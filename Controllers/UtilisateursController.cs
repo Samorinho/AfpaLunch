@@ -46,6 +46,12 @@ namespace AfpaLunch.Views
          
             return View();       
         }
+
+        public ActionResult Deconnexion()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Restaurants");
+        }
         // GET: Utilisateurs/Details/5
         public ActionResult Details(int? id)
         {
