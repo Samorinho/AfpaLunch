@@ -40,12 +40,67 @@ namespace AfpaLunch.Controllers
             ViewBag.Boisson = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 6).ToList(), "IdProduit", "Nom");
             ViewBag.Dessert = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 4).ToList(), "IdProduit", "Nom");
 
-            Restaurant restaurant = db.Restaurants.Find(id);           
+            Restaurant restaurant = db.Restaurants.Find(id);
+            List<string> nomcategorie = new List<string>();
+
+            foreach (Categorie item in db.Categories)
+            {
+                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).ToList();
+                
+                
+                if (produits != null && produits.Count > 0)
+                {
+                    TempData[item.Nom] = produits;
+                    nomcategorie.Add(item.Nom);
+                }
+            }
+
+            ViewBag.NomsCategories = nomcategorie;
 
             if (restaurant == null)
             {
                 return HttpNotFound();
             }
+            return View(restaurant);
+        }
+
+        public ActionResult DetailsResto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Restaurant restaurant = db.Restaurants.Find(id);
+
+            if (restaurant == null)
+            {
+                return HttpNotFound();
+            }
+
+            //Nouvelle liste de string
+
+            List<string> nomscategories = new List<string>();
+
+            // On parcourt les catégories du restaurant en question
+
+            foreach (Categorie item in db.Categories)
+            {
+                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).ToList();
+
+
+                if (produits != null && produits.Count > 0)
+                {
+                    // On ajoute la liste des produits au "ViewData"
+
+                    ViewData[item.Nom] = produits;
+                    nomscategories.Add(item.Nom);
+                }
+            }
+
+            ViewBag.NomsCategories = nomscategories;
+
+            
             return View(restaurant);
         }
 

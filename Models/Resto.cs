@@ -10,5 +10,7 @@ namespace AfpaLunch.Models
         public int IdRestaurant { get; set; }
 
         public string Nom { get; set; }
+
+        public Restaurant Restaurant { get; set; }
     }
 }

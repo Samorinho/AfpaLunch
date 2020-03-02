@@ -80,6 +80,7 @@ namespace AfpaLunch.Controllers
                 {
                     prod.Quantite++;
                     quantite += prod.Quantite;
+
                     HttpContext.Application[idsession] = produitPaniers;
                     return Json(quantite, JsonRequestBehavior.AllowGet);
                 }
@@ -110,33 +111,21 @@ namespace AfpaLunch.Controllers
 
             ProduitPanier produitPanier = new ProduitPanier();
 
+            int quantite = 0;
+
             produitPanier = produitPaniers.Find(p => p.IdProduit == IdProduit);
+         
+            if (produitPaniers.Count > 0)
+            {
+                produitPanier.Quantite--;
+                quantite -= produitPanier.Quantite;
+
+                HttpContext.Application[idsession] = produitPaniers;
+
+                return Json(quantite, JsonRequestBehavior.AllowGet);
+            }
 
             produitPaniers.Remove(produitPanier);
-
-            HttpContext.Application[idsession] = produitPaniers;
-
-            return Json(produitPaniers, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveQuantite(int IdProduit, string idsession)
-        {
-            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
-
-            List<ProduitPanier> produitPaniers = (List<ProduitPanier>)HttpContext.Application[idsession];
-
-            int quantite = 0;
-            ProduitPanier produitPanier = new ProduitPanier();
-
-            produitPanier = produitPaniers.Find(p => p.IdProduit == IdProduit);
-            produitPanier.Quantite--;
-            quantite--;
-            quantite -= produitPanier.Quantite;
-
-            if (produitPanier.Quantite == 0)
-            {
-                produitPaniers.Remove(produitPanier);
-            }
 
             HttpContext.Application[idsession] = produitPaniers;
 
@@ -305,36 +294,42 @@ namespace AfpaLunch.Controllers
             return Json(quantite, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetRestos(int IdTypeCuisine, string idsession)
+        public JsonResult GetRestos(int? IdTypeCuisine, string idsession)
         {
-            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
+            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);           
 
             if (sessionUtilisateur != null)
             {
-                var resto = db.Restaurants.Where(r => r.IdTypeCuisine == IdTypeCuisine).ToList();
+               var resto = db.Restaurants.Where(r => r.IdTypeCuisine == IdTypeCuisine).Select(r => new
+                {
+                    IdRestaurant = r.IdRestaurant
+
+                }).ToList();
 
                 return Json(resto, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(JsonRequestBehavior.AllowGet);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Recherche(string search)
         {
             List<Resto> marecherche = null;
-
+            //List<Restaurant> requete = null;
             try
             {
-                marecherche = db.Restaurants.Where(r => r.Nom.Contains(search)).Select(r => new Resto()
+                marecherche = db.Restaurants.Where(r => r.Nom.Contains(search) || r.Tag.Contains(search)).Select(r => new Resto()
                 {
                     IdRestaurant = r.IdRestaurant,
                     Nom = r.Nom
                 }).ToList();
             }
+
             catch (Exception ex)
             {
                 string er = ex.Message;
             }
+
             return Json(marecherche, JsonRequestBehavior.AllowGet);
         }
     }

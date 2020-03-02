@@ -19,14 +19,15 @@
         <p class="card-text my-0"><i class="fa fa-phone"></i> @Html.DisplayFor(model => Model.Telephone)</p>
     </div>
 
-    <div>
+    @*<div>
         <button class="animated infinite zoomOut delay-2s">TEST</button>
         <button id="sa" class="">TEST</button>
-    </div>
+    </div>*@
 
     @*<div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Produits&nbsp;<i class="fa fa-birthday-cake"></i></p></div>*@
 
     @{
+
         var ordre = from p in Model.Produits
                     orderby p.Categorie
                     select p;
