@@ -22,7 +22,12 @@ namespace AfpaLunch.Views
 
         public ActionResult Connexion()
         {
-            //Utilisateur utilisateur = db.Utilisateurs.Find();
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur = (Utilisateur)Session["Utilisateur"];
+            if (utilisateur != null)
+            {
+                return RedirectToAction("Index", "Restaurants"); 
+            }
             return View();
         }
 
@@ -47,6 +52,59 @@ namespace AfpaLunch.Views
             return View();       
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult Details(FormCollection values)
+        {
+            Utilisateur utilisateur = new Utilisateur();
+
+            if (ModelState.IsValid)
+            {
+                utilisateur = (Utilisateur)Session["Utilisateur"];
+              
+                if (utilisateur != null && utilisateur.Password == Convert.ToString(values["OldPassword"]))
+                {
+                    utilisateur.Password = Convert.ToString(values["MotdePasse"]);
+                    
+                    if (utilisateur.Password == Convert.ToString(values["PasswordBis"]))
+                    {
+                        db.Entry(utilisateur).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }                  
+                }
+            }
+
+            return View(utilisateur);
+        }
+
+        public ActionResult Historique()
+        {
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur = (Utilisateur)Session["Utilisateur"];
+
+            if (utilisateur != null)
+            {
+                List<string> history = new List<string>();
+
+                foreach (Commande item in db.Commandes)
+                {
+                    var back = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderBy(c => c.Date).ToList();
+
+                    //if (back != null && back.Count > 0)
+                    //{
+                    //    ViewData[item.IdCommande.ToString()] = back;
+                    //    history.Add(item.IdCommande.ToString());
+                    //}
+                }
+
+                ViewBag.Histoires = history;
+                ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).ToList();
+            }
+            
+
+            return View();
+        }
         public ActionResult Deconnexion()
         {
             Session.Clear();

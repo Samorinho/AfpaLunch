@@ -48,7 +48,7 @@
 
 @*Carousel types de cuisine*@
 <div id="types" @*class="collapse"*@>
-    <div class="row">
+    <div class="row" style="margin-left:0">
         <div class="oul-carousel owl-carousel owl-theme mt-4">
             @foreach (var item in typerestaurant)
             {
@@ -207,6 +207,7 @@
                 autoplay: true,
                 autoplayTimeout: 2000,
                 autoplayHoverPause: true,
+                center: true,
                 responsive: {
                     0: {
                         items: 1
@@ -232,6 +233,7 @@
                 autoplay: false,
                 autoplayTimeout: 2000,
                 autoplayHoverPause: true,
+                center: true,
                 responsive: {
                     0: {
                         items: 1
@@ -256,6 +258,7 @@
                 autoplay: false,
                 autoplayTimeout: 2000,
                 autoplayHoverPause: true,
+                center: true,
                 responsive: {
                     0: {
                         items: 2,

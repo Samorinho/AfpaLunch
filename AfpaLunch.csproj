@@ -447,6 +447,7 @@
     <Content Include="Views\Home\Panier.cshtml" />
     <Content Include="Views\Home\PanierAjax.cshtml" />
     <Content Include="Views\Restaurants\DetailsResto.cshtml" />
+    <Content Include="Views\Utilisateurs\Historique.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
