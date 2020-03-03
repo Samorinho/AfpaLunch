@@ -137,12 +137,11 @@ namespace AfpaLunch.Controllers
             {
                 try
                 {
-                    List<Basket> baskets = new List<Basket>();
+                    List<Panier> baskets = new List<Panier>();
 
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
 
-                    Basket basket  = new Basket();
-                    basket.monproduit = produit;
+                    Panier basket  = new Panier();
                     basket.Quantite++;
                     baskets.Add(basket);
                     Session["Panier"] = baskets;
@@ -156,11 +155,10 @@ namespace AfpaLunch.Controllers
             {
                 try
                 {
-                    List<Basket> baskets = (List<Basket>)Session["Panier"];
+                    List<Panier> baskets = (List<Panier>)Session["Panier"];
 
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
-                    Basket basket = new Basket();
-                    basket.monproduit = produit;
+                    Panier basket = new Panier();
                     basket.Quantite++;
                     baskets.Add(basket);
                     Session["Panier"] = baskets;

@@ -5,13 +5,20 @@ using System.Web;
 
 namespace AfpaLunch.Models
 {
-    public class MenuPanier
+    public class MenuPanier : ItemPanier
     {
         public int IdMenu { get; set; }
 
-        public List<Produit> produits { get; set; }
+        public List<ProduitPanier> produits { get; set; }
 
-        public decimal Prix { get; set; }
-        public int Quantite { get; set; }
+        public MenuPanier()
+        {
+            produits = new List<ProduitPanier>();
+        }
+
+        public override int GetIdMenu()
+        {
+            return IdMenu;
+        }
     }
 }

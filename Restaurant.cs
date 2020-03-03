@@ -20,6 +20,7 @@ namespace AfpaLunch
             this.Commandes = new HashSet<Commande>();
             this.Menus = new HashSet<Menu>();
             this.Produits = new HashSet<Produit>();
+            this.Utilisateurs = new HashSet<Utilisateur>();
             this.Photos = new HashSet<Photo>();
         }
     
@@ -46,6 +47,8 @@ namespace AfpaLunch
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Produit> Produits { get; set; }
         public virtual TypeCuisine TypeCuisine { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Utilisateur> Utilisateurs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Photo> Photos { get; set; }
     }

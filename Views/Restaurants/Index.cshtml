@@ -76,7 +76,11 @@
                             <p class="card-text">
                                 <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
                             </p>
-                            <a href="@Url.Action("DetailsResto", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                            <div class="row px-2">
+                                <div><a href="@Url.Action("DetailsResto", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a></div>
+                                <div class="ml-auto"><span class="jaime"><i class="jaimejaune fa fa-2x fa-thumbs-up text-warning"></i></span></div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -306,6 +310,16 @@
                         }
                     })
             });
+
+            $(".jaime").click(function () {
+                //$(".jaime").toggleClass("animated heartBeat duration-1s")
+                //$(".jaimejaune").toggleClass("fa fa-2x fa-thumbs-up text-dark")
+                $(".jaimejaune").toggleClass("animated heartBeat duration-1s")
+               
+            });
+            $(".animated .heartBeat .duration-1s").event(function () {
+                 $(".jaimejaune").removeClass("animated heartBeat duration-1s")
+            })
         });
     </script>
 

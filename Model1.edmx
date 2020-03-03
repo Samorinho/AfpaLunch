@@ -41,6 +41,14 @@
           <Property Name="IdEtatCommande" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nom" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Favoris">
+          <Key>
+            <PropertyRef Name="IdUtilisateur" />
+            <PropertyRef Name="IdRestaurant" />
+          </Key>
+          <Property Name="IdUtilisateur" Type="int" Nullable="false" />
+          <Property Name="IdRestaurant" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="IdMenu" />
@@ -237,6 +245,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Favoris_Restaurant">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="Favoris" Type="Self.Favoris" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="IdRestaurant" />
+            </Principal>
+            <Dependent Role="Favoris">
+              <PropertyRef Name="IdRestaurant" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favoris_Utilisateur">
+          <End Role="Utilisateur" Type="Self.Utilisateur" Multiplicity="1" />
+          <End Role="Favoris" Type="Self.Favoris" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utilisateur">
+              <PropertyRef Name="IdUtilisateur" />
+            </Principal>
+            <Dependent Role="Favoris">
+              <PropertyRef Name="IdUtilisateur" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Menu_Restaurant">
           <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
           <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
@@ -410,6 +442,7 @@
           <EntitySet Name="Commande" EntityType="Self.Commande" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommandeProduit" EntityType="Self.CommandeProduit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EtatCommande" EntityType="Self.EtatCommande" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Favoris" EntityType="Self.Favoris" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuCategorie" EntityType="Self.MenuCategorie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Operation" EntityType="Self.Operation" Schema="dbo" store:Type="Tables" />
@@ -443,6 +476,14 @@
           <AssociationSet Name="FK_CommandeProduit_Produit" Association="Self.FK_CommandeProduit_Produit">
             <End Role="Produit" EntitySet="Produit" />
             <End Role="CommandeProduit" EntitySet="CommandeProduit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favoris_Restaurant" Association="Self.FK_Favoris_Restaurant">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="Favoris" EntitySet="Favoris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favoris_Utilisateur" Association="Self.FK_Favoris_Utilisateur">
+            <End Role="Utilisateur" EntitySet="Utilisateur" />
+            <End Role="Favoris" EntitySet="Favoris" />
           </AssociationSet>
           <AssociationSet Name="FK_Menu_Restaurant" Association="Self.FK_Menu_Restaurant">
             <End Role="Restaurant" EntitySet="Restaurant" />
@@ -625,6 +666,7 @@
           <NavigationProperty Name="Menus" Relationship="Self.FK_Menu_Restaurant" FromRole="Restaurant" ToRole="Menu" />
           <NavigationProperty Name="Produits" Relationship="Self.FK_Produit_Restaurant" FromRole="Restaurant" ToRole="Produit" />
           <NavigationProperty Name="TypeCuisine" Relationship="Self.FK_Restaurant_TypeCuisine" FromRole="Restaurant" ToRole="TypeCuisine" />
+          <NavigationProperty Name="Utilisateurs" Relationship="Self.Favoris" FromRole="Restaurant" ToRole="Utilisateur" />
           <NavigationProperty Name="Photos" Relationship="Self.RestaurantPhoto" FromRole="Restaurant" ToRole="Photo" />
         </EntityType>
         <EntityType Name="SessionUtilisateur">
@@ -675,6 +717,7 @@
           <Property Name="IdSession" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Commandes" Relationship="Self.FK_Commande_Utilisateur" FromRole="Utilisateur" ToRole="Commande" />
           <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_Utilisateur" FromRole="Utilisateur" ToRole="Operation" />
+          <NavigationProperty Name="Restaurants" Relationship="Self.Favoris" FromRole="Utilisateur" ToRole="Restaurant" />
         </EntityType>
         <Association Name="FK_Produit_Categorie">
           <End Role="Categorie" Type="Self.Categorie" Multiplicity="1" />
@@ -808,6 +851,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Favoris">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="*" />
+          <End Role="Utilisateur" Type="Self.Utilisateur" Multiplicity="*" />
+        </Association>
         <Association Name="MenuCategorie">
           <End Role="Categorie" Type="Self.Categorie" Multiplicity="*" />
           <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
@@ -882,6 +929,10 @@
           <AssociationSet Name="FK_Restaurant_TypeCuisine" Association="Self.FK_Restaurant_TypeCuisine">
             <End Role="TypeCuisine" EntitySet="TypeCuisines" />
             <End Role="Restaurant" EntitySet="Restaurants" />
+          </AssociationSet>
+          <AssociationSet Name="Favoris" Association="Self.Favoris">
+            <End Role="Restaurant" EntitySet="Restaurants" />
+            <End Role="Utilisateur" EntitySet="Utilisateurs" />
           </AssociationSet>
           <AssociationSet Name="MenuCategorie" Association="Self.MenuCategorie">
             <End Role="Categorie" EntitySet="Categories" />
@@ -1060,6 +1111,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="Favoris" TypeName="AfpEATModel.Favoris" StoreEntitySet="Favoris">
+            <EndProperty Name="Restaurant">
+              <ScalarProperty Name="IdRestaurant" ColumnName="IdRestaurant" />
+            </EndProperty>
+            <EndProperty Name="Utilisateur">
+              <ScalarProperty Name="IdUtilisateur" ColumnName="IdUtilisateur" />
+            </EndProperty>
+          </AssociationSetMapping>
           <AssociationSetMapping Name="MenuCategorie" TypeName="AfpEATModel.MenuCategorie" StoreEntitySet="MenuCategorie">
             <EndProperty Name="Categorie">
               <ScalarProperty Name="IdCategorie" ColumnName="IdCategorie" />

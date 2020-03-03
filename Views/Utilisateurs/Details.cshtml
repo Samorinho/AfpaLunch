@@ -32,7 +32,15 @@
                 </fieldset>
             </p>
             <p>Vous disposez d'un solde de @Model.Solde€.</p>
-            <input id="envoi" data-toggle="modal" data-target="#modalUser" type="submit" class="d-flex justify-content-center mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Mettre à jour votre mot de passe" />
+            <div class="row" style="padding-left: 1.25rem; padding-right: 1.25rem">
+                <div>
+                    <input id="envoi" data-toggle="modal" data-target="#modalUser" type="submit" class="d-flex justify-content-center mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Mettre à jour votre mot de passe" />
+                </div>
+                <div class="alert alert-success ml-auto" role="alert" style="display:none" id="validation2">
+                    Votre mot de passe a bien été modifié !
+                </div>
+            </div>
+            
         </div>
     </div>   
 </div>
@@ -57,7 +65,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center mb-3 input-group">
-                        @Html.Editor("OldPassword", null, new { htmlAttributes = new { placeholder = " ", @class = "form-control test", @id = "a" } })
+                        @Html.Editor("OldPassword", null, new { htmlAttributes = new { @class = "form-control test", @id = "a" } })
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                         <div class="input-group-append" id="123">
                             <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
@@ -69,9 +77,9 @@
                     </div>
 
                     <div class="d-flex justify-content-center mb-3 input-group">
-                        @Html.Editor("MotdePasse", null, new { htmlAttributes = new { placeholder = "", @class = "form-control test" } })
+                        @Html.Editor("MotdePasse", null, new { htmlAttributes = new { @class = "form-control test", @id = "b" } })
                         @Html.ValidationMessageFor(model => model.Matricule, "", new { @class = "text-danger" })
-                        <div class="input-group-append">
+                        <div class="input-group-append" id="456">
                             <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
                         </div>
                     </div>
@@ -81,35 +89,56 @@
                     </div>
 
                     <div class="d-flex justify-content-center input-group">
-                        @Html.Editor("PasswordBis", null, new { htmlAttributes = new { @class = "form-control test", placeholder = "" } })
+                        @Html.Editor("PasswordBis", null, new { htmlAttributes = new { @class = "form-control test", @id = "c" } })
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                        <div class="input-group-append">
+                        <div class="input-group-append" id="789">
                             <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                    <button type="submit" class="btn btn-primary" id="validation">Confirmer</button>
                 </div>
             </div>
         }
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#envoi").click(function () {
-            $("input:text").attr("type", "password")
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#a").attr("type", "password");
+            $("#b").attr("type", "password"); 
+            $("#c").attr("type", "password"); 
+
+            $("#123").mousedown(function () {
+                $("#a").attr("type", "text") 
+            });
+
+            $("#456").mousedown(function () {
+                $("#b").attr("type", "text") 
+            });
+
+            $("#789").mousedown(function () {
+                $("#c").attr("type", "text") 
+            });
+
+            $("#123").mouseup(function () {
+                $("#a").attr("type", "password") 
+            });
+
+            $("#456").mouseup(function () {
+                $("#b").attr("type", "password") 
+            });
+
+            $("#789").mouseup(function () {
+                $("#c").attr("type", "password") 
+            });
+
+            $("#validation").click(function () {
+                $("#validation2").css("display", "block")
+            });
         });
-
-        $("#123").click(function () {
-            $("#a").toggle("type", "password"),
-                alert("YES")
-
-        });
-
-
-    })
-    
-</script>
+    </script>
+    }

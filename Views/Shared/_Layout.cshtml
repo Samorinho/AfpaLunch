@@ -1,6 +1,6 @@
 ﻿
 @{
-    List<AfpaLunch.Models.Basket> baskets = (List<AfpaLunch.Models.Basket>)Session["Panier"];
+    List<AfpaLunch.Models.Panier> baskets = (List<AfpaLunch.Models.Panier>)Session["Panier"];
     List<AfpaLunch.Models.ProduitPanier> panier = (List<AfpaLunch.Models.ProduitPanier>)HttpContext.Current.Application[Session.SessionID];
 }
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - AfpaLunch</title>
     <style>
-        #produitModal:hover, #typesnom:hover, #restonom:hover, .choix:hover {
+        #produitModal:hover, #typesnom:hover, #restonom:hover, .choix:hover, .jaime:hover, .virer:hover {
             cursor: pointer;
         }
 
@@ -203,15 +203,16 @@
     @Scripts.Render("~/bundles/owl.carousel")
     @RenderSection("scripts", required: false)
 
-
-    <script type="text/javascript">
+    @section Scripts {
+        <script type="text/javascript">
             $(document).ready(function () {
                 $("#produitModal").click(function () {
                     GetProduitsSw();
                 });
-                //$("#modalPanier").load(function () {
-                //    GetProduitsSw();
-                //});
+
+                $("#commander").click(function () {
+                    SaveCommandeSw();
+                });
 
                 function GetProduitsSw() {
                     var data = { 'idsession': '@Session.SessionID' };
@@ -228,10 +229,6 @@
                         }
                     })
                 };
-
-                $("#commander").click(function () {
-                    SaveCommandeSw();
-                });
 
                function SaveCommandeSw() {
                         var data = { 'idsession': '@Session.SessionID' };
@@ -254,7 +251,7 @@
                 $('.plusproduit').click(function () {
                     var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
                     $.ajax({
-                        url: '@Url.Action("AddQuantite", "Sw")',
+                        url: '@Url.Action("AddProduit", "Sw")',
                         type: 'POST',
                         data: JSON.stringify(data),
                         contentType: 'application/json; charset=utf-8',
@@ -271,7 +268,7 @@
                 $('.moinsproduit').click(function () {
                     var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
                     $.ajax({
-                        url: '@Url.Action("RemoveQuantite", "Sw")',
+                        url: '@Url.Action("RemoveProduit", "Sw")',
                         type: 'POST',
                         data: JSON.stringify(data),
                         contentType: 'application/json; charset=utf-8',
@@ -285,11 +282,8 @@
                     })
                 });
             });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
+        </script>
+    }
 
-        }
-    </script>
 </body>
 </html>

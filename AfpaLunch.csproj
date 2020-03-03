@@ -169,8 +169,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Basket.cs" />
+    <Compile Include="Models\Panier.cs" />
+    <Compile Include="Models\ItemPanier.cs" />
     <Compile Include="Models\MenuPanier.cs" />
+    <Compile Include="Models\ProduitComposePanier.cs" />
     <Compile Include="Models\ProduitPanier.cs" />
     <Compile Include="Models\Resto.cs" />
     <Compile Include="Operation.cs">
@@ -213,10 +215,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\glide.core.css" />
-    <Content Include="Content\glide.core.min.css" />
-    <Content Include="Content\glide.theme.css" />
-    <Content Include="Content\glide.theme.min.css" />
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
     <Content Include="Content\images\ui-icons_555555_256x240.png" />
     <Content Include="Content\images\ui-icons_777620_256x240.png" />
@@ -234,14 +232,6 @@
     <Content Include="Content\owl.theme.green.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="GlideJS\glide.core.css" />
-    <Content Include="GlideJS\glide.core.min.css" />
-    <Content Include="GlideJS\glide.esm.js" />
-    <Content Include="GlideJS\glide.js" />
-    <Content Include="GlideJS\glide.min.js" />
-    <Content Include="GlideJS\glide.modular.esm.js" />
-    <Content Include="GlideJS\glide.theme.css" />
-    <Content Include="GlideJS\glide.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\coke.png" />
@@ -297,10 +287,6 @@
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
-    <Content Include="Scripts\glide.esm.js" />
-    <Content Include="Scripts\glide.js" />
-    <Content Include="Scripts\glide.min.js" />
-    <Content Include="Scripts\glide.modular.esm.js" />
     <Content Include="Scripts\index.js.flow" />
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\esm\popper.js.map" />
@@ -311,6 +297,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\magic.css.map" />
     <EntityDeploy Include="Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
@@ -318,7 +305,6 @@
     <Content Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
-    <Content Include="Content\magic.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -448,6 +434,7 @@
     <Content Include="Views\Home\PanierAjax.cshtml" />
     <Content Include="Views\Restaurants\DetailsResto.cshtml" />
     <Content Include="Views\Utilisateurs\Historique.cshtml" />
+    <Content Include="Views\Utilisateurs\Favoris.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

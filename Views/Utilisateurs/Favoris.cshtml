@@ -1,0 +1,60 @@
+﻿@model AfpaLunch.Restaurant
+@{
+    ViewBag.Title = "Favoris";
+    List<Restaurant> favoriss = (List<Restaurant>)ViewBag.MesFavoris;
+    List<string> favoris = (List<string>)ViewBag.Favourites;
+}
+
+<div class="d-flex justify-content-center mb-4"><p class="h3">Mes restaurants préférés <i class="fa fa-2x fa-heart"></i></p></div>
+
+<div class="container w-75">
+    @foreach (Restaurant item in favoriss)
+    {
+        <div class="supprimed" id="@item.IdRestaurant">
+            <div class="d-flex justify-content-center">
+                <div><p class="h5">@item.Nom<br /></p></div>
+            </div>
+            <div class="" style="width:100%; overflow:hidden; margin:0"><img src="~/@item.Photos.FirstOrDefault().Nom" class="w-100" style="margin:-20.875% 0;" /></div>
+            <div class="px-4 pt-4">
+                <div class="row">
+                    <div class="col-5"><div><span><i class="fa fa-location-arrow"></i></span> <small>Adresse</small><p>@item.Adresse @item.CodePostal @item.Ville</p></div></div>
+                    <div class="col-5"><div><span><i class="fa fa-phone"></i></span> <small>Numéro de téléphone</small><p> @item.Telephone</p></div></div>
+                    <div class="col-2"><div class="ml-auto"><span data-restoremove="@item.IdRestaurant" class="mr-3 virer"><i class="fa fa-2x fa-trash"></i></span><a href="@Url.Action("DetailsResto","Restaurants", new { id = item.IdRestaurant })"><span><i class="fa fa-2x fa-search-plus text-dark"></i></span></a></div></div>
+                </div>
+                <div class="row">
+                    <div class="ml-auto">
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+    }
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.virer').click(function () {
+                var yo = $(this).data("restoremove");
+                var data = { 'idrestaurant': $(this).data("restoremove"), 'idsession': '@Session.SessionID' };
+                var div = $("#" + yo).closest("div");
+                $.ajax({
+                    url: '@Url.Action("RemoveFavoris", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(div).remove();
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
+
+        });
+    </script>
+}

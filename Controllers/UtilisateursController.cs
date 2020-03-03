@@ -78,6 +78,32 @@ namespace AfpaLunch.Views
             return View(utilisateur);
         }
 
+        public ActionResult Favoris(int? id)
+        {
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur = (Utilisateur)Session["Utilisateur"];
+
+            if (utilisateur != null)
+            {
+                utilisateur = db.Utilisateurs.Find(id);
+                //List<string> favoris = new List<string>();
+
+                //foreach (Restaurant item in db.Restaurants)
+                //{
+                //    var fav = db.Restaurants.Where(r => r.Utilisateurs.FirstOrDefault().IdUtilisateur == id && r.IdRestaurant == item.IdRestaurant).ToList();
+
+                //    if (fav != null && fav.Count > 0)
+                //    {
+                //        TempData[item.Nom] = fav;
+                //        favoris.Add(item.Nom);
+                //    }
+                //}
+                //ViewBag.Favourites = favoris;
+                ViewBag.MesFavoris = db.Restaurants.Where(r => r.Utilisateurs.FirstOrDefault().IdUtilisateur == id).ToList();
+            }
+
+            return View();
+        }
         public ActionResult Historique()
         {
             Utilisateur utilisateur = new Utilisateur();

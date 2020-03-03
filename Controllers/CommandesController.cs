@@ -60,7 +60,7 @@ namespace AfpaLunch.Controllers
                     try
                     {
                         Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
-                        List<Basket> baskets = (List<Basket>)Session["Panier"];
+                        List<Panier> baskets = (List<Panier>)Session["Panier"];
                         int IdUtilisateur = utilisateur.IdUtilisateur;
                         DateTime Date = DateTime.Now;
                     }
