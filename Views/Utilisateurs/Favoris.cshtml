@@ -5,7 +5,7 @@
     List<string> favoris = (List<string>)ViewBag.Favourites;
 }
 
-<div class="d-flex justify-content-center mb-4"><p class="h3">Mes restaurants préférés <i class="fa fa-2x fa-heart"></i></p></div>
+<div class="d-flex justify-content-center mb-4"><p class="h3">Mes restaurants préférés <i class="fa fa-heart"></i></p></div>
 
 <div class="container w-75">
     @foreach (Restaurant item in favoriss)
@@ -47,14 +47,16 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-                        $(div).remove();
+                        $(div).addClass("animated zoomOut");
                     },
                     error: function () {
                         alert("Erreur");
                     }
-                })
+                });
+                setTimeout(function () {
+                    $(div).remove();
+                }, 500);
             });
-
         });
     </script>
 }

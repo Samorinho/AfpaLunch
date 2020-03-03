@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -102,6 +103,50 @@ namespace AfpaLunch.Controllers
 
             
             return View(restaurant);
+        }
+
+        [HttpPost]
+        public ActionResult Upload()
+        {
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        string path = AppDomain.CurrentDomain.BaseDirectory + "Images/";  
+                        string filename = Path.GetFileName(Request.Files[i].FileName);  
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = file.FileName;
+                        }
+
+                        // Get the complete folder path and store the file inside it.  
+                        fname = Path.Combine(Server.MapPath("~/Images/"), fname);
+                        file.SaveAs(fname);
+                    }
+                    // Returns message that successfully uploaded  
+                    return Json("Votre image a bien été envoyée !");
+                }
+                catch (Exception ex)
+                {
+                    return Json("Une erreure s'est produite : " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
         }
 
         // GET: Restaurants/Create
