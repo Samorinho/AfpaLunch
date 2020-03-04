@@ -1,0 +1,48 @@
+﻿@model AfpaLunch.Menu
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<div id="select">
+    @foreach (var categorie in Model.Categories)
+    {
+        List<SelectListItem> data = (List<SelectListItem>)ViewData["cat" + categorie.IdCategorie];
+        <div>@categorie.Nom</div>
+        @Html.DropDownList("cat" + categorie.IdCategorie, data, "Sélectionnez", new { @class = "form-control" })
+    }
+
+</div>
+
+<button id="btnCommandeMenu">Ajouter au panier</button>
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#btnCommandeMenu').click(function () {
+
+                var produits = [];
+
+                $.each($("#select").find("select"), function (X, V) {
+                    console.log($(V).val());
+                    produits.push($(V).val());
+                });
+
+                var data = { 'idproduits': produits, 'idmenu': '@Model.IdMenu', 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddMenu", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("YES");
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                });
+
+            });
+    </script>
+}

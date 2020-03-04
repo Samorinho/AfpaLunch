@@ -8,16 +8,12 @@ namespace AfpaLunch.Models
     public class Panier : List<ItemPanier>
     {
         public int IdRestaurant { get; set; }
-        public int Quantite { get; set; }
-        public decimal Total { get; set; }
-        public void GetQuantite()
+        public int Quantite { get; private set; }
+        public decimal Total { get; private set; }
+
+        private void CalculPanier()
         {
             Quantite = 0;
-            Browse();
-        }
-
-        public void GetTotal()
-        {
             Total = 0;
             Browse();
         }
@@ -40,8 +36,10 @@ namespace AfpaLunch.Models
                     }
                     else
                     {
-                        this.Add(item);
+                        this.Add(itemPanier);
                     }
+
+                    CalculPanier();
                 }
 
                 else if (itemPanier is MenuPanier && IdMenu > 0)
@@ -57,13 +55,15 @@ namespace AfpaLunch.Models
                         this.Add(item);
                     }
 
-                    this.Add(itemPanier);
+                    this.Add(itemPanier);                    
                 }
 
                 else
                 {
                     isReturnOk = false;
                 }
+
+                CalculPanier();
             }
             
             else
@@ -81,7 +81,7 @@ namespace AfpaLunch.Models
 
             if (IdProduit != null && IdProduit > 0)
             {
-                 item = this.FirstOrDefault(p => p.GetIdProduit() == IdProduit);           
+                 item = this.FirstOrDefault(p => p.GetIdProduit() == IdProduit);
             }
 
             else if (IdMenu != null && IdMenu > 0)
@@ -93,6 +93,8 @@ namespace AfpaLunch.Models
             {
                 this.Remove(item);
                 isReturnOk = true;
+
+                CalculPanier();
             }
 
             return isReturnOk;

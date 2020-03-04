@@ -20,9 +20,9 @@
     </div>
 
     @*<div>
-        <button class="animated infinite zoomOut delay-2s">TEST</button>
-        <button id="sa" class="">TEST</button>
-    </div>*@
+            <button class="animated infinite zoomOut delay-2s">TEST</button>
+            <button id="sa" class="">TEST</button>
+        </div>*@
 
     @*<div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Produits&nbsp;<i class="fa fa-birthday-cake"></i></p></div>*@
 
@@ -245,10 +245,10 @@
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#sa").toggleClass("animated bounce delay-2s");
+
+            $("#produitModal").load(window.location.href + " #produitModal")
 
             $('.lemenu').click(function () {
-
                 var data = { 'idmenu': $(this).data("menu"), 'idsession': '@Session.SessionID' };
                 $.ajax({
                     url: '@Url.Action("AddMenu", "Sw")',
@@ -265,7 +265,7 @@
                 })
             });
 
-            $('.leproduit').click(function () {
+            $('.leproduit').click(function () {                
                 event.stopPropagation();
                 var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
                 $.ajax({
@@ -275,20 +275,30 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-
-                        $("#chiffrepanier").html(data);
-                        $("#chiffrepanier").toggleClass('magictime boingInUp');
-                        $("#nompanier").toggleClass("animated infinite bounce delay-2s");
-                        return false;
+                        if (data.isReturnOk == true) {
+                            $("#chiffrepanier").html(data.qte);
+                            $("#prix").html(data.total);
+                            $("#ModalPanier").load(data);
+                            $(this).hide(slow, linear);
+                            //$("#produitModal").load(window.location.href + " #produitModal");
+                        }
+                        else {
+                            alert("Votre produit ne s'est pas ajouté au panier");
+                        }
 
                     },
                     error: function () {
                         alert("Erreur");
                     }
                 });
-                //$(this).addClass('magictime puffOut', '400');
-                $(this).toggleClass('magictime holeOut');
-                //$("#chiffrepanier").toggleClass("tinUpIn");
+
+                
+                //$(this).toggleClass('magictime holeOut');
+
+                //setTimeout(function () {
+                //    $(this).toggleClass('magictime holeOut');
+                //}, 500);
+
             });
 
             $('.removeproduit').click(function () {
@@ -308,21 +318,6 @@
                     })
             });
 
-            $("#modalPanier").click(function () {
-                var data = { 'idsession': '@Session.SessionID' };
-                    $.ajax({
-                        url: '@Url.Action("GetProduits", "Sw")',
-                        type: 'POST',
-                        data: JSON.stringify(data),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        success: function (data) {
-                        },
-                        error: function () {
-                            alert("Erreur");
-                        }
-                    })
-            });
 
             $('.moinsproduit').click(function () {
                     var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };

@@ -15,100 +15,95 @@ namespace AfpaLunch.Controllers
         public JsonResult AddMenu(int IdMenu, List<int> IdProduits, string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
-            Panier produitPaniers = null;
+            Panier panier = GetPanier(idsession);
 
-            if (sessionUtilisateur != null)
+            if (sessionUtilisateur != null && panier != null && IdMenu > 0 && IdProduits.Count > 0)
             {
-                if (HttpContext.Application[idsession] != null)
-                {
-                    produitPaniers = (Panier)HttpContext.Application[idsession];
-                }
-                else
-                {
-                    produitPaniers = new Panier();
-                }
-
                 Menu menu = db.Menus.Find(IdMenu);
 
                 if (menu != null)
                 {
                     MenuPanier menuPanier = new MenuPanier();
                     menuPanier.IdMenu = IdMenu;
+                    menuPanier.Prix = menu.Prix;
+                    menuPanier.Nom = menu.Nom;
+                    menuPanier.Quantite = 1;
 
                     foreach (int IdProduit in IdProduits)
                     {
                         ProduitPanier produitPanier = FindProduit(IdProduit);
-                        
+
                         if (produitPanier != null)
                         {
+                            panier.IdRestaurant = produitPanier.IdRestaurant;
                             menuPanier.produits.Add(produitPanier);
-                        }                        
+                        }
                     }
 
-                    produitPaniers.Add(menuPanier);
+                    panier.Add(menuPanier);
                 }
 
-                HttpContext.Application[idsession] = produitPaniers;
+                HttpContext.Application[idsession] = panier;
             }
 
-            return Json(produitPaniers.Quantite, JsonRequestBehavior.AllowGet);
+            return Json(panier.Quantite, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AddProduit(int IdProduit, string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
-            Panier produitPaniers = null;
+            Panier panier = GetPanier(idsession);
+            bool isReturnOk = false;
 
-            if (sessionUtilisateur != null)
+            if (sessionUtilisateur != null && panier != null && IdProduit > 0)
             {
-                if (HttpContext.Application[idsession] != null)
-                {
-                    produitPaniers = (Panier)HttpContext.Application[idsession];
-                }
-                else
-                {
-                    produitPaniers = new Panier();
-                }
+                ProduitPanier produitPanier = FindProduit(IdProduit);
 
-                if (IdProduit > 0)
+                if (produitPanier != null)
                 {
-                    ProduitPanier produitPanier = FindProduit(IdProduit);
-
-                    if (produitPanier != null)
+                    if (panier.IdRestaurant == 0)
                     {
-                        produitPaniers.Add(produitPanier);
+                        panier.IdRestaurant = produitPanier.IdRestaurant;
+                        panier.AddItem(produitPanier);
+                        isReturnOk = true;
                     }
+
+                    else if (panier.IdRestaurant == produitPanier.IdRestaurant)
+                    {
+                        panier.AddItem(produitPanier);
+                        isReturnOk = true;
+                    } 
                 }
 
-                HttpContext.Application[idsession] = produitPaniers;
+                HttpContext.Application[idsession] = panier;
             }
 
-            return Json(produitPaniers.Quantite, JsonRequestBehavior.AllowGet);
+            return Json(new { isReturnOk, qte = panier.Quantite, total = panier.Total }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult RemoveProduit(int IdProduit, string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
 
-            Panier produitPaniers = (Panier)HttpContext.Application[idsession];
+            Panier panier = (Panier)HttpContext.Application[idsession];
 
             ProduitPanier produitPanier = new ProduitPanier();
 
             int quantite = 0;
 
-            var prod = produitPaniers.Find(p => p.GetIdProduit() == IdProduit);
-            if (prod != null && produitPaniers.Count > 1)
+            var prod = panier.Find(p => p.GetIdProduit() == IdProduit);
+            if (prod != null && panier.Count > 1)
             {
                 prod.Quantite--;
                 quantite -= prod.Quantite;
             }
-            else if (prod != null && produitPaniers.Count > 0)
+            else if (prod != null && panier.Count > 0)
             {
-                produitPaniers.Remove(produitPanier);
+                panier.Remove(produitPanier);
                 quantite -= produitPanier.Quantite;
             }
 
-            HttpContext.Application[idsession] = produitPaniers;
+            HttpContext.Application[idsession] = panier;
 
             return Json(quantite, JsonRequestBehavior.AllowGet);
         }
@@ -116,11 +111,11 @@ namespace AfpaLunch.Controllers
         public JsonResult GetProduits(string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
-            List<ProduitPanier> panier = null;
+            Panier panier = null;
 
             if (sessionUtilisateur != null && HttpContext.Application[idsession] != null)
             {
-                panier = (List<ProduitPanier>)HttpContext.Application[idsession];
+                panier = (Panier)HttpContext.Application[idsession];
             }
 
             return Json(panier, JsonRequestBehavior.AllowGet);
@@ -144,7 +139,7 @@ namespace AfpaLunch.Controllers
                 {
                     decimal prixTotal = 0;
 
-                    panier.GetTotal();
+                    // panier.GetTotal(); -> On fait appel à CalculPanier() à l'ajout ou à la suppression d'un item
                     prixTotal = panier.Total;
 
                     if (prixTotal <= utilisateur.Solde)
@@ -175,7 +170,7 @@ namespace AfpaLunch.Controllers
                                 List<ProduitPanier> produitPaniers = menuPanier.produits;
                                 Menu menu = db.Menus.Find(item.GetIdMenu());
 
-                                foreach ( ProduitPanier produitPanier in produitPaniers)
+                                foreach (ProduitPanier produitPanier in produitPaniers)
                                 {
                                     CommandeProduit commandeProduit = new CommandeProduit();
                                     commandeProduit.IdProduit = item.GetIdProduit();
@@ -342,12 +337,23 @@ namespace AfpaLunch.Controllers
             return Json(idrestaurant, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetFavoris(int idcommande, string idsession)
+        {
+            Utilisateur utilisateur = db.Utilisateurs.Where(u => u.IdSession == idsession).FirstOrDefault();
+
+            Commande commande = db.Commandes.Find(idcommande);
+
+            int a = commande.Restaurant.IdRestaurant;
+
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
         private ProduitPanier FindProduit(int IdProduit)
         {
             Produit produit = db.Produits.Find(IdProduit);
             ProduitPanier produitPanier = null;
 
-            if (produitPanier != null)
+            if (produit != null)
             {
                 produitPanier = new ProduitPanier();
                 produitPanier.IdProduit = IdProduit;
@@ -355,11 +361,28 @@ namespace AfpaLunch.Controllers
                 produitPanier.Description = produit.Description;
                 produitPanier.Quantite = 1;
                 produitPanier.Prix = produit.Prix;
-                produitPanier.Photo = produit.Photos.First().Nom;
+                produitPanier.Photo = produit.Photos.First()?.Nom;
                 produitPanier.IdRestaurant = produit.IdRestaurant;
             }
-            
+
             return produitPanier;
+        }
+
+        private Panier GetPanier(string idsession)
+        {
+            Panier panier = null;
+
+            if (HttpContext.Application[idsession] != null)
+            {
+                panier = (Panier)HttpContext.Application[idsession];
+            }
+            else
+            {
+                panier = new Panier();
+                panier.IdRestaurant = 0;
+            }
+
+            return panier;
         }
     }
 }

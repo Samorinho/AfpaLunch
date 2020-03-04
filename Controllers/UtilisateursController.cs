@@ -104,6 +104,8 @@ namespace AfpaLunch.Views
 
             return View();
         }
+
+        // EN COURS
         public ActionResult Historique()
         {
             Utilisateur utilisateur = new Utilisateur();
@@ -126,6 +128,28 @@ namespace AfpaLunch.Views
 
                 ViewBag.Histoires = history;
                 ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).ToList();
+
+                Commande commande = new Commande();
+                ////////////////////////////////////////
+
+                var backup = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderBy(c => c.Date).ToList();
+
+                var produits = db.Produits.Where(p => p.IdRestaurant == commande.IdRestaurant).ToList();
+
+                foreach (var historique in utilisateur.Commandes)
+                {
+                    List<Produit> products = produits.Where(p => p.IdProduit == historique.Restaurant.Produits.FirstOrDefault().IdProduit).ToList();
+
+                    // On crée les items d'un select (dropdownlist)
+                    List<SelectListItem> items = new List<SelectListItem>();
+
+                    foreach (Produit produit in products)
+                    {
+                        items.Add(new SelectListItem { Text = produit.Nom, Value = produit.IdProduit.ToString() });
+                    }
+
+                    ViewData["produits" + historique.IdCommande] = items;
+                }
             }
             
 

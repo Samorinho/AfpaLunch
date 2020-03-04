@@ -1,7 +1,7 @@
 ﻿
 @{
-    List<AfpaLunch.Models.Panier> baskets = (List<AfpaLunch.Models.Panier>)Session["Panier"];
-    List<AfpaLunch.Models.ProduitPanier> panier = (List<AfpaLunch.Models.ProduitPanier>)HttpContext.Current.Application[Session.SessionID];
+    AfpaLunch.Models.Panier panier = (AfpaLunch.Models.Panier)HttpContext.Current.Application[Session.SessionID];
+    //Response.AddHeader("Refresh", "5");
 }
 <!DOCTYPE html>
 <html>
@@ -122,8 +122,8 @@
     </nav>
 
     <div class="modal fade" id="ModalPanier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        @using (@Html.BeginForm("SaveCommande", "Sw"))
-        {
+         @*using (@Html.BeginForm("SaveCommande", "Sw"))*@
+        @{
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -136,9 +136,15 @@
                         @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                         @{ if (panier != null)
                             {
+                                Html.Hidden(Session.SessionID);
                                 <div class="row">
-                                    @{ foreach (AfpaLunch.Models.ProduitPanier item in panier)
+                                    @{ foreach (AfpaLunch.Models.ItemPanier item in panier)
                                         {
+                                            if (item is AfpaLunch.Models.MenuPanier)
+                                            {
+                                                List<AfpaLunch.Models.ProduitPanier> produitPaniers = ((AfpaLunch.Models.MenuPanier)item).produits;
+                                            }
+
                                             try
                                             {
                                                 <div class="row m-1 listepanier">
@@ -155,12 +161,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-2">@item.Prix€ <span class="badge badge-light" data-produit="@item.IdProduit">@item.Quantite</span></div>
+                                                    <div class="col-2">@item.Prix€ <span class="badge badge-light" data-produit="@item.GetIdProduit()">@item.Quantite</span></div>
                                                     <div class="col-2">
-                                                        <span class="p-2 rounded moinsproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                                        <span class="p-2 rounded moinsproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
                                                     </div>
                                                     <div class="col-2">
-                                                        <span class="p-2 rounded removeproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
+                                                        <span class="p-2 rounded removeproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
                                                     </div>
                                                 </div>
                                             }
@@ -170,6 +176,9 @@
                                             }
                                         }
                                     }
+                                    <div class="ml-auto">
+                                        <p class="text-light" id="prix"></p>
+                                    </div>
                                 </div>
                             }
                             else
@@ -180,7 +189,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
-                        <input type="button" id="commander" class="btn btn-outline-success" value="Commander" />
+                        <input type="button" id="commander" class="btn btn-outline-success FOU" value="Commander" />
                     </div>
                 </div>
             </div>
@@ -206,47 +215,8 @@
     @section Scripts {
         <script type="text/javascript">
             $(document).ready(function () {
-                $("#produitModal").click(function () {
-                    GetProduitsSw();
-                });
 
-                $("#commander").click(function () {
-                    SaveCommandeSw();
-                });
 
-                function GetProduitsSw() {
-                    var data = { 'idsession': '@Session.SessionID' };
-                    $.ajax({
-                        url: '@Url.Action("GetProduits", "Sw")',
-                        type: 'POST',
-                        data: JSON.stringify(data),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        success: function (data) {
-                        },
-                        error: function () {
-                            alert("Erreur");
-                        }
-                    })
-                };
-
-               function SaveCommandeSw() {
-                        var data = { 'idsession': '@Session.SessionID' };
-                        $.ajax({
-                            url: '@Url.Action("SaveCommande", "Sw")',
-                            type: 'POST',
-                            data: JSON.stringify(data),
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'json',
-                            success: function (data) {
-                                alert("Commande validée !");
-                                document.location.href = '/restaurants/index';
-                            },
-                            error: function () {
-                            alert("Erreur");
-                            }
-                        })
-                };
 
                 $('.plusproduit').click(function () {
                     var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };

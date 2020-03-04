@@ -41,8 +41,8 @@ namespace AfpaLunch.Controllers
             ViewBag.Boisson = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 6).ToList(), "IdProduit", "Nom");
             ViewBag.Dessert = new SelectList(db.Produits.Where(p => p.IdRestaurant == id && p.IdCategorie == 4).ToList(), "IdProduit", "Nom");
 
-            Restaurant restaurant = db.Restaurants.Find(id);
             List<string> nomcategorie = new List<string>();
+            Restaurant restaurant = db.Restaurants.Include(r => r.Produits).Include(r => r.Menus).Where(r => r.IdRestaurant == id).First();
 
             foreach (Categorie item in db.Categories)
             {
@@ -72,7 +72,7 @@ namespace AfpaLunch.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Restaurant restaurant = db.Restaurants.Find(id);
+            Restaurant restaurant = db.Restaurants.Include(r => r.Produits).Include(r => r.Menus).Where(r => r.IdRestaurant == id).First();
 
             if (restaurant == null)
             {
@@ -187,7 +187,6 @@ namespace AfpaLunch.Controllers
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
 
                     Panier basket  = new Panier();
-                    basket.Quantite++;
                     baskets.Add(basket);
                     Session["Panier"] = baskets;
                 }
@@ -204,7 +203,6 @@ namespace AfpaLunch.Controllers
 
                     Produit produit = db.Produits.Include(p => p.Photos).Where(p => p.IdProduit == idproduit).First();
                     Panier basket = new Panier();
-                    basket.Quantite++;
                     baskets.Add(basket);
                     Session["Panier"] = baskets;
                 }

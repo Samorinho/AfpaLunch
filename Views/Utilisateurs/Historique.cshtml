@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Historique";
     List<Commande> commandes = (List<Commande>)ViewBag.Histoire;
+
 }
 <div class="d-flex justify-content-center mb-4"><p class="h3">Historique des commandes</p></div>
 
@@ -16,14 +17,12 @@
                     <div><p class="text-dark font-weight-light h4">@item.Restaurant.Nom</p></div>
                     <div class="text-secondary">@item.Date.ToString("ddd d MMM")</div>
                 </div>
-                <div class="ml-auto"><p>@item.Prix€</p><span class="lacommande" data-commande="@item.IdCommande"><i class="fa fa-plus"></i></span></div>
+                <div class="ml-auto"><p>@item.Prix€</p><span class="lacommande" data-commande="@item.IdCommande" id="@item.IdCommande"><i class="fa fa-plus"></i></span></div>
             </div>
             <hr />
         }
     </div>
 </div>
-
-<button id="bouton" data-toggle="modal" data-target="#modalhistorique">TEST</button>
 
 <div id="modalhistorique" class="modal " tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -56,7 +55,7 @@
                 <div class="collapse" id="collapseExample">
                     @foreach (var item in commandes)
                     {
-                        <div class="row p-2">
+                        <div class="row p-2" id="@item.IdCommande">
                             <div class="col-3"><img src="~/@item.CommandeProduits.FirstOrDefault().Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
                             <div class="col-5"><p>@item.CommandeProduits.FirstOrDefault().Produit.Nom</p></div>
                             <div class="col-2"><span class="badge badge-light">@item.CommandeProduits.FirstOrDefault().Quantite</span></div>
@@ -75,17 +74,17 @@
     </div>
 </div>
 
+<button id="x">LOL</button>
 
 @section Scripts {
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#bouton").click(function () {
-                $("#modalHistorique").modal("show")
-            })
-
+            $(".lacommande").click(function () {
+                var w = $(this).data("commande");
+                $("#modalhistorique").modal("show");
+            });          
         });
-
     </script>
 
 }

@@ -46,7 +46,7 @@
                                             <p class="card-text">@Html.DisplayFor(modelItem => produit.Categorie.Nom)<br />@Html.DisplayFor(modelItem => produit.Prix)€</p>
                                         </div>
                                         <div class="p-2 ml-auto">
-                                            <span class="p-2 rounded leproduit" data-produit="@produit.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                            <span class="p-2 rounded leproduit" data-produit="@produit.IdProduit" style="background-color:#fdf18d" id="@produit.IdProduit"><i class="fa fa-plus"></i></span>
                                         </div>
                                     </div>
                                 </div>
@@ -57,13 +57,77 @@
                 }
             </div>
         }
+
+        foreach (var item in Model.Menus)
+        {
+            <div class='row d-flex p-3'>
+                <div class='col-4'>
+                    <div class='d-flex flex-column'>
+                        <div class='row px-5 h4'>
+                            @item.Nom
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <p class="font-weight-light">@item.Prix€</p>
+                </div>
+                <div class='col-2 ml-auto'>
+                    <div class="row">
+                        <a href="@Url.Action("Details", "Menus", new { id = item.IdMenu })">Composer son menu</a>
+                        <button class="btn btn-info"></button>
+                    </div>
+                </div>
+                <div class="col-2 ajouted" style="display:none">
+                    <div class="alert-link">Menu ajouté au panier !</div>
+                </div>
+            </div>
+        }
     }
+
 </div>
 
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            //$("#sa").toggleClass("animated bounce delay-2s");
+
+               $(".FOU").click(function () {
+                    SaveCommandeSw();
+                });
+
+            function SaveCommandeSw() {
+                var data = { 'idsession': '@Session.SessionID' };
+                        $.ajax({
+                            url: '@Url.Action("SaveCommande", "Sw")',
+                            type: 'POST',
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (data) {
+                                alert("Commande validée !");
+                                document.location.href = '/restaurants/index';
+                            },
+                            error: function () {
+                            alert("Erreur");
+                            }
+                        })
+            };
+
+            function Commander() {
+                 var data = { 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddMenu", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(".ajouted").css("display","block");
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            };
 
             $('.lemenu').click(function () {
 
@@ -93,20 +157,24 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
+                        if (data.isReturnOk == true) {
+                            $("#chiffrepanier").html(data.qte);
+                            $("#prix").html(data.total);
+                        }
 
-                        $("#chiffrepanier").html(data);
-                        //$("#chiffrepanier").toggleClass('magictime boingInUp');
-                        //$("#nompanier").toggleClass("animated infinite bounce delay-2s");
-                        return false;
-
+                        else {
+                            alert("Votre produit ne s'est pas ajouté au panier");
+                        }
                     },
                     error: function () {
                         alert("Erreur");
                     }
                 });
-                //$(this).addClass('magictime puffOut', '400');
-                //$(this).toggleClass('magictime holeOut');
-                //$("#chiffrepanier").toggleClass("tinUpIn");
+
+                $(this).hide().delay(1000).fadeIn(2200);
+                                //                $(this).toggleClass('magictime puffOut', function () {
+                                //    $(this).delay(3000).toggleClass("magictime puffIn");
+                                //});
             });
 
             $('.removeproduit').click(function () {
