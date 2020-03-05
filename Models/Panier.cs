@@ -38,8 +38,6 @@ namespace AfpaLunch.Models
                     {
                         this.Add(itemPanier);
                     }
-
-                    CalculPanier();
                 }
 
                 else if (itemPanier is MenuPanier && IdMenu > 0)

@@ -24,66 +24,74 @@
     </div>
 </div>
 
-<div id="modalhistorique" class="modal " tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+@foreach (Commande item in commandes)
+{
+    <div id="@item.IdCommande@item.IdCommande" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-            <div class="modal-header">
-                <div class="modal-title font-weight-light">
-                    <div class="d-flex justify-content-center">
-                        <div><p class="h5">@commandes.FirstOrDefault().Restaurant.Nom<br /></p></div>
-                    </div>
-                </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="px-2 mb-1">
-                    <div class="row">
-                        <div><p class="text-secondary mb-0">Date</p></div><div class="ml-auto"><p class="text-secondary mb-0">Prix</p></div>
-                    </div>
-                    <div class="row">
-                        <div> <p class="font-weight-bolder">@commandes.FirstOrDefault().Date.ToString("dddd d MMM")</p></div><div class="ml-auto"><p class=" font-weight-normal">@commandes.FirstOrDefault().Prix.ToString()€</p> </div>
-                    </div>
-                </div>
-                <div class="" style="width:100%; overflow:hidden; margin:0"><img src="~/@commandes.FirstOrDefault().Restaurant.Photos.FirstOrDefault().Nom" class="w-100" style="margin:-20.875% 0;" /></div>
-                <div class="px-2">
-                    <span><i class="fa fa-location-arrow"></i></span> <small>Adresse</small><p>@commandes.FirstOrDefault().Restaurant.Adresse @commandes.FirstOrDefault().Restaurant.CodePostal @commandes.FirstOrDefault().Restaurant.Ville</p>
-                    <span><i class="fa fa-phone"></i></span> <small>Numéro de téléphone</small><p> @commandes.FirstOrDefault().Restaurant.Telephone</p>
-                </div>
-                <div class="collapse" id="collapseExample">
-                    @foreach (var item in commandes)
-                    {
-                        <div class="row p-2" id="@item.IdCommande">
-                            <div class="col-3"><img src="~/@item.CommandeProduits.FirstOrDefault().Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
-                            <div class="col-5"><p>@item.CommandeProduits.FirstOrDefault().Produit.Nom</p></div>
-                            <div class="col-2"><span class="badge badge-light">@item.CommandeProduits.FirstOrDefault().Quantite</span></div>
-                            <div class="ml-auto col-2"><p>@item.CommandeProduits.FirstOrDefault().Prix€</p></div>
+                <div class="modal-header">
+                    <div class="modal-title font-weight-light">
+                        <div class="d-flex justify-content-center">
+                            <div><p class="h5">@item.Restaurant.Nom<br /></p></div>
                         </div>
-                    }
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Produits</button>
-                <button type="button" class="btn btn-primary">Commander</button>
+                <div class="modal-body">
+                    <div class="px-2 mb-1">
+                        <div class="row">
+                            <div><p class="text-secondary mb-0">Date</p></div><div class="ml-auto"><p class="text-secondary mb-0">Prix</p></div>
+                        </div>
+                        <div class="row">
+                            <div> <p class="font-weight-bolder">@item.Date.ToString("dddd d MMM")</p></div><div class="ml-auto"><p class=" font-weight-normal">@item.Prix.ToString()€</p> </div>
+                        </div>
+                    </div>
+                    <div class="" style="width:100%; overflow:hidden; margin:0"><img src="~/@item.Restaurant.Photos.FirstOrDefault().Nom" class="w-100" style="margin:-20.875% 0;" /></div>
+                    <div class="px-2">
+                        <span><i class="fa fa-location-arrow"></i></span> <small>Adresse</small><p>@item.Restaurant.Adresse @item.Restaurant.CodePostal @item.Restaurant.Ville</p>
+                        <span><i class="fa fa-phone"></i></span> <small>Numéro de téléphone</small><p> @item.Restaurant.Telephone</p>
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        @foreach (var produits in item.CommandeProduits)
+                        {
+                            <div class="row p-2" id="@item.IdCommande">
+                                <div class="col-3"><img src="~/@item.CommandeProduits.FirstOrDefault().Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
+                                <div class="col-5"><p>@item.CommandeProduits.FirstOrDefault().Produit.Nom</p></div>
+                                <div class="col-2"><span class="badge badge-light">@item.CommandeProduits.FirstOrDefault().Quantite</span></div>
+                                <div class="ml-auto col-2"><p>@item.CommandeProduits.FirstOrDefault().Prix€</p></div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Produits</button>
+                    <button type="button" class="btn btn-primary">Commander</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<button id="x">LOL</button>
-
+}
 @section Scripts {
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".lacommande").click(function () {
-                var w = $(this).data("commande");
-                $("#modalhistorique").modal("show");
-            });          
+
+            $('.lacommande').on('click', function () {
+                var idcommande = $(this).data("commande");
+                console.log("idcommande = " + idcommande);
+
+                var find = idcommande + "" + idcommande;
+                console.log("var find = " + find);
+
+                $('#' + find).modal("show");
+            });
+
         });
     </script>
 

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using AfpaLunch;
@@ -26,30 +27,88 @@ namespace AfpaLunch.Views
             utilisateur = (Utilisateur)Session["Utilisateur"];
             if (utilisateur != null)
             {
-                return RedirectToAction("Index", "Restaurants"); 
+                return RedirectToAction("Index", "Restaurants");
             }
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Connexion([Bind(Include ="Matricule, Password")] Utilisateur utilisateur)
+        public ActionResult Connexion([Bind(Include = "Matricule, Password")] Utilisateur utilisateur)
         {
             if (ModelState.IsValid)
             {
-                Utilisateur user = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
-                if (user != null)
-                {
-                    user.IdSession = Session.SessionID;
-                    db.SaveChanges();
+                Utilisateur user = db.Utilisateurs.First(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
+                user.IdSession = Session.SessionID;
+                db.SaveChanges();
 
-                    Session["Utilisateur"] = user;
+                Session["Utilisateur"] = user;
 
-                    return RedirectToAction("Index", "Restaurants");
-                }
+                return RedirectToAction("Index", "Restaurants");
+
+                //Utilisateur user = new Utilisateur();
+
+                //user.Password = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule).Password;
+
+                //byte[] hashBytes = Convert.FromBase64String(user.Password);
+
+                //byte[] salt = new byte[16];
+                //Array.Copy(hashBytes, 0, salt, 0, 16);
+
+                //var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 10000);
+                //byte[] hash = pbkdf2.GetBytes(20);
+
+                //for (int i = 0; i < 20; i++)
+                //{
+                //    if (hashBytes[i + 16] != hash[i])
+                //    {
+                //        throw new UnauthorizedAccessException();
+                //    }
+                //    else
+                //    {
+                //        user.IdSession = Session.SessionID;
+                //        db.SaveChanges();
+
+                //        Session["Utilisateur"] = user;
+
+                //        return RedirectToAction("Index", "Restaurants");
+                //    }
+                //}
+
+                //byte[] salt;
+                //new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+                //var pbkdf2 = new Rfc2898DeriveBytes(utilisateur.Password, salt, 10000);
+                //byte[] hash = pbkdf2.GetBytes(20);
+
+                //byte[] hashBytes = new byte[36];
+                //Array.Copy(salt, 0, hashBytes, 0, 16);
+                //Array.Copy(hash, 0, hashBytes, 16, 20);
+
+                //utilisateur.Password = Convert.ToBase64String(hashBytes);
+
+                //Utilisateur user = db.Utilisateurs.First(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
+                //utilisateur.IdSession = Session.SessionID;
+                //db.SaveChanges();
+
+                //Session["Utilisateur"] = user;
+
+                //return RedirectToAction("Index", "Restaurants");
+
+                //Utilisateur user = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule &&  u.Password == utilisateur.Password);
+                //if (user != null)
+                //{
+
+                //    user.IdSession = Session.SessionID;
+                //    db.SaveChanges();
+
+                //    Session["Utilisateur"] = user;
+
+                //    return RedirectToAction("Index", "Restaurants");
+                //}
             }
-         
-            return View();       
+
+            return View();
         }
 
         [HttpPost]
@@ -62,16 +121,28 @@ namespace AfpaLunch.Views
             if (ModelState.IsValid)
             {
                 utilisateur = (Utilisateur)Session["Utilisateur"];
-              
+
                 if (utilisateur != null && utilisateur.Password == Convert.ToString(values["OldPassword"]))
                 {
                     utilisateur.Password = Convert.ToString(values["MotdePasse"]);
-                    
+
                     if (utilisateur.Password == Convert.ToString(values["PasswordBis"]))
                     {
+                        //byte[] salt;
+                        //new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+                        //var pbkdf2 = new Rfc2898DeriveBytes(utilisateur.Password, salt, 10000);
+                        //byte[] hash = pbkdf2.GetBytes(20);
+
+                        //byte[] hashBytes = new byte[36];
+                        //Array.Copy(salt, 0, hashBytes, 0, 16);
+                        //Array.Copy(hash, 0, hashBytes, 16, 20);
+
+                        //utilisateur.Password = Convert.ToBase64String(hashBytes);
+
                         db.Entry(utilisateur).State = EntityState.Modified;
                         db.SaveChanges();
-                    }                  
+                    }
                 }
             }
 
@@ -113,45 +184,46 @@ namespace AfpaLunch.Views
 
             if (utilisateur != null)
             {
-                List<string> history = new List<string>();
+                //List<string> history = new List<string>();
 
-                foreach (Commande item in db.Commandes)
-                {
-                    var back = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderBy(c => c.Date).ToList();
+                //foreach (Commande item in db.Commandes)
+                //{
+                //    var back = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderByDescending(c => c.Date).ToList();
 
-                    //if (back != null && back.Count > 0)
-                    //{
-                    //    ViewData[item.IdCommande.ToString()] = back;
-                    //    history.Add(item.IdCommande.ToString());
-                    //}
-                }
+                //    if (back != null && back.Count > 0)
+                //    {
+                //        ViewData[item.IdCommande.ToString()] = back;
+                //        history.Add(item.IdCommande.ToString());
+                //    }
+                //}
 
-                ViewBag.Histoires = history;
-                ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).ToList();
+                //ViewBag.Histoires = history;
+                //List<Commande> commandes = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).ToList();
+                ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderByDescending(c => c.Date).ToList();
 
-                Commande commande = new Commande();
-                ////////////////////////////////////////
+                //Commande commande = new Commande();
+                //////////////////////////////////////////
 
-                var backup = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderBy(c => c.Date).ToList();
+                //var backup = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderBy(c => c.Date).ToList();
 
-                var produits = db.Produits.Where(p => p.IdRestaurant == commande.IdRestaurant).ToList();
+                //var produits = db.Produits.Where(p => p.IdRestaurant == commande.IdRestaurant).ToList();
 
-                foreach (var historique in utilisateur.Commandes)
-                {
-                    List<Produit> products = produits.Where(p => p.IdProduit == historique.Restaurant.Produits.FirstOrDefault().IdProduit).ToList();
+                //foreach (var historique in commandes)
+                //{
+                //    List<Produit> products = produits.Where(p => p.IdProduit == historique.Restaurant.Produits.FirstOrDefault().IdProduit).ToList();
 
-                    // On crée les items d'un select (dropdownlist)
-                    List<SelectListItem> items = new List<SelectListItem>();
+                //    // On crée les items d'un select (dropdownlist)
+                //    List<SelectListItem> items = new List<SelectListItem>();
 
-                    foreach (Produit produit in products)
-                    {
-                        items.Add(new SelectListItem { Text = produit.Nom, Value = produit.IdProduit.ToString() });
-                    }
+                //    foreach (Produit produit in products)
+                //    {
+                //        items.Add(new SelectListItem { Text = produit.Nom, Value = produit.IdProduit.ToString() });
+                //    }
 
-                    ViewData["produits" + historique.IdCommande] = items;
-                }
+                //    ViewData["produits" + historique.IdCommande] = items;
+                //}
             }
-            
+
 
             return View();
         }
