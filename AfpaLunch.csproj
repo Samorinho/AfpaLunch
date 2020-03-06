@@ -237,6 +237,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Capture.PNG" />
     <Content Include="Images\coke.png" />
     <Content Include="Images\cover.jpg" />
     <Content Include="Images\eau.jpg" />
