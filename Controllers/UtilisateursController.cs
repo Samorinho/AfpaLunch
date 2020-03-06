@@ -32,80 +32,83 @@ namespace AfpaLunch.Views
             return View();
         }
 
+        public string ChangePassword(string password)
+        {
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+
+            password = Convert.ToBase64String(hashBytes);
+
+            return password;
+        }
+
+        public bool ConnexionPassword(string passwordbdd, string passwordecran)
+        {
+            bool safeOk = true;
+
+            // Extraction des bytes 
+            byte[] hashBytes = Convert.FromBase64String(passwordbdd);
+
+            // Salaison
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+
+            // Hash sur le mot de passe tapé sur la page de connexion
+            var pbkdf2 = new Rfc2898DeriveBytes(passwordecran, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            // Comparaison des résultats
+            for (int i = 0; i < 20; i++)
+            {
+                if (hashBytes[i + 16] != hash[i])
+                {
+                    // Erreur retournée si les résultats sont différents
+                    safeOk = false;
+                    throw new UnauthorizedAccessException();
+                }
+            }
+
+            return safeOk;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Connexion([Bind(Include = "Matricule, Password")] Utilisateur utilisateur)
         {
             if (ModelState.IsValid)
             {
-                Utilisateur user = db.Utilisateurs.First(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
+                Utilisateur user = db.Utilisateurs.First(u => u.Matricule == utilisateur.Matricule);
+
+                byte[] hashBytes = Convert.FromBase64String(user.Password);
+
+                byte[] salt = new byte[16];
+                Array.Copy(hashBytes, 0, salt, 0, 16);
+
+                var pbkdf2 = new Rfc2898DeriveBytes(utilisateur.Password, salt, 10000);
+                byte[] hash = pbkdf2.GetBytes(20);
+
+                for (int i = 0; i < 20; i++)
+                {
+                    if (hashBytes[i + 16] != hash[i])
+                    {
+                        throw new UnauthorizedAccessException();
+                    }
+                }
+
                 user.IdSession = Session.SessionID;
-                db.SaveChanges();
 
                 Session["Utilisateur"] = user;
 
+                db.SaveChanges();
+
                 return RedirectToAction("Index", "Restaurants");
-
-                //Utilisateur user = new Utilisateur();
-
-                //user.Password = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule).Password;
-
-                //byte[] hashBytes = Convert.FromBase64String(user.Password);
-
-                //byte[] salt = new byte[16];
-                //Array.Copy(hashBytes, 0, salt, 0, 16);
-
-                //var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 10000);
-                //byte[] hash = pbkdf2.GetBytes(20);
-
-                //for (int i = 0; i < 20; i++)
-                //{
-                //    if (hashBytes[i + 16] != hash[i])
-                //    {
-                //        throw new UnauthorizedAccessException();
-                //    }
-                //    else
-                //    {
-                //        user.IdSession = Session.SessionID;
-                //        db.SaveChanges();
-
-                //        Session["Utilisateur"] = user;
-
-                //        return RedirectToAction("Index", "Restaurants");
-                //    }
-                //}
-
-                //byte[] salt;
-                //new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-
-                //var pbkdf2 = new Rfc2898DeriveBytes(utilisateur.Password, salt, 10000);
-                //byte[] hash = pbkdf2.GetBytes(20);
-
-                //byte[] hashBytes = new byte[36];
-                //Array.Copy(salt, 0, hashBytes, 0, 16);
-                //Array.Copy(hash, 0, hashBytes, 16, 20);
-
-                //utilisateur.Password = Convert.ToBase64String(hashBytes);
-
-                //Utilisateur user = db.Utilisateurs.First(u => u.Matricule == utilisateur.Matricule && u.Password == utilisateur.Password);
-                //utilisateur.IdSession = Session.SessionID;
-                //db.SaveChanges();
-
-                //Session["Utilisateur"] = user;
-
-                //return RedirectToAction("Index", "Restaurants");
-
-                //Utilisateur user = db.Utilisateurs.FirstOrDefault(u => u.Matricule == utilisateur.Matricule &&  u.Password == utilisateur.Password);
-                //if (user != null)
-                //{
-
-                //    user.IdSession = Session.SessionID;
-                //    db.SaveChanges();
-
-                //    Session["Utilisateur"] = user;
-
-                //    return RedirectToAction("Index", "Restaurants");
-                //}
             }
 
             return View();
@@ -115,38 +118,33 @@ namespace AfpaLunch.Views
         [ValidateAntiForgeryToken]
 
         public ActionResult Details(FormCollection values)
-        {
-            Utilisateur utilisateur = new Utilisateur();
-
+        {           
             if (ModelState.IsValid)
             {
-                utilisateur = (Utilisateur)Session["Utilisateur"];
+                Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
 
-                if (utilisateur != null && utilisateur.Password == Convert.ToString(values["OldPassword"]))
+                if (utilisateur != null && values["MotdePasse"] == values["PasswordBis"])
                 {
-                    utilisateur.Password = Convert.ToString(values["MotdePasse"]);
+                    byte[] salt;
+                    new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
 
-                    if (utilisateur.Password == Convert.ToString(values["PasswordBis"]))
-                    {
-                        //byte[] salt;
-                        //new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+                    var pbkdf2 = new Rfc2898DeriveBytes(Convert.ToString(values["MotdePasse"]), salt, 10000);
+                    byte[] hash = pbkdf2.GetBytes(20);
 
-                        //var pbkdf2 = new Rfc2898DeriveBytes(utilisateur.Password, salt, 10000);
-                        //byte[] hash = pbkdf2.GetBytes(20);
+                    byte[] hashBytes = new byte[36];
+                    Array.Copy(salt, 0, hashBytes, 0, 16);
+                    Array.Copy(hash, 0, hashBytes, 16, 20);
 
-                        //byte[] hashBytes = new byte[36];
-                        //Array.Copy(salt, 0, hashBytes, 0, 16);
-                        //Array.Copy(hash, 0, hashBytes, 16, 20);
+                    utilisateur.Password = Convert.ToBase64String(hashBytes);
 
-                        //utilisateur.Password = Convert.ToBase64String(hashBytes);
+                    db.Entry(utilisateur).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                        db.Entry(utilisateur).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
+                    return View(utilisateur);
                 }
             }
 
-            return View(utilisateur);
+            return RedirectToAction("Connexion","Utilisateurs");
         }
 
         public ActionResult Favoris(int? id)
@@ -176,7 +174,7 @@ namespace AfpaLunch.Views
             return View();
         }
 
-        // EN COURS
+        // EN COURS 
         public ActionResult Historique()
         {
             Utilisateur utilisateur = new Utilisateur();

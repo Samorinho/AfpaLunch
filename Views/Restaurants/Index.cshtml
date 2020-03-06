@@ -78,7 +78,7 @@
                             </p>
                             <div class="row px-2">
                                 <div><a href="@Url.Action("DetailsResto", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a></div>
-                                <div class="ml-auto"><span class="jaime"><i class="jaimejaune fa fa-2x fa-thumbs-up text-warning"></i></span></div>
+                                <div class="ml-auto"><span class="jaime" data-resto="@item.IdRestaurant"><i class="jaimejaune fa fa-2x fa-thumbs-up text-warning"></i></span></div>
                             </div>
                             
                         </div>
@@ -311,15 +311,36 @@
                     })
             });
 
-            $(".jaime").click(function () {
-                //$(".jaime").toggleClass("animated heartBeat duration-1s")
-                //$(".jaimejaune").toggleClass("fa fa-2x fa-thumbs-up text-dark")
-                $(".jaimejaune").toggleClass("animated heartBeat duration-1s")
-               
+            $('.jaime').click(function () {
+                event.stopPropagation();
+                var data = { 'idrestaurant': $(this).data("resto"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddFavoris", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.isReturnOk == true) {
+                            alert("YES")
+                            //$(this).hide().delay(1000).fadeOut(2000).css("color", "black");
+                        }
+
+                        else {
+                            alert("Votre produit ne s'est pas ajouté au panier");
+                        }
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                });
+                $(this).hide().delay(1000).fadeOut(2000).css("color", "black");
+                //$(this).hide().delay(1000).fadeIn(2200).css("color", "black");
             });
-            $(".animated .heartBeat .duration-1s").event(function () {
-                 $(".jaimejaune").removeClass("animated heartBeat duration-1s")
-            })
+
+            //$(".jaime").click(function () {
+            //    $(".jaimejaune").toggleClass("animated heartBeat duration-1s")              
+            //});
         });
     </script>
 

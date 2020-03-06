@@ -72,13 +72,34 @@ namespace AfpaLunch.Controllers
                     {
                         panier.AddItem(produitPanier);
                         isReturnOk = true;
-                    } 
+                    }
                 }
 
                 HttpContext.Application[idsession] = panier;
             }
 
             return Json(new { isReturnOk, qte = panier.Quantite, total = panier.Total }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFavoris(int IdRestaurant, string idsession)
+        {
+            Utilisateur user = (Utilisateur)Session["Utilisateur"];
+            Utilisateur utilisateur = db.Utilisateurs.FirstOrDefault(u => u.IdSession == idsession && u.IdUtilisateur == user.IdUtilisateur);
+            Restaurant restaurant = db.Restaurants.Find(IdRestaurant);
+
+            bool isReturnOk = false;
+
+            if (utilisateur != null && restaurant != null)
+            {
+                utilisateur.Restaurants.Add(restaurant);
+                //restaurant.Utilisateurs.Add(utilisateur);                
+                //db.Utilisateurs.Add(utilisateur);
+                db.SaveChanges();
+
+                isReturnOk = true;
+            }
+
+            return Json(new { isReturnOk }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult RemoveProduit(int IdProduit, string idsession)
@@ -215,6 +236,32 @@ namespace AfpaLunch.Controllers
             return Json(JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult Recommander(int IdCommande, string idsession)
+        {
+            bool isReturnOk = false;
+
+            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
+
+            Commande commande = db.Commandes.Find(IdCommande);
+
+            if (commande != null)
+            {
+                List<CommandeProduit> commandeProduits = db.CommandeProduits.Where(c => c.IdCommande == IdCommande).ToList();
+
+                foreach (CommandeProduit item in commandeProduits)
+                {
+                    int IdProduit = item.IdProduit;
+                    AddProduit(IdProduit, idsession);
+                }
+
+                SaveCommande(idsession);
+
+                isReturnOk = true;
+            }
+
+            return Json(new { isReturnOk }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult LoginUtilisateur(string idsession, string matricule, string password)
         {
             Utilisateur utilisateur = db.Utilisateurs.FirstOrDefault(u => u.Matricule == matricule && u.Password == password);
@@ -330,22 +377,11 @@ namespace AfpaLunch.Controllers
             {
                 Restaurant restaurant = db.Restaurants.Find(idrestaurant);
                 db.Utilisateurs.Where(r => r.Restaurants.FirstOrDefault().Utilisateurs.FirstOrDefault().IdUtilisateur == utilisateur.IdUtilisateur);
-                //db.Utilisateurs.Remove(utilisateur);
-                //db.SaveChanges();
+                db.Utilisateurs.Remove(utilisateur);
+                db.SaveChanges();
             }
 
             return Json(idrestaurant, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetFavoris(int idcommande, string idsession)
-        {
-            Utilisateur utilisateur = db.Utilisateurs.Where(u => u.IdSession == idsession).FirstOrDefault();
-
-            Commande commande = db.Commandes.Find(idcommande);
-
-            int a = commande.Restaurant.IdRestaurant;
-
-            return Json(JsonRequestBehavior.AllowGet);
         }
 
         private ProduitPanier FindProduit(int IdProduit)
