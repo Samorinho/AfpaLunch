@@ -3,64 +3,142 @@
 @{
     ViewBag.Title = "Details";
 }
+    <div class="d-flex justify-content-center mb-4">
+        <h2>Bonjour @Model.Prenom @Model.Nom !</h2>
+    </div>
 
-<h2>Details</h2>
-
-<div>
-    <h4>Utilisateur</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nom)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Nom)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Prenom)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Prenom)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Matricule)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Matricule)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Statut)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Statut)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Solde)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Solde)
-        </dd>
-
-    </dl>
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+        <div class="d-flex justify-content-center mt-3"><i class="fa fa-5x fa-user-circle"></i></div>
+        <div class="card-body">
+            <p class="card-text">
+                <fieldset disabled>
+                    <div class="form-group">
+                        <label for="disabledTextInput">N° de Matricule</label>
+                        <input type="text" class="form-control" placeholder="@Model.Matricule">
+                    </div>
+                    <div class="form-group">
+                        <label for="disabledTextInput">Nom</label>
+                        <input type="text" class="form-control" placeholder="@Model.Nom">
+                    </div>
+                    <div class="form-group">
+                        <label for="disabledTextInput">Prénom</label>
+                        <input type="text" class="form-control" placeholder="@Model.Prenom">
+                    </div>
+                    <div class="form-group">
+                        <label for="disabledTextInput">Mot de passe</label>
+                        <input type="password" class="form-control" placeholder="***********">
+                    </div>
+                </fieldset>
+            </p>
+            <p>Vous disposez d'un solde de @Model.Solde€.</p>
+            <div class="row" style="padding-left: 1.25rem; padding-right: 1.25rem">
+                <div>
+                    <input id="envoi" data-toggle="modal" data-target="#modalUser" type="submit" class="d-flex justify-content-center mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Mettre à jour votre mot de passe" />
+                </div>
+                <div class="alert alert-success ml-auto" role="alert" style="display:none" id="validation2">
+                    Votre mot de passe a bien été modifié !
+                </div>
+            </div>
+            
+        </div>
+    </div>   
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdUtilisateur }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div id="modalUser" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier votre mot de passe</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        @Html.Label("Votre ancien mot de passe")
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-3 input-group">
+                        @Html.Editor("OldPassword", null, new { htmlAttributes = new { @class = "form-control test", @id = "a" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        <div class="input-group-append" id="123">
+                            <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        @Html.Label("Votre nouveau mot de passe")
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-3 input-group">
+                        @Html.Editor("MotdePasse", null, new { htmlAttributes = new { @class = "form-control test", @id = "b" } })
+                        @Html.ValidationMessageFor(model => model.Matricule, "", new { @class = "text-danger" })
+                        <div class="input-group-append" id="456">
+                            <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        @Html.Label("Veuillez confirmer votre nouveau mot de passe")
+                    </div>
+
+                    <div class="d-flex justify-content-center input-group">
+                        @Html.Editor("PasswordBis", null, new { htmlAttributes = new { @class = "form-control test", @id = "c" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        <div class="input-group-append" id="789">
+                            <i class="fa fa-eye btn" style="color: white; background-color:#007bff"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="validation">Confirmer</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#a").attr("type", "password");
+            $("#b").attr("type", "password"); 
+            $("#c").attr("type", "password"); 
+
+            $("#123").mousedown(function () {
+                $("#a").attr("type", "text") 
+            });
+
+            $("#456").mousedown(function () {
+                $("#b").attr("type", "text") 
+            });
+
+            $("#789").mousedown(function () {
+                $("#c").attr("type", "text") 
+            });
+
+            $("#123").mouseup(function () {
+                $("#a").attr("type", "password") 
+            });
+
+            $("#456").mouseup(function () {
+                $("#b").attr("type", "password") 
+            });
+
+            $("#789").mouseup(function () {
+                $("#c").attr("type", "password") 
+            });
+
+            $("#validation").click(function () {
+                $("#validation2").css("display", "block", 5000)
+            });
+        });
+    </script>
+    }

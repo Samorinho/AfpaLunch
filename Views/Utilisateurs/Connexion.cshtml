@@ -7,7 +7,11 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    <style>
+        input {
+            max-width: 280px;
+        }
+    </style>
     <div class="text-center">
         <div class="form-signin">
             <img class="mb-4" src="~/Images/logo.png" alt="logo" width="72" height="72">

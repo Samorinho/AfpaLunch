@@ -1,196 +1,347 @@
-﻿@model IEnumerable<AfpaLunch.Restaurant>
+﻿﻿@model  IEnumerable<AfpaLunch.Restaurant>
 
 @{
     ViewBag.Title = "Index";
     List<Restaurant> restaurants = (List<Restaurant>)ViewBag.Restaurants;
-    List<Restaurant> typerestaurant = (List<Restaurant>)ViewBag.TypeRestaurant;
+    List<AfpaLunch.TypeCuisine> typerestaurant = (List<AfpaLunch.TypeCuisine>)ViewBag.TypeCuisine;
 }
 
-<h2>Nos Restaurants</h2>
 
-@using (Html.BeginForm())
-{
-   
-    <div class="input-group mb-3">
-        @Html.TextBox("searchString", null, htmlAttributes: new { @class = "form-control", placeholder = "Pizzeria ou Sandwich"})
-        <div class="input-group-append">
-            <input class="btn btn-primary" type="submit" value="Rechercher" />
+@*<div class="row mb-4 mx-2">
+        <div class="h4">Nos Restaurants</div>
+        <div class="input-group">
+            @Html.TextBox("search", null, htmlAttributes: new { @class = "form-control", @id = "rechercheTest", placeholder = "Pizzeria ou Sandwich" })
+            <div class="input-group-append">
+                <input class="btn" type="submit" value="Rechercher" style="background-color:#fdf18d" />
+            </div>
         </div>
-    </div>
-}
+    </div>*@
+
+
+<div id="frgrd">
+    <div id="bckgrd"></div>
+    <p class="h1 font-weight-bold" style="color:#fdf18d">Bienvenue chez AfpaLunch !</p>
+</div>
+
+@*Recherche + autcomplete*@
 
 <div class="row">
-    @foreach (var item in Model)
-    {
-        try
-        {
-            <div class=" card mr-4 mb-4" style="width: 18rem;">
+    <div class="input-group my-4 col-12 ui-widget">
+        <input type="text" class="form-control" id="rechercheTest" placeholder="ex: McDonald's ou Pizza">
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
 
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
-                    <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
-                    <p class="card-text"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-primary" style="border-radius: 20px;">Voir</a>
+@*Titres catégories collapse*@
+
+<div class="row col-12 border border-bottom-0 border-grey rounded-top p-0 m-0" style="background-color:#F0F0F0">
+    <div id="typesnom" @*data-toggle="collapse" data-target="#types"*@ class="d-flex justify-content-center alert col-6 m-0 rounded-0" style="background-color:darkgrey">
+        Types de cuisine
+    </div>
+
+    <div id="restonom" @*data-toggle="collapse" data-target="#resto"*@ class="d-flex justify-content-center alert col-6 m-0 rounded-0" style="background-color: lightgray">
+        Restaurants
+    </div>
+</div>
+
+@*Carousel types de cuisine*@
+<div id="types" @*class="collapse"*@>
+    <div class="row" style="margin-left:0">
+        <div class="oul-carousel owl-carousel owl-theme mt-4">
+            @foreach (var item in typerestaurant)
+            {
+                <div class="d-flex justify-content-center shadow-sm border-0 m-0 rounded choix" data-resto="@item.IdTypeCuisine" style="width: 10rem; padding-top: 5rem; padding-bottom: 5rem; background-color: #fdf18d">
+                    <p class="font-weight-bold h5">@item.Nom</p>
                 </div>
-            </div>
-        }
-        catch (Exception ex)
+            }
+        </div>
+    </div>
+</div>
+
+@*Carousel restaurants*@
+<div id="resto" @*class="collapse show"*@ style="display: none">
+    <div class="oulo-carousel owl-carousel owl-theme mt-4">
+        @foreach (var item in Model)
         {
-            string error = ex.Message;
+            try
+            {
+                <div class="">
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                            <p class="card-text font-italic my-0">@Html.DisplayFor(modelItem => item.TypeCuisine.Nom) ( Prix moyen @Html.DisplayFor(modelItem => item.Budget)€)</p>
+                            <p class="card-text">
+                                <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                            </p>
+                            <div class="row px-2">
+                                <div><a href="@Url.Action("DetailsResto", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a></div>
+                                <div class="ml-auto"><span class="jaime" data-resto="@item.IdRestaurant"><i class="jaimejaune fa fa-2x fa-thumbs-up text-warning"></i></span></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+        }
+    </div>
+</div>
+
+@*@{
+        if (restaurants != null)
+        {
+            <div class="oulo-carousel owl-carousel owl-theme mt-4">
+                @foreach (var item in restaurants)
+                {
+                    try
+                    {
+                        <div class="">
+                            <div class="card" style="width: 18rem;">
+                                <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Nom</h5>
+                                    <p class="card-text font-italic my-0">@item.TypeCuisine.Nom ( Prix moyen @item.Budget€)</p>
+                                    <p class="card-text">
+                                        <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                                    </p>
+                                    <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    catch (Exception ex)
+                    {
+                        string error = ex.Message;
+                    }
+                }
+            </div>
         }
     }
-</div>
+    ____________________________________________________________*@
 
-<div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
+@*Carousel des meilleurs produits*@
 
-    <!--Controls-->
-    <div class="controls-top">
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="prev">
-            <i class="fa fa-chevron-left"></i>
-        </a>
-        <a class="btn-floating" href="#carousel-example-multi" data-slide="next">
-            <i class="fa fa-chevron-right"></i>
-        </a>
-    </div>
-    <!--/.Controls-->
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-example-multi" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="1"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="2"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="3"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="4"></li>
-        <li data-target="#carousel-example-multi" data-slide-to="5"></li>
-    </ol>
-    <!--/.Indicators-->
+@*<p class="h5 font-weight-light">Nos meilleurs produits</p>
 
-    <div class="carousel-inner v-2" role="listbox">
+    <div class="oula-carousel owl-carousel owl-theme mt-4">
+        @{
+            Random rnd = new Random();
+            foreach (var item in restaurants)
+            {
+                try
+                {
+                    <div class="">
+                        @rnd.Next()
+                        <div class="card" style="width: 18rem;">
+                            <img src="~/@item.Produits.FirstOrDefault().Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Produits.FirstOrDefault().Nom</h5>
+                                <p class="card-text font-italic my-0">@item.Produits.FirstOrDefault().Categorie.Nom ( Prix @item.Produits.FirstOrDefault().Prix€)</p>
+                                <p class="card-text">
+                                    <i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i>
+                                </p>
+                                <a href="@Url.Action("Details", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.Message;
+                }
+            }
+        }
+    </div>*@
 
-        <div class="carousel-item active">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (36).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (34).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (38).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (29).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (30).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="col-12 col-md-4">
-                <div class="card mb-2">
-                    <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/img (27).jpg"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-weight-bold">Card title</h4>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the
-                            card's content.
-                        </p>
-                        <a class="btn btn-primary btn-md btn-rounded">Button</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+<hr />
 
 @section Scripts {
-    <script src="owlcarousel/owl.carousel.min.js"></script>
 
-    <script type="text/javascript">
-        $('.carousel.carousel-multi-item.v-2 .carousel-item').each(function () {
-            var next = $(this).next();
-            if (!next.length) {
-                next = $(this).siblings(':first');
-            }
-            next.children(':first-child').clone().appendTo($(this));
-
-            for (var i = 0; i < 4; i++) {
-                next = next.next();
-                if (!next.length) {
-                    next = $(this).siblings(':first');
-                }
-                next.children(':first-child').clone().appendTo($(this));
-            }
-        });
-
+    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.20/af-2.3.4/datatables.min.js">
         $(document).ready(function () {
-            $(".owl-carousel").owlCarousel();
+            $('').DataTable();
         });
     </script>
+
+    <script type="text/javascript">
+         $("#rechercheTest").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("Recherche","Sw")",
+                        data: { search: $("#rechercheTest").val() },
+                        dataType: "json",
+                        //type: "POST",
+                        //contentType: "application/json; charset=utf-8",
+                        //dataFilter: function (data) { return data; },
+                         success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.Nom,
+                                    value: item.Nom,
+                                    id: item.IdRestaurant
+                                }
+                            }))
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Erreur");
+                        }
+                    });
+                },
+                 select: function (event, ui) {
+                     $('#rechercheTest').val(ui.item.IdRestaurant);
+                     window.location = "/Restaurants/Details/" + ui.item.id;                  
+                },
+                minLength: 1,
+         });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".oulo-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                center: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-2x fa-chevron-circle-left' style='color:#fdf18d'></i>", "<i class='fa fa-2x fa-chevron-circle-right' style='color:#fdf18d'></i>"]
+            });
+
+            $(".oula-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                center: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-2x fa-chevron-circle-left' style='color:#fdf18d'></i>", "<i class='fa fa-2x fa-chevron-circle-right' style='color:#fdf18d'></i>"]
+            });
+
+            $(".oul-carousel").owlCarousel({
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                center: true,
+                responsive: {
+                    0: {
+                        items: 2,
+                    },
+                    768: {
+                        items: 3,
+                        margin: 30
+                    },
+                    992: {
+                        items: 5,
+                        margin: 1
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
+            });
+
+            $("#typesnom").click(function () {
+                $("#resto").css("display", "none"),
+                    $("#types").css("display", "block"),
+                    $("#typesnom").css("background-color", "darkgrey"),
+                    $("#restonom").css("background-color", "lightgray")
+            });
+
+            $("#restonom").click(function () {
+                $("#types").css("display", "none"),
+                    $("#resto").css("display", "block"),
+                    $("#restonom").css("background-color", "darkgrey"),
+                    $("#typesnom").css("background-color", "lightgray")
+            });
+
+            $(".choix").click(function () {
+                    var data = { 'IdTypeCuisine': $(this).data("resto"), 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("GetRestos", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            alert(data);
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+            });
+
+            $('.jaime').click(function () {
+                event.stopPropagation();
+                var data = { 'idrestaurant': $(this).data("resto"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddFavoris", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.isReturnOk == true) {
+                            alert("YES")
+                            //$(this).hide().delay(1000).fadeOut(2000).css("color", "black");
+                        }
+
+                        else {
+                            alert("Votre produit ne s'est pas ajouté au panier");
+                        }
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                });
+                $(this).hide().delay(1000).fadeOut(2000).css("color", "black");
+                //$(this).hide().delay(1000).fadeIn(2200).css("color", "black");
+            });
+
+            //$(".jaime").click(function () {
+            //    $(".jaimejaune").toggleClass("animated heartBeat duration-1s")              
+            //});
+        });
+    </script>
+
 }

@@ -143,7 +143,9 @@
     <Compile Include="Controllers\CommandesController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\RestaurantsController.cs" />
+    <Compile Include="Controllers\SwController.cs" />
     <Compile Include="EtatCommande.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -168,6 +170,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Panier.cs" />
+    <Compile Include="Models\ItemPanier.cs" />
+    <Compile Include="Models\MenuPanier.cs" />
+    <Compile Include="Models\ProduitComposePanier.cs" />
+    <Compile Include="Models\ProduitPanier.cs" />
+    <Compile Include="Models\Resto.cs" />
     <Compile Include="Operation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -182,6 +190,12 @@
     <Compile Include="Restaurant.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="SessionUtilisateur.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="TypeCuisine.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -193,12 +207,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\basic.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dropzone.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
@@ -210,16 +227,33 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\magic.css" />
+    <Content Include="Content\owl.carousel.css" />
+    <Content Include="Content\owl.carousel.min.css" />
+    <Content Include="Content\owl.theme.default.css" />
+    <Content Include="Content\owl.theme.default.min.css" />
+    <Content Include="Content\owl.theme.green.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\coke.png" />
+    <Content Include="Images\cover.jpg" />
+    <Content Include="Images\eau.jpg" />
+    <Content Include="Images\flancoco.jpg" />
+    <Content Include="Images\icetea.jpg" />
     <Content Include="Images\jambonbeurre.jpg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\orangina.jpg" />
+    <Content Include="Images\pouletcrudites.jpg" />
     <Content Include="Images\resto1.jpg" />
     <Content Include="Images\resto3.jpeg" />
+    <Content Include="Images\restoitalien.jpg" />
+    <Content Include="Images\restokebab.jpg" />
+    <Content Include="Images\restopizzeria.jpg" />
     <Content Include="Images\tarteaucitron.jpg" />
+    <Content Include="Images\tarteauxpommes.jpg" />
+    <Content Include="Images\thonalacatalane.jpg" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -252,6 +286,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -266,6 +301,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\magic.css.map" />
     <EntityDeploy Include="Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
@@ -285,6 +321,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\owl.carousel.js" />
+    <Content Include="Scripts\owl.carousel.min.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -396,11 +434,22 @@
     <Content Include="Views\Commandes\Details.cshtml" />
     <Content Include="Views\Commandes\Edit.cshtml" />
     <Content Include="Views\Commandes\Index.cshtml" />
+    <Content Include="Views\Home\Panier.cshtml" />
+    <Content Include="Views\Home\PanierAjax.cshtml" />
+    <Content Include="Views\Restaurants\DetailsResto.cshtml" />
+    <Content Include="Views\Utilisateurs\Historique.cshtml" />
+    <Content Include="Views\Utilisateurs\Favoris.cshtml" />
+    <Content Include="Views\Menus\Create.cshtml" />
+    <Content Include="Views\Menus\Delete.cshtml" />
+    <Content Include="Views\Menus\Details.cshtml" />
+    <Content Include="Views\Menus\Edit.cshtml" />
+    <Content Include="Views\Menus\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Views\Basket\" />
     <Folder Include="Views\Default\" />
+    <Folder Include="Views\Sw\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

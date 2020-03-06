@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AfpaLunch.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,11 +14,6 @@ namespace AfpaLunch.Controllers
             return View();
         }
 
-        public ActionResult Deconnexion()
-        {
-            Session.Clear();
-            return RedirectToAction("Index");
-        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -29,6 +25,18 @@ namespace AfpaLunch.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        public ActionResult Panier()
+        {
+            List<ProduitPanier> panier = (List<ProduitPanier>)HttpContext.Application[Session.SessionID];
+
+            return View(panier);
+        }
+
+        public ActionResult PanierAjax()
+        {
             return View();
         }
     }

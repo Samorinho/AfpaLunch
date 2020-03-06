@@ -9,7 +9,8 @@ namespace AfpaLunch
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -22,10 +23,28 @@ namespace AfpaLunch
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/owl.carousel").Include(
+                      "~/Scripts/owl.carousel.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/dropzone").Include(
+                     "~/Scripts/dropzone.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
                       "~/Content/font-awesome.min.css",
+                      "~/Content/owl.carousel.min.css",
+                      "~/Content/owl.carousel.css",
+                      "~/Content/owl.theme.default.css",
+                      "~/Content/owl.theme.default.min.css",
+                      "~/Content/owl.theme.green.css",
+                      "~/Content/animate.css",
+                      "~/Content/magic.css",
+                      "~/Content/jquery-ui.css",
+                      "~/Content/jquery-ui.structure.css",
+                      "~/Content/jquery-ui.theme.css",
+                      "~/Content/basic.css",
+                      "~/Content/dropzone.css",
                       "~/Content/site.css"));
         }
     }

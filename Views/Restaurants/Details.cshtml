@@ -1,62 +1,368 @@
-﻿@model AfpaLunch.Restaurant
+﻿﻿@model AfpaLunch.Restaurant
 
 @{
     ViewBag.Title = "Details";
+    SelectList bouffe = ViewBag.Bouffe;
 }
 
-<h2>Details</h2>
+<h2 class="font-italic">Vous êtes chez <b>@Html.DisplayFor(model => Model.Nom)</b></h2>
 @Html.Hidden("IdRestaurant")
-<img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" @*style="margin:-40.875% 0; display:block; overflow:hidden;"*@ />
-<div>
-    <p class="font-weight-bold h3 mt-2 mb-0">@Html.DisplayFor(model => Model.Nom)</p>
-    <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
-    <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
-    <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
-    <p class="card-text my0">@Html.DisplayFor(model => Model.Description)</p>
-</div>
+<div class="">
+    <div class="rounded-top" style="width:100%; overflow:hidden; margin:0"><img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" style="margin:-20.875% 0;" /></div>
 
-@{
-    foreach (var item in Model.Produits)
-    {
-        <div class='row d-flex p-3 border-0 p-3 mb-2 rounded'>
-            <div class='col-2'>
-                <img src="~/@item.Photos.FirstOrDefault().Nom" class="" style="max-width: 100px" />
-            </div>
-            <div class='col-4'>
-                <div class='d-flex flex-column'>
-                    <div class='row px-5 h4'>
-                        @item.Nom
+    <div class="p-2 rounded-bottom" style="background-color: rgba(250, 168, 75, 0.4);">
+        <p class="font-weight-bold h3 mb-0">@Html.DisplayFor(model => Model.Nom)</p>
+        <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
+        <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
+        <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+        <p class="card-text my-0">@Html.DisplayFor(model => Model.Description)</p>
+        <p class="card-text my-0"><i class="fa fa-phone"></i> @Html.DisplayFor(model => Model.Telephone)</p>
+    </div>
+
+    @*<div>
+            <button class="animated infinite zoomOut delay-2s">TEST</button>
+            <button id="sa" class="">TEST</button>
+        </div>*@
+
+    @*<div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Produits&nbsp;<i class="fa fa-birthday-cake"></i></p></div>*@
+
+    @{
+
+        var ordre = from p in Model.Produits
+                    orderby p.Categorie
+                    select p;
+
+        var entree = from p in Model.Produits
+                     where p.Categorie.IdCategorie == 2
+                     select p;
+
+        var plat = from p in Model.Produits
+                   where p.Categorie.IdCategorie == 3 || p.Categorie.IdCategorie == 5 || p.Categorie.IdCategorie == 7 || p.Categorie.IdCategorie == 8 || p.Categorie.IdCategorie == 9
+                   select p;
+
+        var dessert = from p in Model.Produits
+                      where p.Categorie.IdCategorie == 4
+                      select p;
+
+        var boisson = from p in Model.Produits
+                      where p.Categorie.IdCategorie == 6
+                      select p;
+
+
+        if (entree != null)
+        {
+            <p class="font-italic" style="font-size: 1.25em">Nos entrées</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in entree)
+                {
+                    <div class="">
+                        <div class="card rounded border-top-0 shadow-sm p-0 mb-1 bg-white" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-fluid" alt="Photo produit" style="height: 185px; width: 286px">
+                            <div class="card-body p-1" style="background-color:whitesmoke">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Categorie.Nom)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                        </div>
+                                        <div class="p-2 ml-auto">
+                                            <span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    <div class='row px-5'>@item.Description</div>
-                </div>
+                }
+            </div>
+        }
 
+        if (plat != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos plats</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in plat)
+                {
+                    <div class="">
+                        <div class="card rounded border-top-0 shadow-sm p-0 mb-1 bg-white" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-fluid" alt="Photo produit" style="height: 185px; width: 286px">
+                            <div class="card-body p-1" style="background-color:whitesmoke">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Categorie.Nom)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                        </div>
+                                        <div class="p-2 ml-auto">
+                                            <span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-            <div class='col-2'>
-                <div class="row">
-                    <a href="@Url.Action("Payer","Restaurants", new { IdProduit = item.IdProduit })" class="btn btn-outline-info"><i class="fa fa-money fa-2x"></i></a>
-                    &nbsp;
-                    <a href="@Url.Action("AddPanier","Restaurants" ,new { IdProduit = item.IdProduit, IdRestaurant = Model.IdRestaurant })" class="btn btn-outline-success"><i class="fa fa-cart-plus fa-2x"></i></a>
+        }
+
+        if (dessert != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos desserts</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in dessert)
+                {
+                    <div class="">
+                        <div class="card rounded border-top-0 shadow-sm p-0 mb-1 bg-white" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-fluid" alt="Photo produit" style="height: 185px; width: 286px">
+                            <div class="card-body p-1" style="background-color:whitesmoke">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Categorie.Nom)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                        </div>
+                                        <div class="p-2 ml-auto">
+                                            <span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        if (boisson != null)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">Nos boissons</p>
+            <hr />
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var item in boisson)
+                {
+                    <div class="">
+                        <div class="card rounded border-top-0 shadow-sm p-0 mb-1 bg-white" style="width: 18rem;">
+                            <img src="~/@item.Photos.FirstOrDefault().Nom" class="img-fluid" alt="Photo produit" style="max-height: 185px; max-width: 286px">
+                            <div class="card-body p-1" style="background-color:whitesmoke">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Categorie.Nom)<br />@Html.DisplayFor(modelItem => item.Prix)€</p>
+                                        </div>
+                                        <div class="p-2 ml-auto">
+                                            <span class="p-2 rounded leproduit" data-produit="@item.IdProduit" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @*<div class="d-flex justify-content-center mt-3"><p class="h4 font-weight-light">Nos Menus&nbsp;<i class="fa fa-spoon"></i><i class="fa fa-glass"></i></p></div>
+            <hr />*@
+
+        foreach (var item in Model.Menus)
+        {
+            <div class='row d-flex p-3'>
+                <div class='col-4'>
+                    <div class='d-flex flex-column'>
+                        <div class='row px-5 h4'>
+                            @item.Nom
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <p class="font-weight-light">@item.Prix€</p>
+                </div>
+                <div class='col-2 ml-auto'>
+                    <div class="row">
+                        <a href="" data-toggle="modal" data-target="#ModalMenu" class="btn btn-info">Composer son menu</a>
+                    </div>
+                </div>
+                <div class="col-2 ajouted" style="display:none">
+                    <div class="alert-link">Menu ajouté au panier !</div>
                 </div>
             </div>
-            <div class="col-2" id="added" style="display:none">
-                <div class="alert-link">Produit ajouté au panier !</div>
+
+
+
+
+            @* ************Modal Menu************ *@
+
+            <div class="modal" tabindex="-1" role="dialog" id="ModalMenu">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Composez votre menu :</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @Html.Label("Plat")
+                            <div class="col-md-10">
+                                @Html.DropDownList("Bouffe", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            @Html.Label("Boisson")
+                            <div class="col-md-10">
+                                @Html.DropDownList("Boisson", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            @Html.Label("Dessert")
+                            <div class="col-md-10">
+                                @Html.DropDownList("Dessert", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-primary lemenu" data-menu="@item.IdMenu">Ajouter au panier</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        }
+
     }
-}
-
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdRestaurant })
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
+</div>
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            if (!!$.cookie('Panier')) {
-                $("#added").show()
-            }
+
+            $("#produitModal").load(window.location.href + " #produitModal")
+
+            $('.lemenu').click(function () {
+                var data = { 'idmenu': $(this).data("menu"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddMenu", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(".ajouted").css("display","block");
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                })
+            });
+
+            $('.leproduit').click(function () {                
+                event.stopPropagation();
+                var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                $.ajax({
+                    url: '@Url.Action("AddProduit", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.isReturnOk == true) {
+                            $("#chiffrepanier").html(data.qte);
+                            $("#prix").html(data.total);
+                            $("#ModalPanier").load(data);
+                            $(this).hide(slow, linear);
+                            //$("#produitModal").load(window.location.href + " #produitModal");
+                        }
+                        else {
+                            alert("Votre produit ne s'est pas ajouté au panier");
+                        }
+
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                });
+
+                
+                //$(this).toggleClass('magictime holeOut');
+
+                //setTimeout(function () {
+                //    $(this).toggleClass('magictime holeOut');
+                //}, 500);
+
+            });
+
+            $('.removeproduit').click(function () {
+                    var data = { 'IdProduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("RemoveProduit", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('.listepanier').css("display", "none");
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+            });
+
+
+            $('.moinsproduit').click(function () {
+                    var data = { 'idproduit': $(this).data("produit"), 'idsession': '@Session.SessionID' };
+                    $.ajax({
+                        url: '@Url.Action("RemoveQuantite", "Sw")',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#chiffrepanier").html(data);
+                        $("#chiffrepanier").toggleClass('magictime boingInUp');
+                        return false;
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        }
+                    })
+                });
+
+            $(".owl-carousel").owlCarousel({
+                items: 3,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2,
+                        margin: 30
+                    },
+                    992: {
+                        items: 3,
+                        margin: 30
+                    }
+                },
+                smartSpeed: 900,
+                navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
+            });
         });
     </script>
 }
+

@@ -34,6 +34,8 @@ namespace AfpaLunch
         public virtual DbSet<Photo> Photos { get; set; }
         public virtual DbSet<Produit> Produits { get; set; }
         public virtual DbSet<Restaurant> Restaurants { get; set; }
+        public virtual DbSet<SessionUtilisateur> SessionUtilisateurs { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TypeCuisine> TypeCuisines { get; set; }
         public virtual DbSet<TypeVersement> TypeVersements { get; set; }
         public virtual DbSet<Utilisateur> Utilisateurs { get; set; }

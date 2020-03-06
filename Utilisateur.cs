@@ -19,6 +19,7 @@ namespace AfpaLunch
         {
             this.Commandes = new HashSet<Commande>();
             this.Operations = new HashSet<Operation>();
+            this.Restaurants = new HashSet<Restaurant>();
         }
     
         public int IdUtilisateur { get; set; }
@@ -28,10 +29,13 @@ namespace AfpaLunch
         public string Password { get; set; }
         public bool Statut { get; set; }
         public decimal Solde { get; set; }
+        public string IdSession { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Commande> Commandes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Operation> Operations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Restaurant> Restaurants { get; set; }
     }
 }
