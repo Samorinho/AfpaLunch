@@ -194,14 +194,15 @@ namespace AfpaLunch.Controllers
                                 foreach (ProduitPanier produitPanier in produitPaniers)
                                 {
                                     CommandeProduit commandeProduit = new CommandeProduit();
-                                    commandeProduit.IdProduit = item.GetIdProduit();
-                                    commandeProduit.Prix = item.Prix;
-                                    commandeProduit.Quantite = item.Quantite;
+                                    commandeProduit.IdProduit = produitPanier.GetIdProduit();
+                                    commandeProduit.Prix = 0;
+                                    commandeProduit.Quantite = produitPanier.Quantite;
                                     commandeProduit.Menus.Add(menu);
-                                    //commandeProduit.Menus.FirstOrDefault().IdMenu = item.GetIdMenu();
 
                                     commande.CommandeProduits.Add(commandeProduit);
                                 }
+
+                                //
                             }
 
                             else if (item is ProduitComposePanier produitComposePanier)
@@ -210,16 +211,16 @@ namespace AfpaLunch.Controllers
                                 foreach (ProduitPanier produitPanier in produitPaniers)
                                 {
                                     CommandeProduit commandeProduit = new CommandeProduit();
-                                    commandeProduit.IdProduit = item.GetIdProduit();
-                                    commandeProduit.Prix = item.Prix;
-                                    commandeProduit.Quantite = item.Quantite;
+                                    commandeProduit.IdProduit = produitPanier.GetIdProduit();
+                                    commandeProduit.Prix = 0;
+                                    commandeProduit.Quantite = produitPanier.Quantite;
 
                                     commande.CommandeProduits.Add(commandeProduit);
                                 }
                             }
 
                         }
-
+                        commande.Prix = prixTotal;
                         db.Commandes.Add(commande);
                         db.SaveChanges();
 
@@ -247,11 +248,51 @@ namespace AfpaLunch.Controllers
             if (commande != null)
             {
                 List<CommandeProduit> commandeProduits = db.CommandeProduits.Where(c => c.IdCommande == IdCommande).ToList();
+                int IdMenu = 0;
+                int IdProduit = 0;
+                List<MenuSw> menuSws = new List<MenuSw>();
+                MenuSw menusw = null;
+                int i = commandeProduits.Count;
+                List<MenuPanier> menuPaniers = new List<MenuPanier>();
 
                 foreach (CommandeProduit item in commandeProduits)
                 {
-                    int IdProduit = item.IdProduit;
-                    AddProduit(IdProduit, idsession);
+                    // Ajout d'un produit
+                    if (item.Menus.Count == 0 )
+                    {
+                        IdProduit = item.IdProduit;
+                        AddProduit(IdProduit, idsession);                     
+                    }
+                    else
+                    // Ajout d'un menu
+                    {                        
+                        if (IdMenu != item.Menus.FirstOrDefault().IdMenu)
+                        {
+                            menusw = new MenuSw();
+                            menusw.IdMenu = item.Menus.FirstOrDefault().IdMenu;
+                            
+                            menusw.produits.Add(item.IdProduit);
+                            IdMenu = menusw.IdMenu;
+                        }
+                        else
+                        {
+                            menusw.produits.Add(item.IdProduit);
+                        }
+
+                    }
+                }
+
+                if(menusw != null)
+                {
+                    menuSws.Add(menusw);
+                }             
+
+                if (menuSws.Count > 0)
+                {
+                    foreach (MenuSw item in menuSws)
+                    {
+                        AddMenu(item.IdMenu, item.produits, idsession);
+                    }
                 }
 
                 SaveCommande(idsession);

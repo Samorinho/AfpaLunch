@@ -43,7 +43,7 @@ namespace AfpaLunch.Controllers
         {
             if (ModelState.IsValid)
             {
-                restaurant = db.Restaurants.First(u => u.Login == restaurant.Login);
+                restaurant = db.Restaurants.First(r => r.Login == restaurant.Login && r.Password == restaurant.Password);
 
                 Session["Restaurant"] = restaurant;
 
@@ -113,7 +113,7 @@ namespace AfpaLunch.Controllers
 
             foreach (Categorie item in db.Categories)
             {
-                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).ToList();
+                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).OrderBy(p => p.IdCategorie == item.IdCategorie).ToList();
 
 
                 if (produits != null && produits.Count > 0)
@@ -198,6 +198,23 @@ namespace AfpaLunch.Controllers
             ViewBag.IdTypeCuisine = new SelectList(db.TypeCuisines, "IdTypeCuisine", "Nom", restaurant.IdTypeCuisine);
             return View(restaurant);
         }
+
+        public ActionResult MonRestaurant()
+        {
+            return View();
+        }
+
+        public ActionResult MesCommandes()
+        {
+            return View();
+        }
+
+        public ActionResult MaComptabilite()
+        {
+            return View();
+        }
+
+
 
         [HttpGet, ActionName("AddPanier")]
 

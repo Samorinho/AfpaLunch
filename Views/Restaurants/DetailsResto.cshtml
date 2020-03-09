@@ -95,16 +95,16 @@
 
             var monpanier = '<div class="row m-1 listepanier">' +
                             '<div class="col-2">' +
-                            '<img src="~/@@item.Photo" class="img-thumbnail" style="min-width: 90px; min-height:70px" /></div>' +
+                            '<img src="~/Images/photo.jpg" class="img-thumbnail" style="min-width: 90px; min-height:70px" /></div>' +
                             '<div class="col-4">' +
                             '<div class="d-flex flex-column">' +
-                            '<div class="row text-wrap h3">@@item.Nom</div>' +
-                            '<div class="row text-wrap">@@item.Description</div></div></div>' +
-                            '<div class="col-2">@@item.Prix€ <span class="badge badge-light" data-produit="@@item.GetIdProduit()">@@item.Quantite</span></div>' +
+                            '<div class="row text-wrap h3">Nom du produit</div>' +
+                            '<div class="row text-wrap">Description du produit</div></div></div>' +
+                            '<div class="col-2">Prix€ <span class="badge badge-light" data-produit="@@item.GetIdProduit()">Quantite</span></div>' +
                             '<div class="col-2"><span class="p-2 rounded moinsproduit" data-produit="@@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span></div>' +
                             '<div class="col-2"><span class="p-2 rounded removeproduit" data-produit="@@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span></div></div>';
 
-            $(".FOU").click(function () {
+            $("#btnCommander").click(function () {
                 SaveCommandeSw();
             });
 
@@ -190,9 +190,7 @@
                 });
 
                 $(this).hide().delay(1000).fadeIn(2200);
-                                //                $(this).toggleClass('magictime puffOut', function () {
-                                //    $(this).delay(3000).toggleClass("magictime puffIn");
-                                //});
+
             });
 
             $('.removeproduit').click(function () {

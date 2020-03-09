@@ -50,10 +50,10 @@ namespace AfpaLunch.Models
                     }
                     else
                     {
-                        this.Add(item);
+                        this.Add(itemPanier);
                     }
 
-                    this.Add(itemPanier);                    
+                    //this.Add(itemPanier);                    
                 }
 
                 else

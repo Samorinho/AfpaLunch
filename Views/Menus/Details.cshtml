@@ -19,6 +19,28 @@
 
 @section Scripts{
     <script type="text/javascript">
+        $('#commander').click(function () {
+            SaveCommandeSw();
+        });
+
+                    function SaveCommandeSw() {
+                var data = { 'idsession': '@Session.SessionID' };
+                        $.ajax({
+                            url: '@Url.Action("SaveCommande", "Sw")',
+                            type: 'POST',
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (data) {
+                                alert("Commande validée !");
+                                document.location.href = '/restaurants/index';
+                            },
+                            error: function () {
+                            alert("Erreur");
+                            }
+                        })
+        };
+
         $('#btnCommandeMenu').click(function () {
 
                 var produits = [];

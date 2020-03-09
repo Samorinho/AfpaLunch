@@ -21,6 +21,13 @@ namespace AfpaLunch.Views
             return View(db.Utilisateurs.ToList());
         }
 
+        public ActionResult ModalHistorique(int? id)
+        {
+            Commande commande = db.Commandes.Find(id);
+
+            return PartialView();
+        }
+
         public ActionResult Connexion()
         {
             Utilisateur utilisateur = new Utilisateur();
