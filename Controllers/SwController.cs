@@ -350,7 +350,7 @@ namespace AfpaLunch.Controllers
         public JsonResult Recherche(string search)
         {
             List<Resto> marecherche = null;
-            //List<Restaurant> requete = null;
+
             try
             {
                 marecherche = db.Restaurants.Where(r => r.Nom.Contains(search) || r.Tag.Contains(search)).Select(r => new Resto()

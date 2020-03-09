@@ -28,7 +28,7 @@
 <div class="row">
     <div class="input-group my-4 col-12 ui-widget">
         <input type="text" class="form-control" id="rechercheTest" placeholder="ex: McDonald's ou Pizza">
-        <div class="input-group-append">
+        <div class="input-group-append"> 
             <span class="input-group-text"><i class="fa fa-search"></i></span>
         </div>
     </div>
@@ -195,7 +195,7 @@
                 },
                  select: function (event, ui) {
                      $('#rechercheTest').val(ui.item.IdRestaurant);
-                     window.location = "/Restaurants/Details/" + ui.item.id;                  
+                     window.location = "/Restaurants/DetailsResto/" + ui.item.id;                  
                 },
                 minLength: 1,
          });
