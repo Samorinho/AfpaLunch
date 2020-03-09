@@ -4,20 +4,29 @@
     ViewBag.Title = "Create";
 }
 
-<h1>Créer un restaurant</h1>
+<div class="d-flex justify-content-center">
+    <h1>Créer un restaurant</h1>
+</div>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+        <div class="d-flex justify-content-center mt-3"><i class="fa fa-cutlery"></i></div>
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="d-flex justify-content-center">
-        <div class="card" style="width: 40rem;">
-            <div class="d-flex justify-content-center mt-3"><i class="fa fa-cutlery"></i></div>
-            <div class="card-body">
+        <div class="card-body"><button id="mamodal" class="btn btn-outline-primary">Envoyer une photo</button></div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm())
+            {
+
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                 <div id="debut">
                     <p class="card-text">
-                        <div class="form-group">                         
+
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Nom du responsable")
                                 @Html.EditorFor(model => model.Reponsable, new { htmlAttributes = new { @class = "form-control" } })
@@ -25,7 +34,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                           
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Login")
                                 @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
@@ -33,7 +42,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                          
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Mot de passe")
                                 @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
@@ -41,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Email")
                                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
@@ -49,7 +58,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("N° de portable")
                                 @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control" } })
@@ -62,15 +71,9 @@
                 @*****************************@
 
                 <div id="suite" style="display:none">
-                    <form action="@Url.Action("Upload", "Restaurants")" method="post" enctype="multipart/form-data" class="dropzone w-100" id="photo" style="background-color: lightgrey; border: none;">
-                        <div class="fallback">
-                            <input name="file" type="file" multiple />
-                            <input type="submit" value="Upload" />
-                        </div>
-                    </form>
 
                     <p class="card-text">
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Type de cuisine")
                                 @Html.DropDownList("IdTypeCuisine", null, htmlAttributes: new { @class = "form-control" })
@@ -78,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Description du restaurant")
                                 @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
@@ -86,7 +89,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Nom du restaurant")
                                 @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
@@ -94,7 +97,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                           
+                        <div class="form-group">
                             <div class="col-md-10">
                                 @Html.Label("Tag du restaurant")
                                 @Html.EditorFor(model => model.Tag, new { htmlAttributes = new { @class = "form-control" } })
@@ -102,7 +105,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                           
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Budget moyen")
                                 @Html.EditorFor(model => model.Budget, new { htmlAttributes = new { @class = "form-control" } })
@@ -110,7 +113,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                           
+                        <div class="form-group">
                             <div class="col-md-10">
                                 @Html.Label("Adresse")
                                 @Html.EditorFor(model => model.Adresse, new { htmlAttributes = new { @class = "form-control" } })
@@ -118,7 +121,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                           
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Code postal")
                                 @Html.EditorFor(model => model.CodePostal, new { htmlAttributes = new { @class = "form-control" } })
@@ -126,7 +129,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                          
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Ville")
                                 @Html.EditorFor(model => model.Ville, new { htmlAttributes = new { @class = "form-control" } })
@@ -134,7 +137,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">                          
+                        <div class="form-group">
                             <div class="col">
                                 @Html.Label("Telephone")
                                 @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
@@ -146,17 +149,44 @@
                 </div>
 
                 <div class="row" style="padding-left: 1.25rem; padding-right: 1.25rem">
-                    <div>
-                        <input id="envoi" type="submit" class="d-flex justify-content-center mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Créer votre restaurant" />
+                    <div id="retour" class="mr-auto">
+                        <input type="button" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Retour" />
+                    </div>
+                    <div id="continuer" class="ml-auto">
+                        <input type="button" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Continuer" />
+                    </div>
+                    <div id="envoi" class="">
+                        <input id="" type="submit" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Créer votre restaurant" />
                     </div>
                 </div>
+            }
+        </div>
+    </div>
+</div>
 
+<div id="modalphoto" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Envoyer une photo de votre restaurant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <div id="dropout">
+                    <form action="/file-upload"
+                          class="dropzone"
+                          id="my-awesome-dropzone"></form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Retour</button>
+                <button type="button" class="btn btn-primary">Continuer</button>
+            </div>
+        </div>
     </div>
-    </div>
-
-}
-
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -164,20 +194,48 @@
     <script>
         $(document).ready(function () {
 
-            Dropzone.options.myAwesomeDropzone = {
-                paramName: "file",
-                maxFilesize: 3,
-                accept: function (file, done) {
+            $("#envoi").css("display", "none");
+            $("#retour").css("display", "none");
 
-                },
-                acceptedFiles: "images/jpg",
-                dictDefaultMessage: "Test",
+            //$("#dropout").dropzone({ url : " " });
 
-            };
+            //$("#dropout").dropzone({ url: "@Url.Action("Upload","Restaurants")" });
 
-            myDropzone.on("complete", function (file) {
-                myDropzone.removeFile(file);
+            $("#mamodal").click(function () {
+                //var myDropzone = new Dropzone("div#dropout", { url: "@Url.Action("Upload","Restaurants")"});
+                $("#modalphoto").modal("show");
             });
+
+            $("#continuer").click(function () {
+                $("#debut").css("display", "none");
+                $("#suite").css("display", "block");
+                $("#retour").css("display", "block");
+                $("#continuer").css("display", "none");
+                $("#envoi").css("display", "block");
+            });
+
+            $("#retour").click(function () {
+                $("#debut").css("display", "block");
+                $("#suite").css("display", "none");
+                $("#retour").css("display", "none");
+                $("#continuer").css("display", "block");
+                $("#envoi").css("display", "none");
+            });
+
+            //Dropzone.options.myAwesomeDropzone = {
+            //    paramName: "file",
+            //    maxFilesize: 3,
+            //    accept: function (file, done) {
+
+            //    },
+            //    acceptedFiles: "images/jpg",
+            //    dictDefaultMessage: "Test",
+
+            //};
+
+            //myDropzone.on("complete", function (file) {
+            //    myDropzone.removeFile(file);
+            //});
 
         });
     </script>

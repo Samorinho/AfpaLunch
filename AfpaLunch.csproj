@@ -170,6 +170,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MenuSw.cs" />
     <Compile Include="Models\Panier.cs" />
     <Compile Include="Models\ItemPanier.cs" />
     <Compile Include="Models\MenuPanier.cs" />
@@ -445,6 +446,11 @@
     <Content Include="Views\Menus\Details.cshtml" />
     <Content Include="Views\Menus\Edit.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
+    <Content Include="Views\Restaurants\LoginRestaurateur.cshtml" />
+    <Content Include="Views\Restaurants\MonRestaurant.cshtml" />
+    <Content Include="Views\Restaurants\MesCommandes.cshtml" />
+    <Content Include="Views\Restaurants\MaComptabilite.cshtml" />
+    <Content Include="Views\Utilisateurs\ModalHistorique.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,62 +1,79 @@
-﻿@model IEnumerable<AfpaLunch.Models.ProduitPanier>
+﻿@model AfpaLunch.Models.Panier
 
 @{
     ViewBag.Title = "Panier";
     string isConnected = Session["Utilisateur"] != null ? "true" : "false";
+    AfpaLunch.Models.Panier panier = (AfpaLunch.Models.Panier)HttpContext.Current.Application[Session.SessionID];
 
 }
 
-<h2>Panier</h2>
+<h2>Mon panier :</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IdProduit)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nom)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Prix)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quantite)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Photo)
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
+@{ if (panier != null)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdProduit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prix)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photo)
-            </td>
-        </tr>
+        foreach (AfpaLunch.Models.ItemPanier item in panier)
+        {
+            if (item is AfpaLunch.Models.MenuPanier)
+            {
+                List<AfpaLunch.Models.ProduitPanier> produitPaniers = ((AfpaLunch.Models.MenuPanier)item).produits;
+            }
+
+            try
+            {
+                <div class="row m-1 listepanier">
+                    <div class='col-2'>
+                        <img src="~/@item.Photo" class="img-thumbnail" style="min-width: 90px; min-height:70px" />
+                    </div>
+                    <div class='col-4'>
+                        <div class='d-flex flex-column'>
+                            <div class='row text-wrap h3'>
+                                @item.Nom
+                            </div>
+                            <div class="row text-wrap">
+                                @item.Description
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">@item.Prix€ <span class="badge badge-light" data-produit="@item.GetIdProduit()">@item.Quantite</span></div>
+                    <div class="col-2">
+                        <span class="p-2 rounded moinsproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                    </div>
+                    <div class="col-2">
+                        <span class="p-2 rounded removeproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
+                    </div>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                string er = ex.Message;
+            }
+        }
+
+        <div>
+            <button id="btnCommande" class="btn btn-success" style="margin-right: 30px">Commander</button>
+        </div>
     }
 
-</table>
+    else
+    {
+        <p class="alert alert-info">Votre panier est vide !</p>
+    }
 
-<button id="btnCommande" class="btn btn-danger">Commander</button>
+}
+@*<div class="row justify-content-end mx-5">
+        <div class="">
+            <span class="font-weight-bold">TOTAL :</span>
+        </div>
+        <div>
+            @{ AfpaLunch.Models.Panier basket = (AfpaLunch.Models.Panier)HttpContext.Current.Application[Session.SessionID];
+                <span class="badge badge-light"></span>
+            }
+
+        </div>
+
+    </div>*@
+
+
 
 <div class="modal" tabindex="-1" role="dialog" id="modalConnexion">
     <div class="modal-dialog" role="document">
@@ -113,7 +130,7 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data) {
-                        document.location.href = '/utilisateurs/details/' + data.idutilisateur;
+                        document.location.href = '/utilisateurs/historique/' + data.idutilisateur;
                     },
                     error: function () {
                         alert("Erreur");

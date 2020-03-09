@@ -1,7 +1,7 @@
-﻿@model  AfpaLunch.Utilisateur
+﻿@model  AfpaLunch.Restaurant
 
 @{
-    ViewBag.Title = "Connexion";
+    ViewBag.Title = "Connexion Restaurateur";
 }
 
 @using (Html.BeginForm())
@@ -18,8 +18,8 @@
             <h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
 
             <div class="d-flex justify-content-center">
-                @Html.EditorFor(model => model.Matricule, new { htmlAttributes = new { placeholder = "Matricule", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Matricule, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Login, new { htmlAttributes = new { placeholder = "Login", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
             </div>
 
             <div class="d-flex justify-content-center">
@@ -30,7 +30,19 @@
             <div class="d-flex justify-content-center mb-4">
                 <input type="submit" class="btn btn-lg btn-success btn-block" />
             </div>
+
+            <p>OU</p>
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-lg btn-block btn-success" href="@Url.Action("Create","Restaurants")" style="max-width: 280px;">Créez votre restaurant</a>
+            </div>
         </div>
+
     </div>
 
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+    </script>
 }

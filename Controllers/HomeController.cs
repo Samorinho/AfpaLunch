@@ -30,7 +30,7 @@ namespace AfpaLunch.Controllers
 
         public ActionResult Panier()
         {
-            List<ProduitPanier> panier = (List<ProduitPanier>)HttpContext.Application[Session.SessionID];
+            Panier panier = (Panier)HttpContext.Application[Session.SessionID];
 
             return View(panier);
         }

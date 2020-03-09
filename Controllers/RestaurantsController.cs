@@ -17,16 +17,42 @@ namespace AfpaLunch.Controllers
         private AfpEATEntities db = new AfpEATEntities();
 
         // GET: Restaurants
-        public ActionResult Index(/*string searchString*/)
+        public ActionResult Index()
         {
             var restaurants = db.Restaurants.Include(r => r.TypeCuisine);
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    restaurants = db.Restaurants.Where(r => r.Nom.Contains(searchString) || r.TypeCuisine.Nom.Contains(searchString) || r.Produits.FirstOrDefault().Nom.Contains(searchString));
-            //}
+
             ViewBag.TypeCuisine = db.TypeCuisines.OrderBy(t => t.Nom).ToList();
-            ViewBag.Restaurants = db.Restaurants.Include(r => r.TypeCuisine).ToList();
+            ViewBag.Restaurants = db.Restaurants.Include(r => r.TypeCuisine).ToList(); 
             return View(restaurants.ToList());
+        }
+
+        public ActionResult LoginRestaurateur()
+        {
+            Restaurant restaurant = new Restaurant();
+            restaurant = (Restaurant)Session["Restaurant"];
+            if (restaurant != null)
+            {
+                return RedirectToAction("MonRestaurant", "Restaurants");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LoginRestaurateur([Bind(Include = "Login, Password")] Restaurant restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+                restaurant = db.Restaurants.First(r => r.Login == restaurant.Login && r.Password == restaurant.Password);
+
+                Session["Restaurant"] = restaurant;
+
+                db.SaveChanges();
+
+                return RedirectToAction("MonRestaurant", "Restaurants");
+            }
+
+            return View();
         }
 
         // GET: Restaurants/Details/5
@@ -87,7 +113,7 @@ namespace AfpaLunch.Controllers
 
             foreach (Categorie item in db.Categories)
             {
-                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).ToList();
+                var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).OrderBy(p => p.IdCategorie == item.IdCategorie).ToList();
 
 
                 if (produits != null && produits.Count > 0)
@@ -100,8 +126,7 @@ namespace AfpaLunch.Controllers
             }
 
             ViewBag.NomsCategories = nomscategories;
-
-            
+          
             return View(restaurant);
         }
 
@@ -145,7 +170,7 @@ namespace AfpaLunch.Controllers
             }
             else
             {
-                return Json("No files selected.");
+                return Json("Aucun fichier n'a été sélectionné.");
             }
         }
 
@@ -173,6 +198,23 @@ namespace AfpaLunch.Controllers
             ViewBag.IdTypeCuisine = new SelectList(db.TypeCuisines, "IdTypeCuisine", "Nom", restaurant.IdTypeCuisine);
             return View(restaurant);
         }
+
+        public ActionResult MonRestaurant()
+        {
+            return View();
+        }
+
+        public ActionResult MesCommandes()
+        {
+            return View();
+        }
+
+        public ActionResult MaComptabilite()
+        {
+            return View();
+        }
+
+
 
         [HttpGet, ActionName("AddPanier")]
 
