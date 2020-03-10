@@ -28,7 +28,7 @@
 <div class="row">
     <div class="input-group my-4 col-12 ui-widget">
         <input type="text" class="form-control" id="rechercheTest" placeholder="ex: McDonald's ou Pizza">
-        <div class="input-group-append"> 
+        <div class="input-group-append">
             <span class="input-group-text"><i class="fa fa-search"></i></span>
         </div>
     </div>
@@ -78,9 +78,9 @@
                             </p>
                             <div class="row px-2">
                                 <div><a href="@Url.Action("DetailsResto", "Restaurants", new { id = item.IdRestaurant })" class="btn btn-rounded-pill btn-warning" style="border-radius: 20px;">Voir</a></div>
-                                <div class="ml-auto"><span class="jaime" data-resto="@item.IdRestaurant"><i class="jaimejaune fa fa-2x fa-thumbs-up text-warning"></i></span></div>
+                                <div class="ml-auto"><span class="liked" data-resto="@item.IdRestaurant"><i class="fa fa-2x fa-thumbs-up text-warning"></i></span></div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -161,6 +161,40 @@
 
 <hr />
 
+<div class="modal" tabindex="-1" role="dialog" id="favoris">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouvel ajout aux favoris !</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <span><i class="fa fa-3x fa-check text-success"></i></span>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <p>Le restaurant a bien été ajouté aux favoris.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                @{ if (Session["Utilisateur"] != null)
+                    {
+                        Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
+                        <a class="btn btn-success" href="@Url.Action("Favoris","Utilisateurs", new { id = utilisateur.IdUtilisateur })">Voir les favoris</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-success" href="@Url.Action("Connexion","Utilisateurs")">Voir les favoris</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
     <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.20/af-2.3.4/datatables.min.js">
@@ -195,7 +229,7 @@
                 },
                  select: function (event, ui) {
                      $('#rechercheTest').val(ui.item.IdRestaurant);
-                     window.location = "/Restaurants/DetailsResto/" + ui.item.id;                  
+                     window.location = "/Restaurants/DetailsResto/" + ui.item.id;
                 },
                 minLength: 1,
          });
@@ -311,9 +345,10 @@
                     })
             });
 
-            $('.jaime').click(function () {
-                event.stopPropagation();
+            $('.liked').click(function () {
+
                 var data = { 'idrestaurant': $(this).data("resto"), 'idsession': '@Session.SessionID' };
+
                 $.ajax({
                     url: '@Url.Action("AddFavoris", "Sw")',
                     type: 'POST',
@@ -322,12 +357,12 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.isReturnOk == true) {
-                            alert("YES")
+                            $("#favoris").modal("show");
                             //$(this).hide().delay(1000).fadeOut(2000).css("color", "black");
                         }
 
                         else {
-                            alert("Votre produit ne s'est pas ajouté au panier");
+
                         }
                     },
                     error: function () {
@@ -335,12 +370,7 @@
                     }
                 });
                 $(this).hide().delay(1000).fadeOut(2000).css("color", "black");
-                //$(this).hide().delay(1000).fadeIn(2200).css("color", "black");
             });
-
-            //$(".jaime").click(function () {
-            //    $(".jaimejaune").toggleClass("animated heartBeat duration-1s")              
-            //});
         });
     </script>
 

@@ -2,133 +2,104 @@
 
 @{
     ViewBag.Title = "Historique";
-    List<Commande> commandes = (List<Commande>)ViewBag.Histoire;
-    int IdMenu = 0;
-   // string idcol = "";
+    Commande commande = (Commande)ViewBag.Reco;
+
 }
 
-<div id="@Model.IdCommande" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
 
-            <div class="modal-header">
-                <div class="modal-title font-weight-light">
-                    <div class="d-flex justify-content-center">
-                        <div class="bourg">
-                            <p class="h5 mb-0">
-                                @Model.Restaurant.Nom
-                            </p>
-                            <small>Commande #@Model.IdCommande</small>
-                        </div>
+        <div class="modal-header">
+            <div class="modal-title font-weight-light">
+                <div class="d-flex justify-content-center">
+                    <div class="bourg">
+                        <p class="h5 mb-0">
+                            @Model.Restaurant.Nom
+                        </p>
+                        <small>Commande #@Model.IdCommande</small>
                     </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-            <div class="modal-body">
-                <div class="px-2 mb-1">
-                    <div class="row">
-                        <div><p class="text-secondary mb-0">Date</p></div><div class="ml-auto"><p class="text-secondary mb-0">Prix</p></div>
-                    </div>
-                    <div class="row">
-                        <div>
-                            <p class="font-weight-bolder">@Model.Date.ToString("dddd d MMM")</p>
-                        </div>
-                        <div class="ml-auto">
-                            @{
-                                if (Model.CommandeProduits.FirstOrDefault().Menus.Count == 0)
-                                {
-                                    <p class=" font-weight-normal">@Model.Prix€</p>
-                                }
-                                else
-                                {
-                                    //<p class=" font-weight-normal">@item.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().IdMenu€</p>
-                                }
-                            }
-                        </div>
-                    </div>
+        <div class="modal-body">
+            <div class="px-2 mb-1">
+                <div class="row">
+                    <div><p class="text-secondary mb-0">Date</p></div><div class="ml-auto"><p class="text-secondary mb-0">Prix</p></div>
                 </div>
-                <div class="" style="width:100%; overflow:hidden; margin:0"><img src="~/@Model.Restaurant.Photos.FirstOrDefault().Nom" class="w-100" style="margin:-20.875% 0;" /></div>
-                <div class="px-2">
-                    <span><i class="fa fa-location-arrow"></i></span> <small>Adresse</small><p>@Model.Restaurant.Adresse @Model.Restaurant.CodePostal @Model.Restaurant.Ville</p>
-                    <span><i class="fa fa-phone"></i></span> <small>Numéro de téléphone</small><p> @Model.Restaurant.Telephone</p>
-                </div>
-                <div class="collapse" id="collapseExample">
-                    @foreach (var produits in commandes)
-                    {
-                        if (produits.CommandeProduits.FirstOrDefault().Menus.Count == 0)
-                        {
-
-                            <div class="row p-2" id="">
-                                <div class="col-3"><img src="~/@produits.CommandeProduits.FirstOrDefault().Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
-                                <div class="col-5"><p>@produits.CommandeProduits.FirstOrDefault().Produit.Nom</p></div>
-                                <div class="col-2"><p>x&nbsp;<span class="badge badge-light">@produits.CommandeProduits.FirstOrDefault().Quantite</span></p></div>
-                                <div class="ml-auto col-2"><p>@produits.Prix€</p></div>
-                            </div>
-                        }
-
-                        else
-                        {
-                            if (IdMenu != produits.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().IdMenu)
+                <div class="row">
+                    <div>
+                        <p class="font-weight-bolder">@Model.Date.ToString("dddd d MMM")</p>
+                    </div>
+                    <div class="ml-auto">
+                        @{
+                            if (Model.CommandeProduits.FirstOrDefault().Menus.Count == 0)
                             {
-                                IdMenu = produits.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().IdMenu;
+                                <p class=" font-weight-normal">@Model.Prix€</p>
+                            }
+                            else
+                            {
+                                //<p class=" font-weight-normal">@item.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().IdMenu€</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="" style="width:100%; overflow:hidden; margin:0"><img src="~/@Model.Restaurant.Photos.FirstOrDefault().Nom" class="w-100" style="margin:-20.875% 0;" /></div>
+            <div class="px-2">
+                <span><i class="fa fa-location-arrow"></i></span> <small>Adresse</small><p>@Model.Restaurant.Adresse @Model.Restaurant.CodePostal @Model.Restaurant.Ville</p>
+                <span><i class="fa fa-phone"></i></span> <small>Numéro de téléphone</small><p> @Model.Restaurant.Telephone</p>
+            </div>
+            <div class="collapse" id="collapseExample">
+                @foreach (var produits in commande.CommandeProduits)
+                {
+                    if (produits.Menus.Count == 0)
+                    {
+
+                        <div class="row p-2" id="">
+                            <div class="col-3"><img src="~/@produits.Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
+                            <div class="col-5"><p>@produits.Produit.Nom</p></div>
+                            <div class="col-2"><p>x&nbsp;<span class="badge badge-light">@produits.Quantite</span></p></div>
+                            <div class="ml-auto col-2"><p>@produits.Prix€</p></div>
+                        </div>
+                    }
+
+                    else
+                    {
+                        @*if (IdMenu != produits.Menus.FirstOrDefault().IdMenu)
+                            {
+                                IdMenu = produits.Menus.FirstOrDefault().IdMenu;
                                 //idcol = "#toto" + IdMenu;
 
                                 <a class="btn btn-primary" data-toggle="collapse" href="" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                    @produits.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().Nom
+                                    @produits.Menus.FirstOrDefault().Nom
                                 </a>
 
-                            }
+                            }*@
 
-                            <div>
+                        <div>
 
-                                <div class="row p-2" id="">
-                                    <div class="col-3"><img src="~/@produits.CommandeProduits.FirstOrDefault().Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
-                                    <div class="col-5"><p>@produits.CommandeProduits.FirstOrDefault().Produit.Nom</p></div>
-                                    <div class="col-2"><p>x&nbsp;<span class="badge badge-light">@produits.CommandeProduits.FirstOrDefault().Quantite</span></p></div>
-
-                                </div>
+                            <div class="row p-2" id="">
+                                <div class="col-3"><img src="~/@produits.Produit.Photos.FirstOrDefault().Nom" class="img-thumbnail" style="width:100px; height:80px" /></div>
+                                <div class="col-5"><p>@produits.Produit.Nom</p></div>
+                                <div class="col-2"><p>x&nbsp;<span class="badge badge-light">@produits.Quantite</span></p></div>
 
                             </div>
-                        }
 
+                        </div>
                     }
-                </div>
 
+                }
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Produits</button>
-                <button id="recommander" data-button="@Model.IdCommande" type="button" class="btn btn-primary">Commander</button>
-            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Produits</button>
+            <button id="recommander" data-button="@Model.IdCommande" type="button" class="btn btn-primary">Commander</button>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script type="text/javascript">
-                $('#recommander').on('click', function () {
-
-                var data = {
-                    'idcommande': @Model.IdCommande,
-                    'idsession': '@Session.SessionID'
-                };
-
-                $.ajax({
-                    url: '@Url.Action("Recommander", "Sw")',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (data) {
-                        alert("Votre commande a bien été validée");
-                    },
-                    error: function () {
-                        alert("Erreur");
-                    }
-                });
-            });
-    </script>
-}

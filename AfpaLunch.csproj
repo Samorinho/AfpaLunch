@@ -451,6 +451,7 @@
     <Content Include="Views\Restaurants\MesCommandes.cshtml" />
     <Content Include="Views\Restaurants\MaComptabilite.cshtml" />
     <Content Include="Views\Utilisateurs\ModalHistorique.cshtml" />
+    <Content Include="Views\Restaurants\ModalRestaurateur.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

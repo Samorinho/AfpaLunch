@@ -86,17 +86,21 @@ namespace AfpaLunch.Controllers
             Utilisateur user = (Utilisateur)Session["Utilisateur"];
             Utilisateur utilisateur = db.Utilisateurs.FirstOrDefault(u => u.IdSession == idsession && u.IdUtilisateur == user.IdUtilisateur);
             Restaurant restaurant = db.Restaurants.Find(IdRestaurant);
-
             bool isReturnOk = false;
 
             if (utilisateur != null && restaurant != null)
             {
-                utilisateur.Restaurants.Add(restaurant);
-                //restaurant.Utilisateurs.Add(utilisateur);                
-                //db.Utilisateurs.Add(utilisateur);
-                db.SaveChanges();
+                if (!db.Utilisateurs.FirstOrDefault().Restaurants.Contains(restaurant))
+                {
+                    db.Utilisateurs.FirstOrDefault().Restaurants.Add(restaurant);
+                    db.SaveChanges();
 
-                isReturnOk = true;
+                    isReturnOk = true;
+                }
+                else
+                {
+
+                }                
             }
 
             return Json(new { isReturnOk }, JsonRequestBehavior.AllowGet);
@@ -318,58 +322,6 @@ namespace AfpaLunch.Controllers
             return Json(new { error = 1, message = "Vous n'êtes pas connecté(e)" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Hasard(int idfood, int idboisson, string idsession)
-        {
-            SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
-            List<ProduitPanier> produitPaniers = null;
-            int quantite = 0;
-            if (sessionUtilisateur != null)
-            {
-                if (HttpContext.Application[idsession] != null)
-                {
-                    produitPaniers = (List<ProduitPanier>)HttpContext.Application[idsession];
-                }
-                else
-                {
-                    produitPaniers = new List<ProduitPanier>();
-                }
-
-                var prod = produitPaniers.Find(p => p.IdProduit == idfood || p.IdProduit == idboisson);
-                if (prod != null)
-                {
-                    prod.Quantite++;
-                    quantite += prod.Quantite;
-                    HttpContext.Application[idsession] = produitPaniers;
-                    return Json(quantite, JsonRequestBehavior.AllowGet);
-                }
-
-                Produit produit = db.Produits.Find(idfood, idboisson);
-                foreach (ProduitPanier item in produitPaniers)
-                {
-                    //item.IdProduit = idfood || item.IdProduit = idboisson;
-                }
-                ProduitPanier produitPanier = new ProduitPanier();
-                produitPanier.IdProduit = idfood;
-                produitPanier.Nom = produit.Nom;
-                produitPanier.Description = produit.Description;
-                produitPanier.Quantite = 1;
-                produitPanier.Prix = produit.Prix;
-                produitPanier.Photo = produit.Photos.First().Nom;
-                produitPanier.IdRestaurant = produit.IdRestaurant;
-                produitPaniers.Add(produitPanier);
-
-                quantite++;
-
-                HttpContext.Application[idsession] = produitPaniers;
-            }
-            var rnd = new Random();
-
-            var first = db.Produits.Where(p => p.Categorie.IdCategorie == 3 || p.Categorie.IdCategorie == 5 || p.Categorie.IdCategorie == 7 || p.Categorie.IdCategorie == 8 || p.Categorie.IdCategorie == 9).OrderBy(p => rnd.Next());
-            var second = db.Produits.Where(p => p.IdCategorie == 2).OrderBy(p => rnd.Next());
-
-            return Json(quantite, JsonRequestBehavior.AllowGet);
-        }
-
         public JsonResult GetRestos(int? IdTypeCuisine, string idsession)
         {
             SessionUtilisateur sessionUtilisateur = db.SessionUtilisateurs.Find(Session.SessionID);
@@ -417,8 +369,7 @@ namespace AfpaLunch.Controllers
             if (sessionUtilisateur != null && sessionUtilisateur.IdSession == idsession)
             {
                 Restaurant restaurant = db.Restaurants.Find(idrestaurant);
-                db.Utilisateurs.Where(r => r.Restaurants.FirstOrDefault().Utilisateurs.FirstOrDefault().IdUtilisateur == utilisateur.IdUtilisateur);
-                db.Utilisateurs.Remove(utilisateur);
+                db.Utilisateurs.FirstOrDefault().Restaurants.Remove(restaurant);
                 db.SaveChanges();
             }
 

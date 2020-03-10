@@ -1,0 +1,158 @@
+﻿@model AfpaLunch.Restaurant
+
+@{
+    ViewBag.Title = "Historique";
+    Restaurant restaurant = (Restaurant)ViewBag.Monresto;
+}
+
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+<div class="card-body">
+
+    @using (Html.BeginForm())
+    {
+
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div id="debut">
+            <p class="card-text">
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Nom du responsable")
+                        @Html.EditorFor(model => model.Reponsable, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Reponsable, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Login")
+                        @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Mot de passe")
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Email")
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("N° de portable")
+                        @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </p>
+        </div>
+
+        @*****************************@
+
+        <div id="suite" style="display:none">
+
+            <p class="card-text">
+                @*<div class="form-group">
+                        <div class="col">
+                            @Html.Label("Type de cuisine")
+                            @Html.DropDownList("IdTypeCuisine", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IdTypeCuisine, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Description du restaurant")
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Nom du restaurant")
+                        @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.Label("Tag du restaurant")
+                        @Html.EditorFor(model => model.Tag, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Tag, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Budget moyen")
+                        @Html.EditorFor(model => model.Budget, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Budget, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.Label("Adresse")
+                        @Html.EditorFor(model => model.Adresse, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Code postal")
+                        @Html.EditorFor(model => model.CodePostal, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CodePostal, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Ville")
+                        @Html.EditorFor(model => model.Ville, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Ville, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col">
+                        @Html.Label("Telephone")
+                        @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </p>
+        </div>
+
+        <div class="row" style="padding-left: 1.25rem; padding-right: 1.25rem">
+            <div id="retour" class="mr-auto">
+                <input type="button" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Retour" />
+            </div>
+            <div id="continuer" class="ml-auto">
+                <input type="button" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Continuer" />
+            </div>
+            <div id="envoi" class="">
+                <input id="" type="submit" class="mt-2 btn btn-rounded-pill btn-primary" style="border-radius: 20px;" value="Créer votre restaurant" />
+            </div>
+        </div>
+    }
+</div>

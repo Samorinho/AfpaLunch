@@ -138,15 +138,21 @@
         </div>
     </div>
 }
+
+<div class="modal" tabindex="-1" role="dialog" id="modaltest">
+
+</div>
+
 @section Scripts {
 
     <script type="text/javascript">
         $(document).ready(function () {
 
             $('.lacommande').on('click', function () {
-                const idcommande = $(this).data("commande");
+                let idcommande = $(this).data("commande");
                 console.log(idcommande);
-                document.location.href = "/utilisateurs/modalhistorique/" + idcommande;
+                $('#modaltest').load("/utilisateurs/modalhistorique/" + idcommande);
+                $('#modaltest').modal("show");
             });
 
             //$('.lacommande').on('click', function () {
@@ -160,7 +166,7 @@
             //});
 
             $('.recommander').on('click', function () {
-                const lacommande = $(this).data("button");
+                let lacommande = $(this).data("button");
                 var data = {
                     'idcommande': lacommande,
                     'idsession': '@Session.SessionID'

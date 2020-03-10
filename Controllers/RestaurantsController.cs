@@ -28,8 +28,7 @@ namespace AfpaLunch.Controllers
 
         public ActionResult LoginRestaurateur()
         {
-            Restaurant restaurant = new Restaurant();
-            restaurant = (Restaurant)Session["Restaurant"];
+            Restaurant restaurant = (Restaurant)Session["Restaurant"];
             if (restaurant != null)
             {
                 return RedirectToAction("MonRestaurant", "Restaurants");
@@ -49,7 +48,7 @@ namespace AfpaLunch.Controllers
 
                 db.SaveChanges();
 
-                return RedirectToAction("MonRestaurant", "Restaurants");
+                return RedirectToAction("MonRestaurant", "Restaurants", new { id = restaurant.IdRestaurant });
             }
 
             return View();
@@ -199,13 +198,52 @@ namespace AfpaLunch.Controllers
             return View(restaurant);
         }
 
-        public ActionResult MonRestaurant()
+        public ActionResult MonRestaurant(int? id)
         {
-            return View();
+            Restaurant resto = null;
+            if (Session["Restaurant"] != null)
+            {
+                Restaurant restaurateur = (Restaurant)Session["Restaurant"];
+                resto = db.Restaurants.Include(r => r.Produits).Include(r => r.Menus).First(r => r.Login == restaurateur.Login && r.Password == restaurateur.Password && r.IdRestaurant == id);
+
+                //Nouvelle liste de string
+
+                List<string> nomscategories = new List<string>();
+
+                // On parcourt les catégories du restaurant en question
+
+                foreach (Categorie item in db.Categories)
+                {
+                    var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).OrderBy(p => p.IdCategorie == item.IdCategorie).ToList();
+
+
+                    if (produits != null && produits.Count > 0)
+                    {
+                        // On ajoute la liste des produits au "ViewData"
+
+                        ViewData[item.Nom] = produits;
+                        nomscategories.Add(item.Nom);
+                    }
+                }
+
+                ViewBag.NomsCategories = nomscategories;
+            }
+
+            return View(resto);
         }
 
-        public ActionResult MesCommandes()
+        public PartialViewResult ModalRestaurateur(int? id)
         {
+            Restaurant restaurant = db.Restaurants.Find(id);
+            ViewBag.Monresto = restaurant;
+
+            return PartialView(restaurant);
+        }
+
+        public ActionResult MesCommandes(int? id)
+        {
+            List<Commande> commandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id).ToList();
+            ViewBag.MesCommandes = commandes;
             return View();
         }
 

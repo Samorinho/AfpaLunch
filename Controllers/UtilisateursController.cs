@@ -21,17 +21,17 @@ namespace AfpaLunch.Views
             return View(db.Utilisateurs.ToList());
         }
 
-        public ActionResult ModalHistorique(int? id)
+        public PartialViewResult ModalHistorique(int? id)
         {
             Commande commande = db.Commandes.Find(id);
+            ViewBag.Reco = commande;
 
-            return PartialView();
+            return PartialView(commande);
         }
 
         public ActionResult Connexion()
         {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur = (Utilisateur)Session["Utilisateur"];
+            Utilisateur utilisateur = (Utilisateur)Session["Utilisateur"];
             if (utilisateur != null)
             {
                 return RedirectToAction("Index", "Restaurants");
