@@ -5,15 +5,11 @@
     Restaurant restaurant = (Restaurant)ViewBag.Monresto;
 }
 
-@Scripts.Render("~/bundles/modernizr")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
+
 
 <div class="card-body">
-
     @using (Html.BeginForm())
     {
-
         @Html.AntiForgeryToken()
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -155,4 +151,5 @@
             </div>
         </div>
     }
+    <button id="nope">YES</button>
 </div>

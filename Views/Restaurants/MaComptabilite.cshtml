@@ -1,7 +1,124 @@
-﻿
+﻿@model AfpaLunch.Restaurant
 @{
     ViewBag.Title = "MaComptabilite";
+    decimal Somme = ViewBag.Total;
+    List<Produit> produits = ViewBag.Products;
+    DateTime dt = DateTime.Now.AddMonths(1);
+    DateTime xxx = new DateTime(dt.Year, dt.Month, 1);
+    var datepaiement = xxx.ToString("dddd d MMMM");
 }
 
-<h2>MaComptabilite</h2>
+<h2>Ma comptabilité</h2>
+@{
+    <div>
+        <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Mes commandes
+            </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                Mes produits
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <p>Le total de vos ventes s'élève à @Somme€.</p>
+                <p>Votre prochain virement aura lieu le @datepaiement ou le 1er jour ouvré qui suit, sous réserve d'un solde créditeur de votre part.</p>
+            </div>
+        </div>
+        <div class="collapse" id="collapseExample2">
+            <div class="card card-body">
+                <div class="row justify-content-around">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
+                        Carousel
+                    </button>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                        Tableau
+                    </button>
+                </div>
+                
+                <div class="collapse" id="collapseExample3">
+                    <table class="table">
+                        <tr>
+                            <th>Photo</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Stock</th>
+                            <th>Ventes</th>
+                        </tr>
+                        @foreach (Produit item in produits)
+                        {
+                            <tr>
+                                <td><img src="~/@item.Photos.FirstOrDefault().Nom" class="img-thumbnail" alt="Photo Restaurant" style="width:90px; height:75px;"></td>
+                                <td>@Html.DisplayFor(modelItem => item.Nom)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Prix)€</td>
+                                <td>@Html.DisplayFor(modelItem => item.Quantite)</td>
+                                <td>Ventes</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="collapse" id="collapseExample4">
+                    <div class="oulo-carousel owl-carousel owl-theme mt-4 ml-4">
+                        @foreach (Produit item in produits)
+                        {
+                            try
+                            {
+                                <div class="">
+                                    <div class="card" style="width: 18rem;">
+                                        <img src="~/@item.Photos.FirstOrDefault().Nom" class="card-img-top" alt="Photo Restaurant" style="height: 190px">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nom)</h5>
+                                            <p class="card-text font-italic my-0">Prix : @Html.DisplayFor(modelItem => item.Prix)€</p>
+                                            <p class="card-text font-italic my-0">Stock : @Html.DisplayFor(modelItem => item.Quantite)</p>
+                                            <p class="card-text font-italic my-0">Ventes : </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            catch (Exception ex)
+                            {
+                                string error = ex.Message;
+                            }
+                        }
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </div>
+}
+
+
+<div>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".oulo-carousel").owlCarousel({
+            items: 3,
+            loop: true,
+            nav: true,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true,
+            center: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2,
+                    margin: 30
+                },
+                992: {
+                    items: 3,
+                    margin: 30
+                }
+            },
+            smartSpeed: 900,
+            navText: ["<i class='fa fa-2x fa-chevron-circle-left' style='color:#fdf18d'></i>", "<i class='fa fa-2x fa-chevron-circle-right' style='color:#fdf18d'></i>"]
+        });
+    </script>
+}

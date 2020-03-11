@@ -185,14 +185,56 @@ namespace AfpaLunch.Controllers
         // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdRestaurant,IdTypeCuisine,Description,Nom,Tag,Budget,Adresse,CodePostal,Ville,Telephone,Mobile,Email,Reponsable,Login,Password")] Restaurant restaurant)
+        public ActionResult Create([Bind(Include = "IdRestaurant,IdTypeCuisine,Description,Nom,Tag,Budget,Adresse,CodePostal,Ville,Telephone,Mobile,Email,Reponsable,Login,Password")] Restaurant restaurant, HttpFileCollectionBase files)
         {
             if (ModelState.IsValid)
             {
                 db.Restaurants.Add(restaurant);
-                db.SaveChanges();
+                //db.SaveChanges();
+                if (Request.Files.Count > 0)
+                {
+                    try
+                    {
+                        files = Request.Files;
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            string path = AppDomain.CurrentDomain.BaseDirectory + "Images/";
+                            string filename = Path.GetFileName(Request.Files[i].FileName);
+
+                            HttpPostedFileBase file = files[i];
+                            string fname;
+
+                            if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                            {
+                                string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                                fname = testfiles[testfiles.Length - 1];
+                            }
+                            else
+                            {
+                                fname = file.FileName;
+                            }
+
+                            // Get the complete folder path and store the file inside it.  
+                            fname = Path.Combine(Server.MapPath("~/Images/"), fname);
+                            file.SaveAs(fname);
+                        }
+                        // Returns message that successfully uploaded  
+                        return Json("Votre image a bien été envoyée !");
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json("Une erreure s'est produite : " + ex.Message);
+                    }
+                }
+                else
+                {
+                    //return Json("Aucun fichier n'a été sélectionné.");
+                }
+
                 return RedirectToAction("Index");
             }
+
+            
 
             ViewBag.IdTypeCuisine = new SelectList(db.TypeCuisines, "IdTypeCuisine", "Nom", restaurant.IdTypeCuisine);
             return View(restaurant);
@@ -242,13 +284,17 @@ namespace AfpaLunch.Controllers
 
         public ActionResult MesCommandes(int? id)
         {
-            List<Commande> commandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id).ToList();
-            ViewBag.MesCommandes = commandes;
+            Restaurant restaurant = (Restaurant)Session["Restaurant"];
+            //List<Commande> commandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id).ToList();
+
+            ViewBag.MesCommandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id && restaurant.IdRestaurant == id).OrderByDescending(c => c.IdCommande).ToList();
             return View();
         }
 
-        public ActionResult MaComptabilite()
+        public ActionResult MaComptabilite(int? id)
         {
+            ViewBag.Total = db.Commandes.Where(c => c.IdRestaurant == id).Sum(c => c.Prix);
+            ViewBag.Products = db.Produits.Where(p => p.IdRestaurant == id).ToList();
             return View();
         }
 

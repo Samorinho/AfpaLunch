@@ -204,7 +204,7 @@ namespace AfpaLunch.Views
 
                 //ViewBag.Histoires = history;
                 //List<Commande> commandes = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).ToList();
-                ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderByDescending(c => c.Date).ToList();
+                ViewBag.Histoire = db.Commandes.Where(c => c.IdUtilisateur == utilisateur.IdUtilisateur).OrderByDescending(c => c.IdCommande).ToList();
 
                 //Commande commande = new Commande();
                 //////////////////////////////////////////

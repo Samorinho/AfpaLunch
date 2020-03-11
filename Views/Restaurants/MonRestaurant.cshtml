@@ -15,7 +15,7 @@
             <div><p class="font-weight-bold h3 mb-0">@Html.DisplayFor(model => Model.Nom)</p></div>
             <div><button class="btn btn-rounded-pill btn-warning" id="btnEdit" data-monresto="@Model.IdRestaurant">Modifier</button></div>
         </div>
-        
+
         <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
         <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
         <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
@@ -97,58 +97,62 @@
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#btnEdit").click(function () {
-                let idrestaurant = $(this).data("monresto");
-                $('#modalrestaurateur').load("/restaurants/modalrestaurateur/" + idrestaurant);
-                $('#yes').modal("show");
-            });
+    @Scripts.Render("~/bundles/jqueryval")
 
-            $(".owl-carousel").owlCarousel({
-                items: 3,
-                loop: true,
-                nav: true,
-                dots: false,
-                autoplay: false,
-                autoplayTimeout: 2000,
-                autoplayHoverPause: true,
-                responsive: {
-                    0: {
-                        items: 1
+    @*@section Scripts {*@
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#btnEdit").click(function () {
+                    let idrestaurant = $(this).data("monresto");
+                    $('#modalrestaurateur').load("/restaurants/modalrestaurateur/" + idrestaurant);
+                    $('#yes').modal("show");
+                });
+
+                $(".owl-carousel").owlCarousel({
+                    items: 3,
+                    loop: true,
+                    nav: true,
+                    dots: false,
+                    autoplay: false,
+                    autoplayTimeout: 2000,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        768: {
+                            items: 2,
+                            margin: 30
+                        },
+                        992: {
+                            items: 3,
+                            margin: 30
+                        }
                     },
-                    768: {
-                        items: 2,
-                        margin: 30
-                    },
-                    992: {
-                        items: 3,
-                        margin: 30
-                    }
-                },
-                smartSpeed: 900,
-                navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
-            });
+                    smartSpeed: 900,
+                    navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
+                });
 
-            $("#envoi").css("display", "none");
-            $("#retour").css("display", "none");
-
-            $("#continuer").click(function () {
-                $("#debut").css("display", "none");
-                $("#suite").css("display", "block");
-                $("#retour").css("display", "block");
-                $("#continuer").css("display", "none");
-                $("#envoi").css("display", "block");
-            });
-
-            $("#retour").click(function () {
-                $("#debut").css("display", "block");
-                $("#suite").css("display", "none");
-                $("#retour").css("display", "none");
-                $("#continuer").css("display", "block");
                 $("#envoi").css("display", "none");
-            });
+                $("#retour").css("display", "none");
 
-        });
-    </script>
+                $("#continuer").click(function () {
+                    $("#debut").css("display", "none");
+                    $("#suite").css("display", "block");
+                    $("#retour").css("display", "block");
+                    $("#continuer").css("display", "none");
+                    $("#envoi").css("display", "block");
+                });
+
+                $("#retour").click(function () {
+                    $("#debut").css("display", "block");
+                    $("#suite").css("display", "none");
+                    $("#retour").css("display", "none");
+                    $("#continuer").css("display", "block");
+                    $("#envoi").css("display", "none");
+                });
+
+            });
+        </script>
     }
