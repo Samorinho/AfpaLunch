@@ -1,7 +1,158 @@
-﻿
+﻿@model AfpaLunch.Restaurant
+
 @{
     ViewBag.Title = "MonRestaurant";
+    List<string> nomscategories = (List<string>)ViewBag.NomsCategories;
 }
 
-<h2>MonRestaurant</h2>
+<h2 class="font-italic"><b>@Html.DisplayFor(model => Model.Nom)</b>, votre restaurant</h2>
+@Html.Hidden("IdRestaurant")
+<div class="">
+    <div class="rounded-top" style="width:100%; overflow:hidden; margin:0"><img src="~/@Html.DisplayFor(model => Model.Photos.FirstOrDefault().Nom)" class="w-100" style="margin:-20.875% 0;" /></div>
 
+    <div class="p-2 rounded-bottom" style="background-color: rgba(250, 168, 75, 0.4);">
+        <div class="row justify-content-between px-3">
+            <div><p class="font-weight-bold h3 mb-0">@Html.DisplayFor(model => Model.Nom)</p></div>
+            <div><button class="btn btn-rounded-pill btn-warning" id="btnEdit" data-monresto="@Model.IdRestaurant">Modifier</button></div>
+        </div>
+
+        <p class="font-weight-light my-0">@Html.DisplayFor(model => Model.TypeCuisine.Nom)</p>
+        <p class="font-italic my-0"><i class="fa fa-map-pin"></i> @Html.DisplayFor(model => Model.Adresse), @Html.DisplayFor(model => Model.CodePostal) @Html.DisplayFor(model => Model.Ville) </p>
+        <p class="card-text my-0"><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i><i class="fa fa-star" style="color: gold"></i></p>
+        <p class="card-text my-0">@Html.DisplayFor(model => Model.Description)</p>
+        <p class="card-text my-0"><i class="fa fa-phone"></i> @Html.DisplayFor(model => Model.Telephone)</p>
+    </div>
+
+    @{
+        foreach (string item in nomscategories)
+        {
+            <p class="font-italic mt-4" style="font-size: 1.25em">@item</p>
+            <hr />
+
+            List<Produit> produits = (List<Produit>)ViewData[item];
+
+            <div class="owl-carousel owl-theme mt-4">
+                @foreach (var produit in produits)
+                {
+                    <div class="">
+                        <div class="card rounded border-top-0 shadow-sm p-0 mb-1 bg-white" style="width: 18rem;">
+                            <div class="img-hover-zoom">
+                                <img src="~/@produit.Photos.FirstOrDefault().Nom" class="img-fluid" alt="Photo produit" style="height: 185px; width: 286px">
+                            </div>
+
+                            <div class="card-body p-1" style="background-color:whitesmoke">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => produit.Nom)</h5>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div>
+                                            <p class="card-text">@Html.DisplayFor(modelItem => produit.Categorie.Nom)<br />@Html.DisplayFor(modelItem => produit.Prix)€</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        foreach (var item in Model.Menus)
+        {
+            <div class='row d-flex p-3'>
+                <div class='col-4'>
+                    <div class='d-flex flex-column'>
+                        <div class='row px-5 h4'>
+                            @item.Nom
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <p class="font-weight-light">@item.Prix€</p>
+                </div>
+                <div class='col-2 ml-auto'>
+                    <div class="row">
+                        <a href="@Url.Action("Details", "Menus", new { id = item.IdMenu })">Composer son menu</a>
+                        <button class="btn btn-info"></button>
+                    </div>
+                </div>
+                <div class="col-2 ajouted" style="display:none">
+                    <div class="alert-link">Menu ajouté au panier !</div>
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="yes">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalrestaurateur">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*@section Scripts {*@
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#btnEdit").click(function () {
+                    let idrestaurant = $(this).data("monresto");
+                    $('#modalrestaurateur').load("/restaurants/modalrestaurateur/" + idrestaurant);
+                    $('#yes').modal("show");
+                });
+
+                $(".owl-carousel").owlCarousel({
+                    items: 3,
+                    loop: true,
+                    nav: true,
+                    dots: false,
+                    autoplay: false,
+                    autoplayTimeout: 2000,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        768: {
+                            items: 2,
+                            margin: 30
+                        },
+                        992: {
+                            items: 3,
+                            margin: 30
+                        }
+                    },
+                    smartSpeed: 900,
+                    navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
+                });
+
+                $("#envoi").css("display", "none");
+                $("#retour").css("display", "none");
+
+                $("#continuer").click(function () {
+                    $("#debut").css("display", "none");
+                    $("#suite").css("display", "block");
+                    $("#retour").css("display", "block");
+                    $("#continuer").css("display", "none");
+                    $("#envoi").css("display", "block");
+                });
+
+                $("#retour").click(function () {
+                    $("#debut").css("display", "block");
+                    $("#suite").css("display", "none");
+                    $("#retour").css("display", "none");
+                    $("#continuer").css("display", "block");
+                    $("#envoi").css("display", "none");
+                });
+
+            });
+        </script>
+    }

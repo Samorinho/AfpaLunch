@@ -28,8 +28,7 @@ namespace AfpaLunch.Controllers
 
         public ActionResult LoginRestaurateur()
         {
-            Restaurant restaurant = new Restaurant();
-            restaurant = (Restaurant)Session["Restaurant"];
+            Restaurant restaurant = (Restaurant)Session["Restaurant"];
             if (restaurant != null)
             {
                 return RedirectToAction("MonRestaurant", "Restaurants");
@@ -49,7 +48,7 @@ namespace AfpaLunch.Controllers
 
                 db.SaveChanges();
 
-                return RedirectToAction("MonRestaurant", "Restaurants");
+                return RedirectToAction("MonRestaurant", "Restaurants", new { id = restaurant.IdRestaurant });
             }
 
             return View();
@@ -186,31 +185,116 @@ namespace AfpaLunch.Controllers
         // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdRestaurant,IdTypeCuisine,Description,Nom,Tag,Budget,Adresse,CodePostal,Ville,Telephone,Mobile,Email,Reponsable,Login,Password")] Restaurant restaurant)
+        public ActionResult Create([Bind(Include = "IdRestaurant,IdTypeCuisine,Description,Nom,Tag,Budget,Adresse,CodePostal,Ville,Telephone,Mobile,Email,Reponsable,Login,Password")] Restaurant restaurant, HttpFileCollectionBase files)
         {
             if (ModelState.IsValid)
             {
                 db.Restaurants.Add(restaurant);
-                db.SaveChanges();
+                //db.SaveChanges();
+                if (Request.Files.Count > 0)
+                {
+                    try
+                    {
+                        files = Request.Files;
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            string path = AppDomain.CurrentDomain.BaseDirectory + "Images/";
+                            string filename = Path.GetFileName(Request.Files[i].FileName);
+
+                            HttpPostedFileBase file = files[i];
+                            string fname;
+
+                            if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                            {
+                                string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                                fname = testfiles[testfiles.Length - 1];
+                            }
+                            else
+                            {
+                                fname = file.FileName;
+                            }
+
+                            // Get the complete folder path and store the file inside it.  
+                            fname = Path.Combine(Server.MapPath("~/Images/"), fname);
+                            file.SaveAs(fname);
+                        }
+                        // Returns message that successfully uploaded  
+                        return Json("Votre image a bien été envoyée !");
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json("Une erreure s'est produite : " + ex.Message);
+                    }
+                }
+                else
+                {
+                    //return Json("Aucun fichier n'a été sélectionné.");
+                }
+
                 return RedirectToAction("Index");
             }
+
+            
 
             ViewBag.IdTypeCuisine = new SelectList(db.TypeCuisines, "IdTypeCuisine", "Nom", restaurant.IdTypeCuisine);
             return View(restaurant);
         }
 
-        public ActionResult MonRestaurant()
+        public ActionResult MonRestaurant(int? id)
         {
+            Restaurant resto = null;
+            if (Session["Restaurant"] != null)
+            {
+                Restaurant restaurateur = (Restaurant)Session["Restaurant"];
+                resto = db.Restaurants.Include(r => r.Produits).Include(r => r.Menus).First(r => r.Login == restaurateur.Login && r.Password == restaurateur.Password && r.IdRestaurant == id);
+
+                //Nouvelle liste de string
+
+                List<string> nomscategories = new List<string>();
+
+                // On parcourt les catégories du restaurant en question
+
+                foreach (Categorie item in db.Categories)
+                {
+                    var produits = db.Produits.Where(p => p.IdCategorie == item.IdCategorie && p.IdRestaurant == id).OrderBy(p => p.IdCategorie == item.IdCategorie).ToList();
+
+
+                    if (produits != null && produits.Count > 0)
+                    {
+                        // On ajoute la liste des produits au "ViewData"
+
+                        ViewData[item.Nom] = produits;
+                        nomscategories.Add(item.Nom);
+                    }
+                }
+
+                ViewBag.NomsCategories = nomscategories;
+            }
+
+            return View(resto);
+        }
+
+        public PartialViewResult ModalRestaurateur(int? id)
+        {
+            Restaurant restaurant = db.Restaurants.Find(id);
+            ViewBag.Monresto = restaurant;
+
+            return PartialView(restaurant);
+        }
+
+        public ActionResult MesCommandes(int? id)
+        {
+            Restaurant restaurant = (Restaurant)Session["Restaurant"];
+            //List<Commande> commandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id).ToList();
+
+            ViewBag.MesCommandes = db.Commandes.Where(c => c.Restaurant.IdRestaurant == id && restaurant.IdRestaurant == id).OrderByDescending(c => c.IdCommande).ToList();
             return View();
         }
 
-        public ActionResult MesCommandes()
+        public ActionResult MaComptabilite(int? id)
         {
-            return View();
-        }
-
-        public ActionResult MaComptabilite()
-        {
+            ViewBag.Total = db.Commandes.Where(c => c.IdRestaurant == id).Sum(c => c.Prix);
+            ViewBag.Products = db.Produits.Where(p => p.IdRestaurant == id).ToList();
             return View();
         }
 

@@ -1,7 +1,80 @@
-﻿
+﻿@model AfpaLunch.Commande
+
 @{
-    ViewBag.Title = "MesCommandes";
+    ViewBag.Title = "Historique";
+    List<Commande> commandes = (List<Commande>)ViewBag.MesCommandes;
+
 }
+<div class="d-flex justify-content-center mb-4"><p class="h3">Historique des commandes</p></div>
 
-<h2>MesCommandes</h2>
+<div class="d-flex justify-content-center">
+    <div class="card border-0" style="width: 30rem;">
+        @foreach (Commande item in commandes)
+        {
+            <div class="row mb-2 p-2">
+                <div class="col-2"><span style="background-color:#fdf18d;"><i class="fa fa-2x fa-cutlery"></i></span></div>
+                <div class="col">
+                    <div><p class="text-dark font-weight-light h4">Commande #@item.IdCommande</p></div>
+                    <div class="text-secondary">@item.Date.ToString("ddd d MMM")</div>
+                </div>
+                <div class="ml-auto">
+                    @{ if (item.CommandeProduits.FirstOrDefault().Menus.Count == 0)
+                        {
+                            <p>@item.Prix€</p>
+                        }
+                        else
+                        {
+                            <p>@item.CommandeProduits.FirstOrDefault().Menus.FirstOrDefault().Prix€</p>
+                        }
+                    }
+                    <span class="lacommande" data-commande="@item.IdCommande" id="@item.IdCommande"><i class="fa fa-plus"></i></span>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+</div>
 
+
+<div class="modal" tabindex="-1" role="dialog" id="modaltest">
+
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.lacommande').on('click', function () {
+                let idcommande = $(this).data("commande");
+                console.log(idcommande);
+                $('#modaltest').load("/utilisateurs/modalhistorique/" + idcommande);
+                $('#modaltest').modal("show");
+            });
+
+            $('.recommander').on('click', function () {
+                let lacommande = $(this).data("button");
+                var data = {
+                    'idcommande': lacommande,
+                    'idsession': '@Session.SessionID'
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Recommander", "Sw")',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("Votre commande a bien été validée");
+                    },
+                    error: function () {
+                        alert("Erreur");
+                    }
+                });
+            });
+
+        });
+    </script>
+
+}
