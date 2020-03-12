@@ -180,54 +180,54 @@
                             {
                                 Html.Hidden(Session.SessionID);
                                 <div class="row">*@
-                                    @*@{ foreach (AfpaLunch.Models.ItemPanier item in panier)
-                                            {
-                                                if (item is AfpaLunch.Models.MenuPanier)
-                                                {
-                                                    List<AfpaLunch.Models.ProduitPanier> produitPaniers = ((AfpaLunch.Models.MenuPanier)item).produits;
-                                                }
+                        @*@{ foreach (AfpaLunch.Models.ItemPanier item in panier)
+                                {
+                                    if (item is AfpaLunch.Models.MenuPanier)
+                                    {
+                                        List<AfpaLunch.Models.ProduitPanier> produitPaniers = ((AfpaLunch.Models.MenuPanier)item).produits;
+                                    }
 
-                                                try
-                                                {
-                                                    <div class="row m-1 listepanier">
-                                                        <div class='col-2'>
-                                                            <img src="~/@item.Photo" class="img-thumbnail" style="min-width: 90px; min-height:70px" />
-                                                        </div>
-                                                        <div class='col-4'>
-                                                            <div class='d-flex flex-column'>
-                                                                <div class='row text-wrap h3'>
-                                                                    @item.Nom
-                                                                </div>
-                                                                <div class="row text-wrap">
-                                                                    @item.Description
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-2">@item.Prix€ <span class="badge badge-light" data-produit="@item.GetIdProduit()">@item.Quantite</span></div>
-                                                        <div class="col-2">
-                                                            <span class="p-2 rounded moinsproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
-                                                        </div>
-                                                        <div class="col-2">
-                                                            <span class="p-2 rounded removeproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
-                                                        </div>
+                                    try
+                                    {
+                                        <div class="row m-1 listepanier">
+                                            <div class='col-2'>
+                                                <img src="~/@item.Photo" class="img-thumbnail" style="min-width: 90px; min-height:70px" />
+                                            </div>
+                                            <div class='col-4'>
+                                                <div class='d-flex flex-column'>
+                                                    <div class='row text-wrap h3'>
+                                                        @item.Nom
                                                     </div>
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    string er = ex.Message;
-                                                }
-                                            }
-                                        }*@
-                                    @*<div class="ml-auto">
-                                        <p class="text-light" id="prix"></p>
+                                                    <div class="row text-wrap">
+                                                        @item.Description
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">@item.Prix€ <span class="badge badge-light" data-produit="@item.GetIdProduit()">@item.Quantite</span></div>
+                                            <div class="col-2">
+                                                <span class="p-2 rounded moinsproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-minus"></i></span>&nbsp;<span class="p-2 rounded leproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-plus"></i></span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="p-2 rounded removeproduit" data-produit="@item.GetIdProduit()" style="background-color:#fdf18d"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string er = ex.Message;
+                                    }
+                                }
+                            }*@
+                        @*<div class="ml-auto">
+                                            <p class="text-light" id="prix"></p>
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <p class="alert alert-info">Votre panier est vide !</p>
-                            }
-                        }*@
+                                }
+                                else
+                                {
+                                    <p class="alert alert-info">Votre panier est vide !</p>
+                                }
+                            }*@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fermer</button>
@@ -252,6 +252,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/owl.carousel")
     @Scripts.Render("~/bundles/dropzone")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
 
     @section Scripts {

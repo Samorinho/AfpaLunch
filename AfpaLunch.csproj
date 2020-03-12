@@ -274,6 +274,7 @@
     <Content Include="owlcarousel\owl.theme.default.min.css" />
     <Content Include="owlcarousel\owl.theme.green.css" />
     <Content Include="owlcarousel\owl.theme.green.min.css" />
+    <Content Include="Scripts\blabla.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

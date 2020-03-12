@@ -97,7 +97,6 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 
     @*@section Scripts {*@
         <script type="text/javascript">
@@ -134,24 +133,6 @@
                     navText: ["<i class='fa fa-chevron-circle-left fa-2x' style='color:#fdf18d'></i>", "<i class='fa fa-chevron-circle-right fa-2x' style='color:#fdf18d'></i>"]
                 });
 
-                $("#envoi").css("display", "none");
-                $("#retour").css("display", "none");
-
-                $("#continuer").click(function () {
-                    $("#debut").css("display", "none");
-                    $("#suite").css("display", "block");
-                    $("#retour").css("display", "block");
-                    $("#continuer").css("display", "none");
-                    $("#envoi").css("display", "block");
-                });
-
-                $("#retour").click(function () {
-                    $("#debut").css("display", "block");
-                    $("#suite").css("display", "none");
-                    $("#retour").css("display", "none");
-                    $("#continuer").css("display", "block");
-                    $("#envoi").css("display", "none");
-                });
 
             });
         </script>
